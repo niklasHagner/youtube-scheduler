@@ -18,18 +18,17 @@ Easy way: change the line `var apiKey = process.env.YOUTUBEAPIKEY` to `var apiKe
 Hard way: Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
 
 ### How to set env vars on Unix: 
- #### Temproary 
- in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
- #####Permanent `export YOUTUBEAPIKEY = 'abc123'`
+Set it Permanently: `export YOUTUBEAPIKEY = 'abc123'` 
+...or just set it for one session: in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
 
 ### How to set env vars on Windows:
- #### Temporary
- while inthe node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
- ### Permanent
+Set it temporarily:
+while in the node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
+ 
+..or Set it permanently:
 From Powershell:
  `[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")`
-
-You might have to restart your console to use the new env variable
+You might have to restart your console to use the new env variable in node
 
 ## Build
 1. `grunt` or `grunt && grunt watch` in the root directory
