@@ -2,8 +2,32 @@
 ## Broadcast playlists as TV channels
 
 ##Tech
-+ node+express+handlebars+youtubeApiV3
++ backend: node, express
++ frontend: handlebars, jquery
++ uses youtubeApiV3
+
+##Pre-requisites
+Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
+
+Step 2: You gotta your apiKey.
+Easy way: change the line `var apiKey = process.env.YOUTUBEAPIKEY` to `var apiKey = 'mykeyhere``
+
+Hard way: Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
+
+### How to set env vars on Unix: 
+ ####Temproary 
+ in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
+ #####Permanent `export YOUTUBEAPIKEY = 'abc123'`
+
+### How to set env vars on Windows:
+ ####Temporary
+ while inthe node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
+ ###Permanent
+From Powershell:
+ `[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")`
+
+You might have to restart your console to use the new env variable
 
 ## Build
 1. `grunt` or `grunt && grunt watch` in the root directory
-2. browse to `http://localhost:3000`
+2. browse to `http://localhost:3000` 
