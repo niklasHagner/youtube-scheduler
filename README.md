@@ -11,11 +11,12 @@ A simple overlay prevents the user from interacting with the player, to get the 
 + uses youtubeApiV3
 
 ## Pre-requisites
-Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
+Step 1: You NEED to get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
+cause every time you call the youtubeAPI that key has to be provided.
 
-Step 2: You gotta your apiKey.
+Step 2: Make node use that apiKey
 Easy way: change the line `var apiKey = process.env.YOUTUBEAPIKEY` to `var apiKey = "mykeyhere"`
-Hard way: Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
+Right way: Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
 
 ### How to set env vars on Unix: 
 Set it Permanently: `export YOUTUBEAPIKEY = 'abc123'` 
