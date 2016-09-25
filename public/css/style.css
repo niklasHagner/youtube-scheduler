@@ -1,0 +1,186 @@
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+img,
+form,
+fieldset,
+input,
+textarea,
+blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+body {
+  background-color: #000;
+  background-image: url(images/static.gif);
+  font-family: 'Helvetica', sans-serif;
+  letter-spacing: 0.3em;
+  font-size: 14px;
+  overflow: hidden;
+}
+body,
+html {
+  height: 100%;
+}
+a {
+  color: #ded7bd;
+  text-decoration: none;
+}
+a:hover {
+  color: #af9a77;
+}
+/* -------------- TV -------------- */
+#tv {
+  background-image: url(images/tv.png);
+  /*url(images/shading.png);*/
+  background-size: 100% 100%;
+  height: 100%;
+  width: 100%;
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*pointer-events: none //enable clicking the video layer below*/
+}
+iframe#player {
+  margin-top: -7px;
+}
+#content {
+  width: 60%;
+  height: 65%;
+  top: 20%;
+  left: 10%;
+  color: #fff;
+  position: relative;
+  z-index: 2;
+  width: 87%;
+  height: 90%;
+  top: 5%;
+  left: 7%;
+  text-align: center;
+}
+#logo {
+  display: block;
+  width: 20%;
+  margin: 0 auto 2em auto;
+}
+#logo img {
+  max-width: 100%;
+}
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 390px;
+  width: 640px;
+  z-index: -1;
+}
+.videowrapper {
+  float: none;
+  clear: both;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  content: "";
+}
+.videowrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+/* -------------- GUI -------------- */
+.menu {
+  position: absolute;
+  top: 2px;
+  right: 28px;
+  z-index: 4;
+  text-align: center;
+}
+.menu__item {
+  display: inline-block;
+  padding: 5px 10px;
+  background: gold;
+  opacity: 0.5;
+  color: black;
+  letter-spacing: normal;
+  border-radius: 50px;
+  box-shadow: 1px 1px 1px #555;
+  cursor: pointer;
+  user-select: none;
+}
+.menu__item a {
+  color: black;
+}
+.toggle-programme {
+  border-radius: none;
+}
+.toggle-programme--active {
+  background-color: lightblue;
+  box-shadow: inset 0 0 4px black;
+}
+.programme {
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  padding: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 400px;
+  letter-spacing: normal;
+  text-align: left;
+}
+.programme--hidden {
+  display: none;
+}
+.programme .title {
+  margin-top: 10px;
+  font-size: 11px;
+}
+.programme .title--past {
+  display: none;
+}
+.programme .title--current {
+  font-size: 150%;
+}
+.programme .title .start-time {
+  font-family: consolas, monospace;
+  color: gold;
+  font-weight: bolder;
+}
+.programme .programme__close {
+  display: inline-block;
+  padding: 5px 10px;
+  background: gold;
+  color: black;
+  box-shadow: 1px 2px 5px #555;
+  border-radius: 50px;
+  z-index: 999;
+}
+/* -------------- Error -------------- */
+.error {
+  background-color: rgba(50, 50, 50, 0.5);
+  color: white;
+}
+.error h1,
+.error h2,
+.error h3 {
+  color: red;
+}

@@ -1,0 +1,38 @@
+.programme {
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 10px;
+  padding: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 400px;
+  letter-spacing: normal;
+  text-align: left;
+}
+.programme--hidden {
+  display: none;
+}
+.programme .title {
+  margin-top: 10px;
+  font-size: 11px;
+}
+.programme .title--past {
+  display: none;
+}
+.programme .title--current {
+  font-size: 150%;
+}
+.programme .title .start-time {
+  font-family: consolas, monospace;
+  color: gold;
+  font-weight: bolder;
+}
+.programme .programme__close {
+  display: inline-block;
+  padding: 5px 10px;
+  background: gold;
+  color: black;
+  box-shadow: 1px 2px 5px #555;
+  border-radius: 50px;
+  z-index: 999;
+}

@@ -1,0 +1,182 @@
+body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldset, input, textarea, blockquote {
+	margin: 0; padding: 0; border: 0;
+}
+
+body {
+	background-color: #000;
+	background-image: url(images/static.gif);
+	font-family: 'Helvetica', sans-serif; 
+    letter-spacing: 0.3em;
+	font-size: 14px;
+	overflow: hidden;
+}
+
+body, html {
+	height: 100%;
+}
+
+a {
+    color: #ded7bd; text-decoration: none;
+    &:hover {
+		color: #af9a77;
+    }
+}
+	
+/* -------------- TV -------------- */
+#tv {
+	background-image: url(images/tv.png); /*url(images/shading.png);*/
+	background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*pointer-events: none //enable clicking the video layer below*/
+}
+iframe#player { margin-top: -7px;}
+
+#content {
+	width: 60%; height: 65%; 
+    position: relative; top: 20%; left: 10%;
+	text-align: center; color: #fff; 
+    position: relative;
+	z-index: 2;
+    width: 87%;
+    height: 90%;
+    top: 5%;
+    left: 7%;
+    text-align: center;
+}
+
+#logo {
+	display: block; 
+	width: 20%; 	
+    margin: 0 auto 2em auto; 
+    img {
+		max-width: 100%; 
+	}
+}
+	
+
+iframe {
+	z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 390px;
+    width: 640px;
+    z-index: -1;
+}
+.videowrapper {
+    float: none;
+    clear: both;
+    width: 100%;
+    // position: relative;
+    // -moz-box-shadow: inset 0 0 10em #666;  
+    // -webkit-box-shadow: inset 0 0 10em #666;   
+    // box-shadow: inset 0 0 10em #666;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    content: "";
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+/* -------------- GUI -------------- */
+.menu {
+    position: absolute;
+    // top: 0; 
+    // right: 0;
+    // width: 100%; 
+    top: 2px;
+    right: 28px;
+    z-index: 4;
+    text-align: center;
+
+    &__item {
+        display: inline-block;
+        padding: 5px 10px;
+        background: gold;
+        opacity: 0.5;
+        color: black; 
+        letter-spacing: normal;
+        border-radius: 50px; box-shadow: 1px 1px 1px #555;
+        cursor: pointer;
+        user-select: none;
+        a { color: black; }
+    }
+}
+.toggle-programme {
+    border-radius: none;
+    &--active {
+        background-color: lightblue;
+        box-shadow: inset 0 0 4px black;
+    }
+}
+.programme {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    padding: 50px;
+    position: absolute;right: 0; top: 0;
+    width: 400px; 
+    letter-spacing: normal;
+    text-align: left;
+
+    &--hidden { 
+        display: none; 
+    }
+
+    .title {
+        margin-top: 10px;
+        font-size: 11px;
+        &--past {
+          display: none;
+        }
+        &--current {
+            font-size: 150%;
+        }
+        // &--future {
+        //     :nth-of-type(1) {
+        //         font-size: 150%;
+        //     }
+        //     :nth-of-type(2) {
+        //         font-size: 130%;
+        //     }
+        //     :nth-of-type(3) {
+        //         font-size: 110%;
+        //     }
+        // }
+
+        .start-time {
+            font-family: consolas, monospace;
+            color: gold;
+            font-weight: bolder;
+        }
+    }
+    .programme__close {
+        // position: absolute; right: 20%; top: 5%;
+        display: inline-block;
+        padding: 5px 10px;
+        background: gold;
+        color: black;
+        box-shadow: 1px 2px 5px #555;
+        border-radius: 50px;
+        z-index: 999;
+    }
+}
+
+/* -------------- Error -------------- */
+.error {
+  h1, h2, h3 { color: red; }
+  background-color:rgba(50,50,50,0.5); color: white;
+}
