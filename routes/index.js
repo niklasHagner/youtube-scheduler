@@ -13,7 +13,7 @@ var apiKey =  process.env.YOUTUBEAPIKEY;
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
 
 globalsettings = { 
-	shouldCache: true,
+	shouldCache: false, //enabled it will fetch from youtube on every request
 	printlogs: false,
 	requestCounter : 0
 }
@@ -194,6 +194,11 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	if (detailedVideos.length !== playList.items.length)
 		throw error(videos.length, "videos", playList.items.length, "items");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
+
+	playList.items = playList.items.filter(function(item) { 
+		return item.status.privacyStatus == "public" 
+	});
+
 	playList.items.forEach((item, ix) => {
 		//console.log("---------------------");
 		var video = detailedVideos[ix];
