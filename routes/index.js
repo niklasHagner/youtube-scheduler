@@ -7,55 +7,55 @@ var Promise = require('es6-promise').Promise;
 
 /* -------------- Config -------------- */
 
- //you MUST manually set an enviroment variable to your apikey
+//you MUST manually set an enviroment variable to your apikey
 //See instructions in app.js or the readme
 var apiKey =  process.env.YOUTUBEAPIKEY;
 
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
 
-globalsettings = { 
+globalsettings = {
 	shouldCache: true, //false: make new get requests to youtube every time
 	printlogs: false,
-	requestCounter : 0
+	requestCounter: 0
 }
 /*
 	Change these playlist keys!
 	The keys are the strings after `pl=` in the url when watching a playlist on youtube.com
 */
 var channels = {
-	mixed: { 
+	mixed: {
 		name: "Main Channel",
-		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4', 
+		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
-	mtv: { 
+	mtv: {
 		name: "MTV",
-		playlist: 'PLpEqhn87Qk-zMKGVAnuoU-ZbkGkLs7gaD', 
+		playlist: 'PLpEqhn87Qk-zMKGVAnuoU-ZbkGkLs7gaD',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
-	scifi: { 
+	scifi: {
 		name: "Sci-Fi",
-		playlist: 'PLoFIHcp8yG7TZCMpvoJN1sTxLXSC2fX-o', 
+		playlist: 'PLoFIHcp8yG7TZCMpvoJN1sTxLXSC2fX-o',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
-	western:  { 
+	western: {
 		name: "Western",
-		playlist: 'PLoFIHcp8yG7Rw81Vziam16u1U_v-tWUIl', 
+		playlist: 'PLoFIHcp8yG7Rw81Vziam16u1U_v-tWUIl',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
-	classics:  { 
+	classics: {
 		name: "old school classics",
-		playlist: 'PLoFIHcp8yG7QOui_Nljd3L3ZDn-47fnkP', 
+		playlist: 'PLoFIHcp8yG7QOui_Nljd3L3ZDn-47fnkP',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
-	horror:  { 
+	horror: {
 		name: "horror",
-		id: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc', 
+		id: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	}
@@ -73,39 +73,39 @@ function debuglog(args) {
 /* -------------- Channel routes -------------- */
 router.get('/western', function (req, res) {
 	var channel = channels.western;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 router.get('/scifi', function (req, res) {
 	var channel = channels.scifi;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 router.get('/classics', function (req, res) {
 	var channel = channels.classics;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 router.get('/horror', function (req, res) {
 	var channel = channels.horror;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 router.get('/mtv', function (req, res) {
 	var channel = channels.mtv;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
 	var channel = channels.mixed;
-	getAllTheThings(req,res, channel);
+	getAllTheThings(req, res, channel);
 });
 
 /************** Main func ************** */
-function getAllTheThings(req,res, settings) {
+function getAllTheThings(req, res, settings) {
 	globalsettings.requestCounter++;
 	now = new Date();
-	console.info(now.getHours() +":"+now.getMinutes(), " ~ Request", globalsettings.requestCounter, "for", settings.name);
+	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalsettings.requestCounter, "for", settings.name);
 
 	if (typeof apiKey === "undefined") {
-    	throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
+		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
 	}
 	var plData = null;
 	if (globalsettings.shouldCache && settings.cachedResult) {
@@ -191,9 +191,30 @@ function setStartTime(item, previousProgrammeEndTime) {
 		var skipTo = new Date(skipMs);
 		item.skipToSeconds = skipMs / 1000;
 		item.skipToString = msToYoutubeSkipString(skipMs);
-		//console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
 	}
+	console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
 	return item;
+}
+
+function getDataWithBrokenVideosRemoved(playList, detailedVideos) {
+	for (ix = playList.items.length-1; ix--;) {
+		var item = playList.items[ix];
+		var video = detailedVideos[ix];
+		var shouldRemove = false;
+		if (typeof video.items[0] === "undefined") {
+			shouldRemove = true;
+			console.error("video", ix, "has no video items");
+		}
+		if (item.status.privacyStatus !== "public") {
+			shouldRemove = true;
+			console.error("video", ix, "is not public");
+		}
+		if (shouldRemove) {
+			playList.items.splice(ix, 1);
+			detailedVideos.splice(ix, 1);
+		}
+	}
+	return { playList: playList, detailedVideos: detailedVideos};
 }
 
 /*
@@ -202,19 +223,20 @@ take playlist. extend it's items with metadata from video details
 function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	now = new Date();
 	if (detailedVideos.length !== playList.items.length)
-		throw new Error(videos.length, "videos", "but only", playList.items.length, "items in playlist");
+		throw new Error(videos.length, "videos", playList.items.length, "items in playlist");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
-	playList.items = playList.items.filter(function(item) { 
-		return item.status.privacyStatus == "public" 
-	});
-	for (ix = 0; ix < playList.length; ix++) {
-		var item = playList[ix];
+	var filtered = getDataWithBrokenVideosRemoved(playList, detailedVideos);
+	playList = filtered.playList;
+	detailedVideos = filtered.detailedVideos;
+	if (detailedVideos.length !== playList.items.length)
+		console.error(videos.length, "videos", playList.items.length, "items in playlist");
+
+	for (ix = 0; ix < playList.items.length; ix++) {
+		var item = playList.items[ix];
 		var video = detailedVideos[ix];
-		if (typeof video.items[0] ==="undefined") {
-			console.error("video", ix, "has no video items");
-			playList.items.splice(ix, 1);
-			detailedVideos.splice(ix, 1);
+		if(typeof video.items[0] === "undefined") {
+			debugger;
 		}
 		var durationString = video.items[0].contentDetails.duration;
 		var hms = {
