@@ -5,6 +5,8 @@ I miss the days of sitting in front of the TV and watching whatever was on.
 This is a node service that lets you enter some youtube playlists and broadcast them as a TV-channel. 
 A simple overlay prevents the user from interacting with the player, to get the oldschool experience.
 
+![screenshot](http://i.imgur.com/220jd5k.jpg)
+
 ## Tech
 + backend: node, express
 + frontend: handlebars, jquery
