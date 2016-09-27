@@ -1,8 +1,22 @@
 
+var programmeVisible = false;
+
+function toggleProgrammeVisibility() {
+  if (programmeVisible) {
+    $(".programme").addClass("programme--hidden");
+    $(".toggle-programme").removeClass("toggle-programme--active");
+    programmeVisible = false;
+  } else {
+    $(".programme").removeClass("programme--hidden");
+    $(".toggle-programme").addClass("toggle-programme--active");
+    programmeVisible = true;
+  }
+}
+
 function createProgramme(playlist) {
   var items = '<h1>Show times</h1><span class="programme__close" onclick="toggleProgrammeVisibility()">Close</span>';
   var nowTime = new Date().getTime();
-  playlist.items.forEach((item, index) => {
+  playlist.items.forEach(function (item, index) {
     var count = index + 1;
     var modifiers = "";
     var endTime = new Date(item.endTime).getTime();
@@ -20,6 +34,5 @@ function createProgramme(playlist) {
     items += `<p class='title ${modifiers}'><span class='start-time'>${startTimeFormatted} </span>${item.snippet.title}</p>`;
   });
 
-  var wrapped = "<section class='programme programme--hidden'>" + items + "</section>";
-  $(".programme").html(wrapped);
+  $(".programme").html(items);
 }
