@@ -41,7 +41,9 @@ Step 2: Make node use that apiKey
 * If node cannot access the `env.process.YOUTUBEAPIKEY` you will get a warning, and then you need to check the Prerequesities again
 
 ## To do
-* Filter to remove videos with region-locks
-* Timezone stuff
-* Looping the TV schedule 
-* Replace Handlebars with something else
+* Hide youtube controls and overlays completely
+* Remove youtube videos which cannot be played due to region-locks or content policies
+* Sync the schedule with the  timezone of the client browser
+* Turn shorter playlists into a looping schedule
+* Replace Handlebars with something better
+* Caching using something other than in-app-memmory
