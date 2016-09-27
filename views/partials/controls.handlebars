@@ -1,17 +1,17 @@
-<li id="mute-toggle" class="mute-toggle">
-    <i class="fa fa-volume-up" aria-hidden="true"></i>
-</li>
+<div id="mute-toggle" class="mute-toggle">
+    <span style="visibility:hidden">Mute</span>
+    <i class="fa fa-volume-off" aria-hidden="true"></i>
+</div>
 <script>
 $('#mute-toggle').on('click', function() {
-    var mute_toggle = $(this);
-
+    var icon = $(this).find("i");
     if(player.isMuted()){
         player.unMute();
-        mute_toggle.text('volume_up');
+        icon.attr('class','fa fa-volume-off');
     }
     else{
         player.mute();
-        mute_toggle.text('volume_off');
+        icon.attr('class','fa fa-volume-up');
     }
 });
 </script>

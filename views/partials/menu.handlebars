@@ -1,0 +1,26 @@
+<menu class="menu">
+    <nav class="menu__item">{{> controls }}</nav>
+    <nav class="menu__item menu__item--default"><a href="/">Main Channel</a></nav>
+    <nav class="menu__item menu__item--western"><a href="/western">Western</a></nav>
+    <nav class="menu__item menu__item--scifi"><a href="/scifi">Sci-Fi</a></nav>
+    <nav class="menu__item menu__item--classics"><a href="/classics">Classics</a></nav>
+    <nav class="menu__item menu__item--mtv"><a href="/mtv">MTV</a></nav>
+    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
+</menu>
+
+<script>
+$(function() {
+    if( window.location.pathname.indexOf("western") > -1)
+        $(".menu__item--western").addClass("menu__item--active");
+    else if( window.location.pathname.indexOf("scifi") > -1)
+        $(".menu__item--scifi").addClass("menu__item--active");
+    else if( window.location.pathname.indexOf("classics") > -1)
+        $(".menu__item--classics").addClass("menu__item--active");
+    else if( window.location.pathname.indexOf("mtv") > -1) {
+        $(".mtv-logo").removeClass("mtv-logo--hidden");
+        $(".menu__item--mtv").addClass("menu__item--active");
+    }
+    else
+        $(".menu__item--default").addClass("menu__item--active");
+});
+</script>

@@ -108,19 +108,40 @@ iframe {
         padding: 5px 10px;
         background: gold;
         opacity: 0.5;
-        color: black; 
+        color: black;
+        font-size: 12px; 
         letter-spacing: normal;
-        border-radius: 50px; box-shadow: 1px 1px 1px #555;
+        border-radius: 50px; 
+        box-shadow: 1px 1px 1px #555;
         cursor: pointer;
+        -webkit-user-select: none;  
+        -moz-user-select: none;    
+        -ms-user-select: none;      
         user-select: none;
-        a { color: black; }
+
+        &--active {
+            opacity: 0.8;
+        }
+        &:hover {
+            background-color: yellow;
+        }
+
+        a { 
+            padding: 0;
+            color: black; 
+        }
     }
 }
 .toggle-programme {
-    border-radius: none;
+    background: black;
+    color: white;
     &--active {
         background-color: lightblue;
+        color: black;
         box-shadow: inset 0 0 4px black;
+    }
+    &:hover {
+        background-color: yellow;
     }
 }
 .programme {
@@ -131,6 +152,7 @@ iframe {
     width: 400px; 
     letter-spacing: normal;
     text-align: left;
+    transition: width 0.5s, height 2s;
 
     &--hidden { 
         display: none; 
@@ -172,6 +194,18 @@ iframe {
         box-shadow: 1px 2px 5px #555;
         border-radius: 50px;
         z-index: 999;
+    }
+}
+/* -------------- Extra overlays -------------- */
+.mtv-logo {
+    position: absolute;
+    top: -20px;
+    left: -30px;
+    width: 190px;
+    z-index: 4;
+
+    &--hidden {
+        display: none;
     }
 }
 

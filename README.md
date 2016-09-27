@@ -1,4 +1,4 @@
-# Youtube Sheduler
+# Youtube Scheduler
 ## Broadcast playlists as TV channels
 I miss the days of sitting in front of the TV and watching whatever was on.
 

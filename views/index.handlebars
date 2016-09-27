@@ -1,18 +1,13 @@
 
-<menu class="menu">
-    <nav class="menu__item"><a href="/">Main Channel</a></nav>
-    <nav class="menu__item"><a href="/western">Western Channel</a></nav>
-    <nav class="menu__item"><a href="/scifi">Sci-Fi Channel</a></nav>
-    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
-</menu>
-
+{{> menu }}
 
 <div id="tv">
 </div>
 
- {{> showtimes name='Show times' }}
-<div id="content">
-    
+{{> showtimes name='Show times' }}
+
+<div id="content">   
+    <img class="mtv-logo mtv-logo--hidden" src="images/mtv.gif"></img>
     <section class="videowrapper">
         <div id="player"></div>
         <div class="programme programme--hidden"></div>

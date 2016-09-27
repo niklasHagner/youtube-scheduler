@@ -10,10 +10,11 @@ var Promise = require('es6-promise').Promise;
  //you MUST manually set an enviroment variable to your apikey
 //See instructions in app.js or the readme
 var apiKey =  process.env.YOUTUBEAPIKEY;
+
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
 
 globalsettings = { 
-	shouldCache: false, //enabled it will fetch from youtube on every request
+	shouldCache: true, //false: make new get requests to youtube every time
 	printlogs: false,
 	requestCounter : 0
 }
@@ -25,6 +26,12 @@ var channels = {
 	mixed: { 
 		name: "Main Channel",
 		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4', 
+		aggregatedPlaylist: null,
+		cachedResult: null
+	},
+	mtv: { 
+		name: "MTV",
+		playlist: 'PLpEqhn87Qk-zMKGVAnuoU-ZbkGkLs7gaD', 
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
@@ -63,7 +70,7 @@ function debuglog(args) {
 	}
 }
 
-/* -------------- Cgannel routes -------------- */
+/* -------------- Channel routes -------------- */
 router.get('/western', function (req, res) {
 	var channel = channels.western;
 	getAllTheThings(req,res, channel);
@@ -78,6 +85,10 @@ router.get('/classics', function (req, res) {
 });
 router.get('/horror', function (req, res) {
 	var channel = channels.horror;
+	getAllTheThings(req,res, channel);
+});
+router.get('/mtv', function (req, res) {
+	var channel = channels.mtv;
 	getAllTheThings(req,res, channel);
 });
 
@@ -96,7 +107,6 @@ function getAllTheThings(req,res, settings) {
 	if (typeof apiKey === "undefined") {
     	throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
 	}
-
 	var plData = null;
 	if (globalsettings.shouldCache && settings.cachedResult) {
 		var previousProgrammeEndTime = moment(startProgramme).toDate();
@@ -192,17 +202,20 @@ take playlist. extend it's items with metadata from video details
 function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	now = new Date();
 	if (detailedVideos.length !== playList.items.length)
-		throw error(videos.length, "videos", playList.items.length, "items");
+		throw new Error(videos.length, "videos", "but only", playList.items.length, "items in playlist");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
 	playList.items = playList.items.filter(function(item) { 
 		return item.status.privacyStatus == "public" 
 	});
-
-	playList.items.forEach((item, ix) => {
-		//console.log("---------------------");
+	for (ix = 0; ix < playList.length; ix++) {
+		var item = playList[ix];
 		var video = detailedVideos[ix];
-		//console.log(video.items[0].snippet.title);
+		if (typeof video.items[0] ==="undefined") {
+			console.error("video", ix, "has no video items");
+			playList.items.splice(ix, 1);
+			detailedVideos.splice(ix, 1);
+		}
 		var durationString = video.items[0].contentDetails.duration;
 		var hms = {
 			h: durationString.match(/\dh/i) ? durationString.match(/\d+h/i)[0].replace("H", "") : 0,
@@ -218,9 +231,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		item.durationSeconds = hms.s * 1 + hms.m * 60 + (hms.h * 60 * 60);
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
-		//console.log(item.startTimeFormatted, item.snippet.title, "| LENGTH:", item.durationFormatted);
-	});
-	//console.log("Processing playlist videos finished");
+	}
 	return playList;
 }
 
