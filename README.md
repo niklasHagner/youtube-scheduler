@@ -33,6 +33,15 @@ Step 2: Make node use that apiKey
 * Set it temporarily:
   * while in the node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
  
-## Build
-1. `grunt` or `grunt && grunt watch` in the root directory
+## How to build and run this project
+1. `grunt` or `grunt && grunt watch` in the root directory (or just `node start`)
 2. browse to `http://localhost:3000` 
+
+## Troubleshooting
+* If node cannot access the `env.process.YOUTUBEAPIKEY` you will get a warning, and then you need to check the Prerequesities again
+
+## To do
+* Filter to remove videos with region-locks
+* Timezone stuff
+* Looping the TV schedule 
+* Replace Handlebars with something else
