@@ -52,7 +52,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 /* -------------- App Engine Other -------------- */
 app.use(favicon(__dirname + '/public/images/favicon.ico'));
-app.use(logger('dev'));
+if (env === "development")
+    app.use(logger('dev')); // log http requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
