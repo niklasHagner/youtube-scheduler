@@ -240,19 +240,8 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 			debugger;
 		}
 		var durationString = video.items[0].contentDetails.duration;
-		// var hms = {
-		// 	h: durationString.match(/\dh/i) ? durationString.match(/\d+h/i)[0].replace("H", "") : 0,
-		// 	m: durationString.match(/\dm/i) ? durationString.match(/\d+m/i)[0].replace("M", "") : 0,
-		// 	s: durationString.match(/\ds/i) ? durationString.match(/\d+s/i)[0].replace("S", "") : 0
-		// };
-		// var hmsFormatted = { h: hms.h, m: hms.m, s: hms.s };
-		// if (hms.h.length == 1) hmsFormatted.h = "0" + hms.h;
-		// if (hms.m.length == 1) hmsFormatted.m = "0" + hms.m;
-		// if (hms.s.length == 1) hmsFormatted.s = "0" + hms.s;
-
-		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
-
 		item.durationYoutube = durationString;
+		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
 		item.durationFormatted = hms.formatted.h + ":" + hms.formatted.m + ":" + hms.formatted.s;
 		item.durationSeconds = hms.s * 1 + hms.m * 60 + (hms.h * 60 * 60);
 		item = setStartTime(item, previousProgrammeEndTime);
