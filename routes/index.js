@@ -4,12 +4,13 @@ var router = express.Router();
 var moment = require('moment');
 var YouTube = require('youtube-node');
 var Promise = require('es6-promise').Promise;
+var DateTimeHelper = require('../dateTimeHelper');
 
 /* -------------- Config -------------- */
 
 //you MUST manually set an enviroment variable to your apikey
 //See instructions in app.js or the readme
-var apiKey =  process.env.YOUTUBEAPIKEY;
+var apiKey = process.env.YOUTUBEAPIKEY;
 
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
 
@@ -190,14 +191,14 @@ function setStartTime(item, previousProgrammeEndTime) {
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
 		var skipTo = new Date(skipMs);
 		item.skipToSeconds = skipMs / 1000;
-		item.skipToString = msToYoutubeSkipString(skipMs);
+		item.skipToString = DateTimeHelper.msToYoutubeSkipString(skipMs);
 	}
 	console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
 	return item;
 }
 
 function getDataWithBrokenVideosRemoved(playList, detailedVideos) {
-	for (ix = playList.items.length-1; ix--;) {
+	for (ix = playList.items.length - 1; ix--;) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
 		var shouldRemove = false;
@@ -214,7 +215,7 @@ function getDataWithBrokenVideosRemoved(playList, detailedVideos) {
 			detailedVideos.splice(ix, 1);
 		}
 	}
-	return { playList: playList, detailedVideos: detailedVideos};
+	return { playList: playList, detailedVideos: detailedVideos };
 }
 
 /*
@@ -235,21 +236,24 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	for (ix = 0; ix < playList.items.length; ix++) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
-		if(typeof video.items[0] === "undefined") {
+		if (typeof video.items[0] === "undefined") {
 			debugger;
 		}
 		var durationString = video.items[0].contentDetails.duration;
-		var hms = {
-			h: durationString.match(/\dh/i) ? durationString.match(/\d+h/i)[0].replace("H", "") : 0,
-			m: durationString.match(/\dm/i) ? durationString.match(/\d+m/i)[0].replace("M", "") : 0,
-			s: durationString.match(/\ds/i) ? durationString.match(/\d+s/i)[0].replace("S", "") : 0
-		};
-		var hmsFormatted = { h: hms.h, m: hms.m, s: hms.s };
-		if (hms.h.length == 1) hmsFormatted.h = "0" + hms.h;
-		if (hms.m.length == 1) hmsFormatted.m = "0" + hms.m;
-		if (hms.s.length == 1) hmsFormatted.s = "0" + hms.s;
+		// var hms = {
+		// 	h: durationString.match(/\dh/i) ? durationString.match(/\d+h/i)[0].replace("H", "") : 0,
+		// 	m: durationString.match(/\dm/i) ? durationString.match(/\d+m/i)[0].replace("M", "") : 0,
+		// 	s: durationString.match(/\ds/i) ? durationString.match(/\d+s/i)[0].replace("S", "") : 0
+		// };
+		// var hmsFormatted = { h: hms.h, m: hms.m, s: hms.s };
+		// if (hms.h.length == 1) hmsFormatted.h = "0" + hms.h;
+		// if (hms.m.length == 1) hmsFormatted.m = "0" + hms.m;
+		// if (hms.s.length == 1) hmsFormatted.s = "0" + hms.s;
+
+		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
+
 		item.durationYoutube = durationString;
-		item.durationFormatted = hmsFormatted.h + ":" + hmsFormatted.m + ":" + hmsFormatted.s;
+		item.durationFormatted = hms.formatted.h + ":" + hms.formatted.m + ":" + hms.formatted.s;
 		item.durationSeconds = hms.s * 1 + hms.m * 60 + (hms.h * 60 * 60);
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
@@ -310,31 +314,5 @@ function getPlayListAsync(videoId, page, settings) {
 	});
 }
 
-/* -------------- Helpers -------------- */
-
-function msToYoutubeSkipString(duration) {
-    var milliseconds = parseInt((duration % 1000) / 100)
-        , seconds = parseInt((duration / 1000) % 60)
-        , minutes = parseInt((duration / (1000 * 60)) % 60)
-        , hours = parseInt((duration / (1000 * 60 * 60)) % 24);
-
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-    return hours + "H" + minutes + "M" + seconds + "S";
-}
-
-function getHoursMinutesSeconds(durationString) {
-	var hms = {
-		h: durationString.match(/\dh/i) ? durationString.match(/\d+h/i)[0].replace("H", "") : 0,
-		m: durationString.match(/\dm/i) ? durationString.match(/\d+m/i)[0].replace("M", "") : 0,
-		s: durationString.match(/\ds/i) ? durationString.match(/\d+s/i)[0].replace("S", "") : 0
-	};
-	if (hms.h.length == 1) hms.h = "0" + hms.h;
-	if (hms.m.length == 1) hms.m = "0" + hms.m;
-	if (hms.s.length == 1) hms.s = "0" + hms.s;
-	return hms;
-}
 
 module.exports = router;
