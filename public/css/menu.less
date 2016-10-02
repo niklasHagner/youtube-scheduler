@@ -62,17 +62,22 @@
 }
 
 .toggle-programme {
-    background: black;
-    color: white;
-    &--active {
-        background-color: lightblue;
-        color: black;
-        box-shadow: inset 0 0 4px black;
-    }
+   
     &:hover {
-        color: black;
+        color: white;
         background-color: yellow;
     }
+
+    &--active {
+        background: black;
+        color: yellow;
+        box-shadow: 1px 1px 4px gold;
+         &:hover {
+            color: black;
+            background-color: yellow;
+        }
+    }
+   
 }
 
 .programme {
