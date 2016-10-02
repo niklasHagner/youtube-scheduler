@@ -38,14 +38,17 @@ function getPlayerSettings() {
 	var playerSettings = {
 		width: '1280',
 		height: '780',
-		autoplay: 1,
-		showinfo: 0, //not display information like the video title and uploader before the video starts playing.
-		iv_load_policy: 3,
-		controls: 0, //Player controls do not display in the player. For IFrame embeds, the Flash player loads immediately.
-		autohide: 1,//Regardless of the player's dimensions, the video progress bar and player controls display or hide automatically.
-		modestbranding: 1, //Set the parameter value to 1 to prevent the YouTube logo from displaying in the control bar. Note that a small YouTube text label will still display in the upper-right corner of a paused video when the user's mouse pointer hovers over the player.
-		rel: 0, //show related videos when playback of the initial video ends. Supported values are 0 and 1. The default value is 1.
-		fs: 0,
+		playerVars: {
+			autoplay: 1,
+			controls: 0, //Player controls do not display in the player. For IFrame embeds, the Flash player loads immediately.
+			showsearch: 0,
+			showinfo: 0, //display information like the video title and uploader before the video starts playing.
+			autohide: 1,//Regardless of the player's dimensions, the video progress bar and player controls display or hide automatically.
+			modestbranding: 1, //Set the parameter value to 1 to prevent the YouTube logo from displaying in the control bar. Note that a small YouTube text label will still display in the upper-right corner of a paused video when the user's mouse pointer hovers over the player.
+			rel: 0, //show related videos when playback of the initial video ends. Supported values are 0 and 1. The default value is 1.
+			fs: 0,
+			iv_load_policy: 3
+		},
 		events: {
 			'onReady': onPlayerReady,
 			'onStateChange': onPlayerStateChange
