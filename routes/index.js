@@ -59,6 +59,12 @@ var channels = {
 		id: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc',
 		aggregatedPlaylist: null,
 		cachedResult: null
+	},
+	test: {
+		name: "test",
+		id: 'PLoFIHcp8yG7Rvq70T9SWUSqUGHKqqrX0i',
+		aggregatedPlaylist: null,
+		cachedResult: null
 	}
 }
 
@@ -92,6 +98,10 @@ router.get('/mtv', function (req, res) {
 	var channel = channels.mtv;
 	getAllTheThings(req, res, channel);
 });
+router.get('/test', function (req, res) {
+	var channel = channels.test;
+	getAllTheThings(req, res, channel);
+});
 
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
@@ -111,7 +121,7 @@ function getAllTheThings(req, res, settings) {
 	var plData = null;
 	if (globalsettings.shouldCache && settings.cachedResult) {
 		var previousProgrammeEndTime = moment(startProgramme).toDate();
-		settings.cachedResult.items.forEach(function (item) {
+		settings.cachedResult.items.forEach(function (item, ix) {
 			item.playFirst = false;
 			item = setStartTime(item, previousProgrammeEndTime);
 			previousProgrammeEndTime = item.endTime;
@@ -127,28 +137,38 @@ function getAllTheThings(req, res, settings) {
 	//fetch
 	settings.aggregatedPlaylist = null
 
-	getPlayListAsync(settings.playlist, null, settings).then(function (playListData) {
-		plData = playListData;
-		getVideosFromPlaylistAsync(plData).then(function (videoArray) {
-			var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
-			var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
-			if (globalsettings.shouldCache) {
-				settings.cachedResult = plWithEnhancedVids;
-			}
-			res.render('index', {
-				title: 'Web TV',
-				encodedJson: encodedResult
-			});
+	getPlayListAsync(settings.playlist, null, settings)
+		.then(function (playListData) {
+			plData = playListData;
+			getVideosFromPlaylistAsync(plData)
+				.then(function (videoArray) {
+					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
+					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
+					if (globalsettings.shouldCache) {
+						settings.cachedResult = plWithEnhancedVids;
+					}
+					res.render('index', {
+						title: 'Web TV',
+						encodedJson: encodedResult
+					});
+				})
+				.catch(function (e) {
+					console.error(e);
+					res.render('error', {
+						message: e.message,
+						error: e,
+						title: 'error'
+					});
+				})
 		})
-			.catch(function (e) {
-				console.error(e);
-				res.render('error', {
-					message: e.message,
-					error: {},
-					title: 'error'
-				});
-			})
-	});
+		.catch(function (e) {
+			console.error(e);
+			res.render('error', {
+				message: e.message,
+				error: e,
+				title: 'error'
+			});
+		});
 }
 
 /* -------------- Logic -------------- */
@@ -194,7 +214,7 @@ function setStartTime(item, previousProgrammeEndTime) {
 	}
 	if (startDiff > 0 && endDiff < 0) {
 		item.playFirst = true;
-		//console.log("PLAY FIRST");
+		//console.log("PLAY NOW");
 
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
 		var skipTo = new Date(skipMs);
@@ -254,7 +274,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		previousProgrammeEndTime = item.endTime;
 	}
 	//Loop the schedule
-	previousProgrammeEndTime = playList.items[playList.items.length -1 ].endTime;
+	previousProgrammeEndTime = playList.items[playList.items.length - 1].endTime;
 	for (ix = 0; ix < playList.items.length; ix++) {
 
 		var item = playList.items[ix];
@@ -299,23 +319,24 @@ function getPlayListAsync(videoId, page, settings) {
 			if (error) {
 				console.error(error);
 				reject(error);
-			}
-			//aggregate
-			if (settings.aggregatedPlaylist === null) {
-				settings.aggregatedPlaylist = result;
 			} else {
-				Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
-			}
+				//aggregate
+				if (settings.aggregatedPlaylist === null) {
+					settings.aggregatedPlaylist = result;
+				} else {
+					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
+				}
 
-			//return
-			if (result.nextPageToken || settings.maxPageCount >= settings.pageCounter) {
-				//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
-				settings.pageCounter++;
-				fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
-			}
-			else {
-				//console.log("found", settings.aggregatedPlaylist.items.length, "videos");
-				fulfill(settings.aggregatedPlaylist);
+				//return
+				if (result.nextPageToken || settings.maxPageCount >= settings.pageCounter) {
+					//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
+					settings.pageCounter++;
+					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
+				}
+				else {
+					//console.log("found", settings.aggregatedPlaylist.items.length, "videos");
+					fulfill(settings.aggregatedPlaylist);
+				}
 			}
 		});
 	});
