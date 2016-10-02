@@ -175,15 +175,23 @@ function setStartTime(item, previousProgrammeEndTime) {
 	if (typeof previousProgrammeEndTime === "undefined") {
 		previousProgrammeEndTime = moment(startProgramme).toDate();
 	}
+
 	item.startTime = previousProgrammeEndTime;
 	item.startTimeFormatted = moment(item.startTime).format("HH:mm");
 	item.endTime = moment(previousProgrammeEndTime).add(item.durationSeconds, "seconds").toDate();
 	previousProgrammeEndTime = item.endTime;
 
-	item.playFirst = false;
 	var diff = Math.abs(moment(item.startTime).diff(moment(item.endTime)), "seconds");
 	var startDiff = moment(now).diff(item.startTime, 'seconds');
 	var endDiff = moment(now).diff(item.endTime, 'seconds');
+
+	item.past = false;
+	item.playFirst = false;
+	item.future = false;
+
+	if (endDiff > 0) {
+		item.past = true;
+	}
 	if (startDiff > 0 && endDiff < 0) {
 		item.playFirst = true;
 		//console.log("PLAY FIRST");
@@ -197,7 +205,7 @@ function setStartTime(item, previousProgrammeEndTime) {
 	return item;
 }
 
-function getDataWithBrokenVideosRemoved(playList, detailedVideos) {
+function removeBrokenVideos(playList, detailedVideos) {
 	for (ix = playList.items.length - 1; ix--;) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
@@ -227,7 +235,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		throw new Error(videos.length, "videos", playList.items.length, "items in playlist");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
-	var filtered = getDataWithBrokenVideosRemoved(playList, detailedVideos);
+	var filtered = removeBrokenVideos(playList, detailedVideos);
 	playList = filtered.playList;
 	detailedVideos = filtered.detailedVideos;
 	if (detailedVideos.length !== playList.items.length)
@@ -237,16 +245,28 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
 		if (typeof video.items[0] === "undefined") {
-			debugger;
+			console.error("something is messed up with video", ix);
 		}
 		var durationString = video.items[0].contentDetails.duration;
-		item.durationYoutube = durationString;
 		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
-		item.durationFormatted = hms.formatted.h + ":" + hms.formatted.m + ":" + hms.formatted.s;
 		item.durationSeconds = hms.s * 1 + hms.m * 60 + (hms.h * 60 * 60);
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
 	}
+	//Loop the schedule
+	previousProgrammeEndTime = playList.items[playList.items.length -1 ].endTime;
+	for (ix = 0; ix < playList.items.length; ix++) {
+
+		var item = playList.items[ix];
+		var video = detailedVideos[ix];
+		if (item.past === true) {
+			item.past = false;
+			item.future = true;
+			item = setStartTime(item, previousProgrammeEndTime);
+		}
+		previousProgrammeEndTime = item.endTime;
+	}
+
 	return playList;
 }
 
@@ -280,24 +300,22 @@ function getPlayListAsync(videoId, page, settings) {
 				console.error(error);
 				reject(error);
 			}
-			else {
-				//aggregate
-				if (settings.aggregatedPlaylist == null) {
-					settings.aggregatedPlaylist = result;
-				} else {
-					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
-				}
+			//aggregate
+			if (settings.aggregatedPlaylist === null) {
+				settings.aggregatedPlaylist = result;
+			} else {
+				Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
+			}
 
-				//return
-				if (result.nextPageToken || settings.maxPageCount >= settings.pageCounter) {
-					//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
-					settings.pageCounter++;
-					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
-				}
-				else {
-					//console.log("found", settings.aggregatedPlaylist.items.length, "videos");
-					fulfill(settings.aggregatedPlaylist);
-				}
+			//return
+			if (result.nextPageToken || settings.maxPageCount >= settings.pageCounter) {
+				//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
+				settings.pageCounter++;
+				fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
+			}
+			else {
+				//console.log("found", settings.aggregatedPlaylist.items.length, "videos");
+				fulfill(settings.aggregatedPlaylist);
 			}
 		});
 	});
