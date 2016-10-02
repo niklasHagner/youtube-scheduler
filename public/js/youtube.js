@@ -72,7 +72,14 @@ function onPlayerStateChange(event) {
 	}
 }
 
+function onError(event) {
+	console.log("player error", event);
+	setTimeout(function () { nextVideo(event), 100 });
+}
+
 function nextVideo(event) {
+	if (typeof window.currentVideoChanged !== "undefined")
+		currentVideoChanged();
 	var nextVideo = getNextVideo();
 	var cueObject = {
 		videoId: nextVideo.snippet.resourceId.videoId

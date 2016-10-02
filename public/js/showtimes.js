@@ -13,6 +13,13 @@ function toggleProgrammeVisibility() {
   }
 }
 
+function currentVideoChanged() {
+  var $curr = $($(".title--current")[0]);
+  $curr.next().addClass("title--current");
+  $curr.next().find(".start-time").text("Current: ");
+  $curr.removeClass("title--current").addClass("title--past");
+}
+
 function createProgramme(playlist) {
   var items = '<h1>Show times</h1><span class="programme__close" onclick="toggleProgrammeVisibility()">Close</span>';
   var nowTime = new Date().getTime();
