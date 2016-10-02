@@ -283,18 +283,14 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
 	}
-	//Loop the schedule
+	//Loop the schedule by moving past stuff to the end
 	previousProgrammeEndTime = playList.items[playList.items.length - 1].endTime;
-	for (ix = 0; ix < playList.items.length; ix++) {
-
-		var item = playList.items[ix];
-		var video = detailedVideos[ix];
-		if (item.past === true) {
-			item.past = false;
-			item.future = true;
-			item = setStartTime(item, previousProgrammeEndTime);
-		}
+	while (playList.items[0].past === true) {
+		var item = setStartTime(playList.items[0], previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
+		item.past = false;
+		item.future = true;
+		playList.items.push(playList.items.splice(0, 1)[0]);
 	}
 
 	return playList;
