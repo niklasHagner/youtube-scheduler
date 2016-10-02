@@ -62,7 +62,7 @@ var channels = {
 	},
 	test: {
 		name: "test",
-		id: 'PLoFIHcp8yG7Rvq70T9SWUSqUGHKqqrX0i',
+		id: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	}
@@ -230,13 +230,23 @@ function removeBrokenVideos(playList, detailedVideos) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
 		var shouldRemove = false;
-		if (typeof video.items[0] === "undefined") {
-			shouldRemove = true;
-			console.error("video", ix, "has no video items");
+		if (typeof video.items[0] === "undefined"
+			|| video.items.length === 0) {
+			playList.items.splice(ix, 1);
+			detailedVideos.splice(ix, 1);
+			console.error(item.snippet.title, "ix:", ix,  "has no video items");
+			continue;
 		}
-		if (item.status.privacyStatus !== "public") {
+		if (item.status.privacyStatus !== "public"
+			|| video.items[0].status.embeddable !== true) {
 			shouldRemove = true;
-			console.error("video", ix, "is not public");
+			console.error(item.snippet.title, "is not public/embeddable");
+		}
+		if (typeof video.items[0].contentDetails.regionRestriction !== "undefined"
+		&& typeof video.items[0].contentDetails.regionRestriction.blocked !== "undefined"
+		&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
+			shouldRemove = true;
+			console.error(item.snippet.title, "has regionRestriction in SE");
 		}
 		if (shouldRemove) {
 			playList.items.splice(ix, 1);
