@@ -21,6 +21,7 @@ module.exports = function (grunt) {
       dist: {
         files: {
           'public/css/style.css': 'public/css/style.less',
+          'public/css/menu.css': 'public/css/menu.less',
           'public/css/showtimes.css': 'public/css/showtimes.less'
         }
       }

@@ -1,11 +1,16 @@
+<link rel="stylesheet" type="text/css" href="css/menu.css">
+
 <menu class="menu">
     <nav class="menu__item">{{> controls }}</nav>
+    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
+</menu>
+
+<menu class="segment">
     <nav class="menu__item menu__item--default"><a href="/">Main Channel</a></nav>
     <nav class="menu__item menu__item--western"><a href="/western">Western</a></nav>
     <nav class="menu__item menu__item--scifi"><a href="/scifi">Sci-Fi</a></nav>
     <nav class="menu__item menu__item--classics"><a href="/classics">Classics</a></nav>
     <nav class="menu__item menu__item--mtv"><a href="/mtv">MTV</a></nav>
-    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
 </menu>
 
 <script>
