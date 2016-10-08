@@ -1,4 +1,5 @@
 var player;
+var state = { isPlaying: false }
 
 //Insert iframe player
 var tag = document.createElement('script');
@@ -66,18 +67,35 @@ function onPlayerReady(event) {
 	event.target.playVideo();
 }
 
+function handleBufferTimeouts(event) {
+	var maxWait = 4000;
+	setTimeout(function(){ 
+		if ( state.isPlaying === false) {
+			console.log("video failed after", maxWait/1000, "s", "- moving to next video!");
+			playNext(event);
+		};
+	}, maxWait);
+}
+
 function onPlayerStateChange(event) {
 	if (event.data == YT.PlayerState.ENDED) {
-		setTimeout(function () { nextVideo(event), 100 });
+		setTimeout(function () { playNext(event), 100 });
+	}
+	else if (event.data == YT.PlayerState.BUFFERING) {
+		state.isPlaying = false;
+		handleBufferTimeouts(event);
+	}
+	else if (event.data == YT.PlayerState.PLAYING) {
+		state.isPlaying = true;
 	}
 }
 
 function onError(event) {
 	console.log("player error", event);
-	setTimeout(function () { nextVideo(event), 100 });
+	setTimeout(function () { playNext(event), 100 });
 }
 
-function nextVideo(event) {
+function playNext(event) {
 	if (typeof window.currentVideoChanged !== "undefined")
 		currentVideoChanged();
 	var nextVideo = getNextVideo();
