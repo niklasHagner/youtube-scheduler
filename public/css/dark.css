@@ -129,5 +129,10 @@ body.dark-theme .segment--blue .menu__item--active {
   border-top: #222;
 }
 body.dark-theme #tv {
-  display: none;
+  background: none;
+}
+body.dark-theme #tv.loading {
+  background-image: url(images/static.gif);
+  background-size: 50% 50%;
+  opacity: 0.7;
 }

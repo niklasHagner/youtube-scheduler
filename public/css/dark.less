@@ -66,7 +66,7 @@ body.dark-theme {
       a { font-weight: bold; }
     }
   }
-  
+
   .toggle-programme:hover {
     color: gold;
     box-shadow : 0px 0px 5px gold;
@@ -142,6 +142,10 @@ body.dark-theme {
     }
   }
 
-  #tv { display: none; }
+  #tv { background: none; }
+  #tv.loading {     
+    background-image: url(images/static.gif);     background-size: 50% 50%;
+    opacity: 0.7; 
+  }
 
 }

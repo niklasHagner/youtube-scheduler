@@ -86,6 +86,8 @@ function onPlayerStateChange(event) {
 		handleBufferTimeouts(event);
 	}
 	else if (event.data == YT.PlayerState.PLAYING) {
+		setTimeout(function() { $("#tv").removeClass("loading", 1000, "easeInBack"); }, 3500);
+		
 		state.isPlaying = true;
 	}
 }
