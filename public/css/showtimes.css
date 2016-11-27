@@ -8,6 +8,7 @@
   width: 400px;
   letter-spacing: normal;
   text-align: left;
+  left: 0;
 }
 .programme--hidden {
   display: none;

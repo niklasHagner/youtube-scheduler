@@ -4,7 +4,7 @@ body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldse
 
 body {
 	background-color: #000;
-	background-image: url(images/static.gif);
+	// background-image: url(images/static.gif);
 	font-family: 'Helvetica', sans-serif; 
     letter-spacing: 0.3em;
 	font-size: 14px;
@@ -34,6 +34,17 @@ a {
     left: 0;
     /*pointer-events: none //enable clicking the video layer below*/
 }
+
+iframe {
+	z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 390px;
+    width: 640px;
+    z-index: -1;
+}
+
 iframe#player { margin-top: -7px;}
 
 #content {
@@ -58,24 +69,10 @@ iframe#player { margin-top: -7px;}
 	}
 }
 	
-
-iframe {
-	z-index: -1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 390px;
-    width: 640px;
-    z-index: -1;
-}
 .videowrapper {
     float: none;
     clear: both;
     width: 100%;
-    // position: relative;
-    // -moz-box-shadow: inset 0 0 10em #666;  
-    // -webkit-box-shadow: inset 0 0 10em #666;   
-    // box-shadow: inset 0 0 10em #666;
     position: absolute;
     top: 0;
     left: 0;
@@ -112,4 +109,35 @@ iframe {
 .error {
   h1, h2, h3 { color: red; }
   background-color:rgba(50,50,50,0.5); color: white;
+}
+
+
+.logo {
+    font-size: 50px;
+    font-family: Helvetica;
+    color: #eee;
+    letter-spacing: normal;
+}
+
+.logo--horror {
+  font-family: ChunkFive;
+    text-shadow: 1px 0px #a70e0e;
+    color: rgb(78, 71, 161);
+    font-size: 37px;
+    max-width: 300px;
+}
+
+.logo--scifi {
+      font-family: Oswald, Consolas;
+    color: #eee;
+    font-size: 49px;
+    max-width: 290px;
+    font-weight: normal;
+}
+.logo--classics {
+      font-family: ChunkFive;
+    color: #eee;
+    font-size: 49px;
+    max-width: 290px;
+    font-weight: normal;
 }

@@ -1,134 +1,146 @@
-.menu {
-    position: absolute;
-    // top: 0; 
-    // right: 0;
-    // width: 100%; 
-    top: 2px;
-    left: 0px;
-    z-index: 4;
-    text-align: center;
 
-    &__item {
-        display: inline-block;
-        padding: 5px 10px;
-        background: gold;
-        opacity: 0.5;
-        color: black;
-        font-size: 12px; 
-        letter-spacing: normal;
-        border-radius: 50px; 
-        box-shadow: 1px 1px 1px #555;
-        cursor: pointer;
-        -webkit-user-select: none;  
-        -moz-user-select: none;    
-        -ms-user-select: none;      
-        user-select: none;
 
-        &--active {
-            opacity: 0.8;
-        }
-        &:hover {
-            background-color: yellow;
-        }
+body.retro-theme {
+	background-color: #000;
+	background-image: url(images/static.gif);
 
-        a { 
-            padding: 0;
-            color: black; 
-        }
-    }
-}
+  .menu {
+      position: absolute;
+      // top: 0; 
+      // right: 0;
+      // width: 100%; 
+      top: 2px;
+      left: 0px;
+      z-index: 4;
+      text-align: center;
+      font-family: Oswald, Helvetica, Arial, sans-serif;
 
-.segment {
-    position: absolute;
-    top: 2px;
-    right: 28px;
-    z-index: 4;
-    text-align: center;
+      &__item {
+          display: inline-block;
+          padding: 5px 10px;
+          background: gold;
+          opacity: 0.5;
+          color: black;
+          font-size: 12px; 
+          letter-spacing: normal;
+          border-radius: 50px; 
+          box-shadow: 1px 1px 1px #555;
+          cursor: pointer;
+          -webkit-user-select: none;  
+          -moz-user-select: none;    
+          -ms-user-select: none;      
+          user-select: none;
 
-    .menu__item {
-        margin-left: -2px;
-        border-radius: 0;
-        margin-right: -6px;
-    }
-    .menu__item + .menu__item {
-        border-left: solid 1px #555;
-    }
-    .menu__item:first-child {
-        border-radius: 55px 0px 0px 55px;
-    }
-    .menu__item:last-child {
-        border-radius: 0px 55px 55px 0px;
-    }
-}
+          &--active {
+              opacity: 0.8;
+          }
+          &:hover {
+              background-color: yellow;
+          }
 
-.toggle-programme {
-   
-    &:hover {
-        color: white;
-        background-color: yellow;
-    }
+          a { 
+              padding: 0;
+              color: black; 
+          }
+      }
+  }
 
-    &--active {
-        background: black;
-        color: yellow;
-        box-shadow: 1px 1px 4px gold;
-         &:hover {
-            color: black;
-            background-color: yellow;
-        }
-    }
-   
-}
+  .segment {
+      position: absolute;
+      top: 2px;
+      right: 28px;
+      z-index: 4;
+      text-align: center;
 
-.programme {
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 10px;
-    padding: 50px;
-    position: absolute;right: 0; top: 0;
-    width: 400px; 
-    letter-spacing: normal;
-    text-align: left;
-    transition: width 0.5s, height 2s;
+      .menu__item {
+          margin-left: -2px;
+          border-radius: 0;
+          margin-right: -6px;
+      }
+      .menu__item + .menu__item {
+          border-left: solid 1px #555;
+      }
+      .menu__item:first-child {
+          border-radius: 55px 0px 0px 55px;
+      }
+      .menu__item:last-child {
+          border-radius: 0px 55px 55px 0px;
+      }
+  }
 
-    &--hidden { 
-        display: none; 
-    }
+  .toggle-programme {
+    
+      &:hover {
+          color: white;
+          background-color: yellow;
+      }
 
-    .title {
-        margin-top: 10px;
-        font-size: 11px;
-        &--past {
-          display: none;
-        }
-        &--current {
-            font-size: 150%;
-        }
-        // &--future {
-        //     :nth-of-type(1) {
-        //         font-size: 150%;
-        //     }
-        //     :nth-of-type(2) {
-        //         font-size: 130%;
-        //     }
-        //     :nth-of-type(3) {
-        //         font-size: 110%;
-        //     }
-        // }
+      &--active {
+          background: black;
+          color: yellow;
+          box-shadow: 1px 1px 4px gold;
+          &:hover {
+              color: black;
+              background-color: yellow;
+          }
+      }
+    
+  }
 
-        .start-time {
-            font-family: consolas, monospace;
-            color: gold;
-            font-weight: bolder;
-        }
-    }
-    .programme__close {
-        // position: absolute; right: 20%; top: 5%;
-        display: inline-block;
-        padding: 5px 10px;
-        background: gold;
-        color: black;
-        box-shadow: 1px 2px 5px #555;
-        border-radius: 50px;
-        z-index: 999;
-    }
+  .programme {
+      background-color: rgba(0, 0, 0, 0.5);
+      margin: 10px;
+      padding: 50px;
+      position: absolute;right: 0; top: 0;
+      width: 400px; 
+      letter-spacing: normal;
+      text-align: left;
+      transition: width 0.5s, height 2s;
+      left: 0;
+
+      &--hidden { 
+          display: none; 
+      }
+
+      .title {
+          margin-top: 10px;
+          font-size: 11px;
+          &--past {
+            display: none;
+          }
+          &--current {
+              font-size: 150%;
+          }
+          // &--future {
+          //     :nth-of-type(1) {
+          //         font-size: 150%;
+          //     }
+          //     :nth-of-type(2) {
+          //         font-size: 130%;
+          //     }
+          //     :nth-of-type(3) {
+          //         font-size: 110%;
+          //     }
+          // }
+
+          .start-time {
+              font-family: consolas, monospace;
+              color: gold;
+              font-weight: bolder;
+          }
+      }
+      .programme__close {
+          // position: absolute; right: 20%; top: 5%;
+          display: inline-block;
+          padding: 5px 10px;
+          background: gold;
+          color: black;
+          box-shadow: 1px 2px 5px #555;
+          border-radius: 50px;
+          z-index: 999;
+      }
+  }
+
+  .logo { text-shadow: 1px 1px 2px black }
+
 }

@@ -1,11 +1,16 @@
-.menu {
+body.retro-theme {
+  background-color: #000;
+  background-image: url(images/static.gif);
+}
+body.retro-theme .menu {
   position: absolute;
   top: 2px;
   left: 0px;
   z-index: 4;
   text-align: center;
+  font-family: Oswald, Helvetica, Arial, sans-serif;
 }
-.menu__item {
+body.retro-theme .menu__item {
   display: inline-block;
   padding: 5px 10px;
   background: gold;
@@ -21,51 +26,51 @@
   -ms-user-select: none;
   user-select: none;
 }
-.menu__item--active {
+body.retro-theme .menu__item--active {
   opacity: 0.8;
 }
-.menu__item:hover {
+body.retro-theme .menu__item:hover {
   background-color: yellow;
 }
-.menu__item a {
+body.retro-theme .menu__item a {
   padding: 0;
   color: black;
 }
-.segment {
+body.retro-theme .segment {
   position: absolute;
   top: 2px;
   right: 28px;
   z-index: 4;
   text-align: center;
 }
-.segment .menu__item {
+body.retro-theme .segment .menu__item {
   margin-left: -2px;
   border-radius: 0;
   margin-right: -6px;
 }
-.segment .menu__item + .menu__item {
+body.retro-theme .segment .menu__item + .menu__item {
   border-left: solid 1px #555;
 }
-.segment .menu__item:first-child {
+body.retro-theme .segment .menu__item:first-child {
   border-radius: 55px 0px 0px 55px;
 }
-.segment .menu__item:last-child {
+body.retro-theme .segment .menu__item:last-child {
   border-radius: 0px 55px 55px 0px;
 }
-.toggle-programme:hover {
+body.retro-theme .toggle-programme:hover {
   color: white;
   background-color: yellow;
 }
-.toggle-programme--active {
+body.retro-theme .toggle-programme--active {
   background: black;
   color: yellow;
   box-shadow: 1px 1px 4px gold;
 }
-.toggle-programme--active:hover {
+body.retro-theme .toggle-programme--active:hover {
   color: black;
   background-color: yellow;
 }
-.programme {
+body.retro-theme .programme {
   background-color: rgba(0, 0, 0, 0.5);
   margin: 10px;
   padding: 50px;
@@ -76,26 +81,27 @@
   letter-spacing: normal;
   text-align: left;
   transition: width 0.5s, height 2s;
+  left: 0;
 }
-.programme--hidden {
+body.retro-theme .programme--hidden {
   display: none;
 }
-.programme .title {
+body.retro-theme .programme .title {
   margin-top: 10px;
   font-size: 11px;
 }
-.programme .title--past {
+body.retro-theme .programme .title--past {
   display: none;
 }
-.programme .title--current {
+body.retro-theme .programme .title--current {
   font-size: 150%;
 }
-.programme .title .start-time {
+body.retro-theme .programme .title .start-time {
   font-family: consolas, monospace;
   color: gold;
   font-weight: bolder;
 }
-.programme .programme__close {
+body.retro-theme .programme .programme__close {
   display: inline-block;
   padding: 5px 10px;
   background: gold;
@@ -103,4 +109,7 @@
   box-shadow: 1px 2px 5px #555;
   border-radius: 50px;
   z-index: 999;
+}
+body.retro-theme .logo {
+  text-shadow: 1px 1px 2px black;
 }

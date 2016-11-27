@@ -1,7 +1,10 @@
 <link rel="stylesheet" type="text/css" href="css/menu.css">
+<link rel="stylesheet" type="text/css" href="css/dark.css">
 
 <menu class="menu">
+    <h1 class="logo">Retro-TV</h1>
     <nav class="menu__item">{{> controls }}</nav>
+    <nav class="menu__item" onclick="toggleTheme()">Theme</nav>
     <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
 </menu>
 
@@ -15,17 +18,33 @@
 
 <script>
 $(function() {
-    if( window.location.pathname.indexOf("western") > -1)
+    var path = window.location.pathname;
+    var western = path.indexOf("western") > -1;
+    var scifi = path.indexOf("scifi") > -1;
+    var classics = path.indexOf("classics") > -1;
+    var mtv = path.indexOf("mtv") > -1;
+    var defaultChannel = !western && !scifi && !classics && !mtv;
+    if(western) {
         $(".menu__item--western").addClass("menu__item--active");
-    else if( window.location.pathname.indexOf("scifi") > -1)
+        $(".logo").addClass("logo--western");
+        $(".logo").html("Western");
+    }
+    else if( scifi) {
         $(".menu__item--scifi").addClass("menu__item--active");
-    else if( window.location.pathname.indexOf("classics") > -1)
+        $(".logo").addClass("logo--scifi");
+        $(".logo").html("Sci-fi");
+    }
+    else if(classics) {
         $(".menu__item--classics").addClass("menu__item--active");
-    else if( window.location.pathname.indexOf("mtv") > -1) {
+        $(".logo").addClass("logo--classics");
+        $(".logo").html("Classics");
+    }
+    else if( mtv) {
         $(".mtv-logo").removeClass("mtv-logo--hidden");
         $(".menu__item--mtv").addClass("menu__item--active");
     }
-    else
+    else {
         $(".menu__item--default").addClass("menu__item--active");
+    }
 });
 </script>

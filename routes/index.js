@@ -32,7 +32,7 @@ var channels = {
 	},
 	mtv: {
 		name: "MTV",
-		playlist: 'PLpEqhn87Qk-zMKGVAnuoU-ZbkGkLs7gaD',
+		playlist: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},

@@ -9,7 +9,7 @@ A simple overlay prevents the user from interacting with the player, to get the 
 
 ## How to build and run this project
 1. `npm install`
-2. `grunt` or `grunt && grunt watch` in the root directory (or just `node start`)
+2. `grunt` or `grunt && grunt watch` in the root directory (or just `node start` or `node ./www/bin` )
 3. browse to `http://localhost:3000` 
 4. you MUST check the Pre-requisites section on how to set YOUTUBEAPIKEY
 
@@ -25,11 +25,11 @@ Step 1: You NEED to get your own unique apikey (a 39 character string) by creati
 cause every time you call the youtubeAPI that key has to be provided.
 
 Step 2: Make node use that apiKey
-* Quick way: change the line `var apiKey = process.env.YOUTUBEAPIKEY` to `var apiKey = "mykeyhere"`
-* A better way: Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
+* Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
+* Or if you are really lazy and hate env vars, you can just remove the line `var apiKey = process.env.YOUTUBEAPIKEY` and replace it with `var apiKey="abc123"`
 
-### How to set env vars on Unix: 
-* Set it Permanently: `export YOUTUBEAPIKEY = 'abc123'` 
+### How to set env vars on Linux/Unix: 
+* Set it Permanently in a bash terminal: `export YOUTUBEAPIKEY='abc123'` 
 * ...or set it for current session only: in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
 
 ### How to set env vars on Windows:
@@ -42,9 +42,9 @@ Step 2: Make node use that apiKey
   * while in the node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
 
 ## To do
-* Hide youtube controls and overlays  [x]
-* Remove youtube videos which cannot be played due to region-locks or content policies
+* Hide youtube controls and overlays  [X]
+* Remove youtube videos which cannot be played due to region-locks or content policies [X]
 * Handle timezones
-* Turn shorter playlists into a looping schedule [x]
+* Turn shorter playlists into a looping schedule [X]
 * Replace Handlebars with something better
-* Store data using something more than in-app-memmory
+* Store data using something more than in-app-memory
