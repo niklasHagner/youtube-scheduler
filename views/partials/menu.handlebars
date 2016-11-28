@@ -21,6 +21,7 @@
     <nav class="menu__item menu__item--scifi"><a href="/scifi">Sci-Fi</a></nav>
     <nav class="menu__item menu__item--classics"><a href="/classics">Classics</a></nav>
     <nav class="menu__item menu__item--mtv"><a href="/mtv">MTV</a></nav>
+    <nav class="menu__item menu__item--horror"><a href="/horror">Horror</a></nav>
 </menu>
 
 <script>
@@ -30,7 +31,8 @@ $(function() {
     var scifi = path.indexOf("scifi") > -1;
     var classics = path.indexOf("classics") > -1;
     var mtv = path.indexOf("mtv") > -1;
-    var defaultChannel = !western && !scifi && !classics && !mtv;
+    var horror = path.indexOf("horror") > -1;
+    var defaultChannel = !western && !scifi && !classics && !mtv && !horror;
     if(western) {
         $(".menu__item--western").addClass("menu__item--active");
         $(".logo").addClass("logo--western");
@@ -49,6 +51,11 @@ $(function() {
     else if( mtv) {
         $(".mtv-logo").removeClass("mtv-logo--hidden");
         $(".menu__item--mtv").addClass("menu__item--active");
+    }
+    else if(horror) {
+        $(".menu__item--horror").addClass("menu__item--active");
+        $(".logo").addClass("logo--horror");
+        $(".logo").html("Horror");
     }
     else {
         $(".menu__item--default").addClass("menu__item--active");

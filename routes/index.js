@@ -55,8 +55,8 @@ var channels = {
 		cachedResult: null
 	},
 	horror: {
-		name: "horror",
-		id: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc',
+		name: "terror",
+		playlist: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
