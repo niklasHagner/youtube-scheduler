@@ -1,11 +1,18 @@
 <link rel="stylesheet" type="text/css" href="css/menu.css">
 <link rel="stylesheet" type="text/css" href="css/dark.css">
 
+<menu class="fullscreen-menu hidden">
+     <nav class="menu__item">{{> mutebutton }}</nav>
+    <nav class="menu__item">{{> fullscreenbutton }}</nav>
+</menu>
+
+
 <menu class="menu">
     <h1 class="logo">Retro-TV</h1>
-    <nav class="menu__item">{{> controls }}</nav>
-    <nav class="menu__item" onclick="toggleTheme()">Theme</nav>
-    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()">Schedule</nav>
+    <nav class="menu__item">{{> mutebutton }}</nav>
+    <nav class="menu__item">{{> fullscreenbutton }}</nav>
+    <nav class="menu__item" onclick="toggleTheme()"><i class="fa fa-bolt" aria-hidden="true"></i>Theme</nav>
+    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()"><i class="fa fa-list-ul" aria-hidden="true"></i>Schedule</nav>
 </menu>
 
 <menu class="segment">

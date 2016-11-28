@@ -4,7 +4,7 @@ body.retro-theme {
 }
 body.retro-theme .menu {
   position: absolute;
-  top: 2px;
+  top: -7px;
   left: 0px;
   z-index: 4;
   text-align: center;
@@ -21,9 +21,6 @@ body.retro-theme .menu__item {
   border-radius: 50px;
   box-shadow: 1px 1px 1px #555;
   cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 body.retro-theme .menu__item--active {
@@ -38,7 +35,7 @@ body.retro-theme .menu__item a {
 }
 body.retro-theme .segment {
   position: absolute;
-  top: 2px;
+  top: -7px;
   right: 28px;
   z-index: 4;
   text-align: center;
@@ -112,4 +109,5 @@ body.retro-theme .programme .programme__close {
 }
 body.retro-theme .logo {
   text-shadow: 1px 1px 2px black;
+  display: none;
 }

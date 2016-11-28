@@ -51,6 +51,9 @@ body.dark-theme .segment .menu__item {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
   outline: 0;
 }
+body.dark-theme .segment .menu__item:hover {
+  background-color: rgba(30, 87, 153, 0.5);
+}
 body.dark-theme .segment .menu__item--active {
   background: linear-gradient(to top, #1e5799 0%, rgba(125, 185, 232, 0) 20%);
 }
@@ -134,5 +137,6 @@ body.dark-theme #tv {
 body.dark-theme #tv.loading {
   background-image: url(images/static.gif);
   background-size: 50% 50%;
-  opacity: 0.7;
+  opacity: 0.8;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.9)), to(#000000));
 }

@@ -1,4 +1,4 @@
-
+@import "vars.less";
 
 body.retro-theme {
 	background-color: #000;
@@ -6,12 +6,9 @@ body.retro-theme {
 
   .menu {
       position: absolute;
-      // top: 0; 
-      // right: 0;
-      // width: 100%; 
-      top: 2px;
+      top: -7px;
       left: 0px;
-      z-index: 4;
+      z-index: @z-standard-menu;
       text-align: center;
       font-family: Oswald, Helvetica, Arial, sans-serif;
 
@@ -26,9 +23,6 @@ body.retro-theme {
           border-radius: 50px; 
           box-shadow: 1px 1px 1px #555;
           cursor: pointer;
-          -webkit-user-select: none;  
-          -moz-user-select: none;    
-          -ms-user-select: none;      
           user-select: none;
 
           &--active {
@@ -47,9 +41,9 @@ body.retro-theme {
 
   .segment {
       position: absolute;
-      top: 2px;
+      top: -7px;
       right: 28px;
-      z-index: 4;
+      z-index: @z-standard-menu;
       text-align: center;
 
       .menu__item {
@@ -141,6 +135,6 @@ body.retro-theme {
       }
   }
 
-  .logo { text-shadow: 1px 1px 2px black }
+  .logo { text-shadow: 1px 1px 2px black; display: none; }
 
 }

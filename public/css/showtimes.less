@@ -1,3 +1,4 @@
+@import "vars.less";
 
 .programme {
     background-color: rgba(0, 0, 0, 0.5);
@@ -8,6 +9,7 @@
     letter-spacing: normal;
     text-align: left;
     left: 0;
+    z-index: @z-programme;
 
     &--hidden { 
         display: none; 
@@ -48,6 +50,6 @@
         color: black;
         box-shadow: 1px 2px 5px #555;
         border-radius: 50px;
-        z-index: 999;
+        z-index: @z-programme-ui;
     }
 }
