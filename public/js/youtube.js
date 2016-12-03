@@ -21,7 +21,7 @@ function onYouTubeIframeAPIReady() {
 		return;
 	}
 	var data = window.youtubeData;
-	data.items.forEach(function (x) { console.log(x.snippet.title) });
+	//data.items.forEach(function (x) { console.log(x.snippet.title) });
 	window.playNowVideo = data.items.find(function (item) { return item.playFirst == true });
 	if (!playNowVideo) {
 		console.log("could not find playFirst so just playing the first video");

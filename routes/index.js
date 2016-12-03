@@ -8,8 +8,7 @@ var DateTimeHelper = require('../dateTimeHelper');
 
 /* -------------- Config -------------- */
 
-//you MUST manually set an enviroment variable to your apikey
-//See instructions in app.js or the readme
+//this env var must be manually set to your unique key for youtube-API  see README.md
 var apiKey = process.env.YOUTUBEAPIKEY;
 
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
@@ -32,7 +31,7 @@ var channels = {
 	},
 	mtv: {
 		name: "MTV",
-		playlist: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
+		playlist: 'PLbEb562CLykG4O0AQIM8ggWGpRgR1nugF',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
@@ -60,6 +59,12 @@ var channels = {
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
+	docs: {
+		name: "Documentaries",
+		playlist: 'PLoFIHcp8yG7TbDOaNjkw6UMPjzaNC-4hX',
+		aggregatedPlaylist: null,
+		cachedResult: null
+	},
 	test: {
 		name: "test",
 		id: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
@@ -70,12 +75,6 @@ var channels = {
 
 var now = new Date();
 
-/* -------------- Extensions -------------- */
-function debuglog(args) {
-	if (globalSettings.printlogs) {
-		console.log(args);
-	}
-}
 
 /* -------------- Channel routes -------------- */
 router.get('/western', function (req, res) {
@@ -96,6 +95,10 @@ router.get('/horror', function (req, res) {
 });
 router.get('/mtv', function (req, res) {
 	var channel = channels.mtv;
+	getAllTheThings(req, res, channel);
+});
+router.get('/docs', function (req, res) {
+	var channel = channels.docs;
 	getAllTheThings(req, res, channel);
 });
 router.get('/test', function (req, res) {
@@ -214,14 +217,14 @@ function setStartTime(item, previousProgrammeEndTime) {
 	}
 	if (startDiff > 0 && endDiff < 0) {
 		item.playFirst = true;
-		//console.log("PLAY NOW");
+		//console.log("Play this video first:");
 
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
 		var skipTo = new Date(skipMs);
 		item.skipToSeconds = skipMs / 1000;
 		item.skipToString = DateTimeHelper.msToYoutubeSkipString(skipMs);
 	}
-	console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
+	//console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
 	return item;
 }
 
@@ -234,7 +237,7 @@ function removeBrokenVideos(playList, detailedVideos) {
 			|| video.items.length === 0) {
 			playList.items.splice(ix, 1);
 			detailedVideos.splice(ix, 1);
-			console.error(item.snippet.title, "ix:", ix,  "has no video items");
+			console.error(item.snippet.title, "ix:", ix, "has no video items");
 			continue;
 		}
 		if (item.status.privacyStatus !== "public"
@@ -243,8 +246,8 @@ function removeBrokenVideos(playList, detailedVideos) {
 			console.error(item.snippet.title, "is not public/embeddable");
 		}
 		if (typeof video.items[0].contentDetails.regionRestriction !== "undefined"
-		&& typeof video.items[0].contentDetails.regionRestriction.blocked !== "undefined"
-		&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
+			&& typeof video.items[0].contentDetails.regionRestriction.blocked !== "undefined"
+			&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "has regionRestriction in SE");
 		}
@@ -348,5 +351,11 @@ function getPlayListAsync(videoId, page, settings) {
 	});
 }
 
+/* -------------- Extensions -------------- */
+function debuglog(args) {
+	if (globalSettings.printlogs) {
+		console.log(args);
+	}
+}
 
 module.exports = router;
