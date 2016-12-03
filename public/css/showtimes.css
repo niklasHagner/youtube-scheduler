@@ -1,14 +1,14 @@
 .programme {
   background-color: rgba(0, 0, 0, 0.5);
+  color: white;
   margin: 10px;
-  padding: 50px;
+  padding: 10px;
   position: absolute;
-  right: 0;
-  top: 0;
+  left: 30px;
+  top: 100px;
   width: 400px;
   letter-spacing: normal;
   text-align: left;
-  left: 0;
   z-index: 7;
 }
 .programme--hidden {
@@ -29,12 +29,16 @@
   color: gold;
   font-weight: bolder;
 }
+.programme h1 {
+  display: inline;
+}
 .programme .programme__close {
-  display: inline-block;
   padding: 5px 10px;
   background: gold;
   color: black;
   box-shadow: 1px 2px 5px #555;
   border-radius: 50px;
   z-index: 7 1;
+  float: right;
+  cursor: pointer;
 }

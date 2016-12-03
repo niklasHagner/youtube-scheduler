@@ -12,7 +12,6 @@ body.retro-theme .menu {
 }
 body.retro-theme .menu__item {
   display: inline-block;
-  padding: 5px 10px;
   background: gold;
   opacity: 0.5;
   color: black;
@@ -23,15 +22,15 @@ body.retro-theme .menu__item {
   cursor: pointer;
   user-select: none;
 }
+body.retro-theme .menu__item > * {
+  /*the inner item is clickable, so apply padding to it instead of the __item */
+  padding: 5px 10px;
+}
 body.retro-theme .menu__item--active {
   opacity: 0.8;
 }
 body.retro-theme .menu__item:hover {
   background-color: yellow;
-}
-body.retro-theme .menu__item a {
-  padding: 0;
-  color: black;
 }
 body.retro-theme .segment {
   position: absolute;
@@ -98,7 +97,11 @@ body.retro-theme .programme .title .start-time {
   color: gold;
   font-weight: bolder;
 }
-body.retro-theme .programme .programme__close {
+body.retro-theme .programme header {
+  width: 100%;
+}
+body.retro-theme .programme header .programme__close {
+  float: right;
   display: inline-block;
   padding: 5px 10px;
   background: gold;

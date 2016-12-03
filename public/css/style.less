@@ -1,33 +1,38 @@
 @import "vars.less";
-
 body, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldset, input, textarea, blockquote {
-	margin: 0; padding: 0; border: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 body {
-	background-color: #000;
-	// background-image: url(images/static.gif);
-	font-family: 'Helvetica', sans-serif; 
+    background-color: #000;
+    // background-image: url(images/static.gif);
+    font-family: 'Helvetica', sans-serif;
     letter-spacing: 0.3em;
-	font-size: 14px;
-	overflow: hidden;
+    font-size: 14px;
+    overflow: hidden;
 }
 
 body, html {
-	height: 100%;
+    height: 100%;
 }
 
 a {
-    color: #ded7bd; text-decoration: none;
+    color: #ded7bd;
+    text-decoration: none;
     &:hover {
-		color: #af9a77;
+        color: #af9a77;
     }
 }
-	
+
+
 /* -------------- TV -------------- */
+
 #tv {
-	background-image: url(images/tv-2.png); /*url(images/shading.png);*/
-	background-size: 100% 100%;
+    background-image: url(images/tv-2.png);
+    /*url(images/shading.png);*/
+    background-size: 100% 100%;
     height: 100%;
     width: 100%;
     z-index: @z-standard-video-hover-blocker;
@@ -36,32 +41,41 @@ a {
     left: 0;
     /*pointer-events: none //enable clicking the video layer below*/
     transition: all 0.5s ease;
-    &.fullscreen { z-index: @z-fullscreen-video-hover-blocker; transition: all 0.5s ease; background-image: none; }
+    &.fullscreen {
+        z-index: @z-fullscreen-video-hover-blocker;
+        transition: all 0.5s ease;
+        background-image: none;
+    }
 }
 
 iframe {
-	z-index: @z-standard-video;
+    z-index: @z-standard-video;
     position: absolute;
     top: 0;
     left: 0;
     height: 390px;
     width: 640px;
-    &#player { margin-top: -7px;}
+    &#player {
+        margin-top: -7px;
+    }
 }
 
 #content {
-	width: 60%; height: 65%; 
-    position: relative; top: 20%; left: 10%;
-	text-align: center; color: #fff; 
+    width: 60%;
+    height: 65%;
     position: relative;
-	z-index: @z-standard-video;
+    top: 20%;
+    left: 10%;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    z-index: @z-standard-video;
     width: 87%;
     height: 90%;
     top: 5%;
     left: 7%;
     text-align: center;
     transition: all 0.5s ease;
-
     &.fullscreen {
         position: absolute;
         z-index: @z-fullscreen-video;
@@ -85,8 +99,8 @@ iframe {
     height: 100%;
     z-index: @z-standard-video;
     content: "";
-
-   :after { /*hide yt-logo*/
+    :after {
+        /*hide yt-logo*/
         position: absolute;
         bottom: 0;
         left: 0;
@@ -97,7 +111,6 @@ iframe {
         position: absolute;
         height: 57PX;
     }
-
     iframe {
         position: absolute;
         top: 0;
@@ -108,22 +121,26 @@ iframe {
 }
 
 
-
 /* -------------- Error -------------- */
+
 .error {
-  h1, h2, h3 { color: red; }
-  background-color:rgba(50,50,50,0.5); color: white;
+    h1, h2, h3 {
+        color: red;
+    }
+    background-color:rgba(50, 50, 50, 0.5);
+    color: white;
 }
+
 
 /* -------------- Extra overlays -------------- */
 
 #logo {
-	display: block; 
-	width: 20%; 	
-    margin: 0 auto 2em auto; 
+    display: block;
+    width: 20%;
+    margin: 0 auto 2em auto;
     img {
-		max-width: 100%; 
-	}
+        max-width: 100%;
+    }
 }
 
 .mtv-logo {
@@ -132,7 +149,6 @@ iframe {
     left: -30px;
     width: 190px;
     z-index: @z-logos;
-
     &--hidden {
         display: none;
     }
@@ -143,64 +159,72 @@ iframe {
     font-family: Helvetica;
     color: #eee;
     letter-spacing: normal;
+    &--horror {
+        font-family: ChunkFive;
+        text-shadow: 1px 0px #a70e0e;
+        color: rgb(78, 71, 161);
+        font-size: 37px;
+        max-width: 300px;
+    }
+    &--scifi {
+        font-family: Oswald, Consolas;
+        color: #eee;
+        font-size: 49px;
+        max-width: 290px;
+        font-weight: normal;
+    }
+    &--classics {
+        font-family: ChunkFive;
+        color: #eee;
+        font-size: 49px;
+        max-width: 290px;
+        font-weight: normal;
+    }
 }
 
-.logo--horror {
-  font-family: ChunkFive;
-    text-shadow: 1px 0px #a70e0e;
-    color: rgb(78, 71, 161);
-    font-size: 37px;
-    max-width: 300px;
-}
-
-.logo--scifi {
-      font-family: Oswald, Consolas;
-    color: #eee;
-    font-size: 49px;
-    max-width: 290px;
-    font-weight: normal;
-}
-.logo--classics {
-      font-family: ChunkFive;
-    color: #eee;
-    font-size: 49px;
-    max-width: 290px;
-    font-weight: normal;
-}
 
 /* -------------- GUI -------------- */
-.fullscreen-menu { 
+
+.fullscreen-menu {
     z-index: @z-fullscreen-control-overlay;
-    position: absolute; 
+    position: absolute;
     top: 5px;
     left: 5px;
     opacity: 1;
     transition: all 0.5s ease;
-     -webkit-animation: slide 0.5s forwards;
+    -webkit-animation: slide 0.5s forwards;
     -webkit-animation-delay: 2s;
     animation: slide 0.5s forwards;
     animation-delay: 2s;
-
-    &.hidden { 
+    &.hidden {
         opacity: 0;
-        transition: all 0.5s ease; 
+        transition: all 0.5s ease;
         transition: all 0.5s ease;
         -webkit-animation: slide 0.5s forwards;
         -webkit-animation-delay: 2s;
         animation: slide 0.5s forwards;
         animation-delay: 2s;
     }
-
-    .close-fullscreen { 
-        color: white; 
-        &:hover { cursor: pointer; }
+    .close-fullscreen {
+        color: white;
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
+.no-cursor { //hide cursor in fullscreen mode
+    cursor: none;
+}
+
 @-webkit-keyframes slide {
-    100% { left: 0; }
+    100% {
+        left: 0;
+    }
 }
 
 @keyframes slide {
-    100% { left: 0; }
+    100% {
+        left: 0;
+    }
 }

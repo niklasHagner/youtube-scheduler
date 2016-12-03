@@ -1,13 +1,13 @@
 var isFullscreen = false;
-$('.js-fullscreen-toggle').on('click', function() {
+$('.js-fullscreen-toggle').on('click', function () {
     toggleFullscreen('.js-fullscreen-toggle', false, 'fa fa-arrow-up', 'fa fa-arrow-down');
 });
 
 var isWindowFullscreen = false;
-$('.fullscreen-toggle-2').on('click', function() {
+$('.fullscreen-toggle-2').on('click', function () {
     var useWindowFullscreen = !isWindowFullscreen;
     toggleFullscreen('.fullscreen-toggle-2', useWindowFullscreen, 'fa fa-arrows-alt', 'fa fa-times');
-    if (!useWindowFullscreen) 
+    if (!useWindowFullscreen)
         exitFullscreenBrowser();
     isWindowFullscreen = useWindowFullscreen;
 });
@@ -18,11 +18,11 @@ function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass
     $("#tv").toggleClass("fullscreen");
     $("#content").toggleClass("fullscreen");
 
-    if(isFullscreen){
+    if (isFullscreen) {
         isFullscreen = false;
         icon.attr('class', collapsedIconClass);
     }
-    else{
+    else {
         isFullscreen = true;
         icon.attr('class', expandedIconClass);
         if (requestBrowserFullscreen) {
@@ -31,21 +31,20 @@ function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass
     }
 }
 
-var mousemovetimer =  null;
+var mousemovetimer = null;
 var showingFullscreenMenu = false;
-$('body').mousemove(function() {
+$('body').mousemove(function () {
     if (!isFullscreen || showingFullscreenMenu) {
         return;
     }
-    console.log("move");
     clearTimeout(mousemovetimer);
     $(".fullscreen-menu").show();
+    $("#tv").removeClass(".no-cursor");
     showingFullscreenMenu = true;
-    console.log("showing fs menu");
-    mousemovetimer = window.setInterval(function() {
+    mousemovetimer = window.setInterval(function () {
+        $("#tv").addClass(".no-cursor");
         $(".fullscreen-menu").hide();
         showingFullscreenMenu = false;
-         console.log("hiding fs menu");
     }, 1500);
 });
 
@@ -63,11 +62,11 @@ function enterFullscreenBrowser(element) {
     }
 }
 function exitFullscreenBrowser() {
-  if(document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if(document.mozCancelFullScreen) {
-    document.mozCancelFullScreen();
-  } else if(document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  }
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    }
 }

@@ -7,22 +7,21 @@ body.dark-theme .menu {
 }
 body.dark-theme .menu__item {
   display: inline-block;
-  padding: 5px 10px;
   opacity: 1;
   color: white;
   font-size: 12px;
   letter-spacing: normal;
   border-radius: 50px;
-  border-left: solid 1px rgba(85, 85, 85, 0.36);
+  border-color: transparent;
   cursor: pointer;
   user-select: none;
 }
+body.dark-theme .menu__item > * {
+  /*the inner item is clickable, so apply padding to it instead of the __item */
+  padding: 5px 10px;
+}
 body.dark-theme .menu__item:hover {
   color: gold;
-}
-body.dark-theme .menu__item a {
-  padding: 0;
-  color: white;
 }
 body.dark-theme .segment {
   position: absolute;
@@ -44,7 +43,7 @@ body.dark-theme .segment .menu__item {
   display: inline-block;
   position: relative;
   line-height: 33px;
-  padding: 0 15px;
+  padding: 0 7px;
   font-size: 13px;
   color: white;
   text-decoration: none;
@@ -56,8 +55,6 @@ body.dark-theme .segment .menu__item:hover {
 }
 body.dark-theme .segment .menu__item--active {
   background: linear-gradient(to top, #1e5799 0%, rgba(125, 185, 232, 0) 20%);
-}
-body.dark-theme .segment .menu__item--active a {
   font-weight: bold;
 }
 body.dark-theme .toggle-programme:hover {
@@ -72,45 +69,6 @@ body.dark-theme .toggle-programme--active:hover {
   color: gold;
   background: black;
   box-shadow: 0px 0px 5px gold;
-}
-body.dark-theme .programme {
-  background-color: rgba(0, 0, 0, 0.5);
-  margin: 10px;
-  padding: 50px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 400px;
-  letter-spacing: normal;
-  text-align: left;
-  transition: width 0.5s, height 2s;
-}
-body.dark-theme .programme--hidden {
-  display: none;
-}
-body.dark-theme .programme .title {
-  margin-top: 10px;
-  font-size: 11px;
-}
-body.dark-theme .programme .title--past {
-  display: none;
-}
-body.dark-theme .programme .title--current {
-  font-size: 150%;
-}
-body.dark-theme .programme .title .start-time {
-  font-family: consolas, monospace;
-  color: gold;
-  font-weight: bolder;
-}
-body.dark-theme .programme .programme__close {
-  display: inline-block;
-  padding: 5px 10px;
-  background: gold;
-  color: black;
-  box-shadow: 1px 2px 5px #555;
-  border-radius: 50px;
-  z-index: 999;
 }
 body.dark-theme .segment--blue .menu__item {
   margin-left: -2px;
@@ -133,10 +91,12 @@ body.dark-theme .segment--blue .menu__item--active {
 }
 body.dark-theme #tv {
   background: none;
+  transition: background 500ms ease-out 1s;
 }
 body.dark-theme #tv.loading {
   background-image: url(images/static.gif);
   background-size: 50% 50%;
   opacity: 0.8;
   -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.9)), to(#000000));
+  transition: background 500ms ease-out 1s;
 }

@@ -31,7 +31,7 @@ function currentVideoChanged() {
 }
 
 function createProgramme(playlist) {
-  var items = '<h1>Show times</h1><span class="programme__close" onclick="toggleProgrammeVisibility()">Close</span>';
+  var items = '';
   var nowTime = new Date().getTime();
   playlist.items.forEach(function (item, index) {
     var count = index + 1;
@@ -51,5 +51,5 @@ function createProgramme(playlist) {
     items += `<p class='title ${modifiers}'><span class='start-time'>${startTimeFormatted} </span>${item.snippet.title}</p>`;
   });
 
-  $(".programme").html(items);
+  $(".programme__body").html(items);
 }

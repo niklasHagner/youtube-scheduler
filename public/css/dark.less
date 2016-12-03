@@ -1,7 +1,5 @@
 @import "vars.less";
-
 body.dark-theme {
-
   .menu {
     position: absolute;
     top: 2px;
@@ -11,24 +9,21 @@ body.dark-theme {
   }
   .menu__item {
     display: inline-block;
-    padding: 5px 10px;
-    // background: rgba(41, 33, 134, 0.67);
     opacity: 1;
     color: white;
     font-size: 12px;
     letter-spacing: normal;
     border-radius: 50px;
-    border-left: solid 1px rgba(85, 85, 85, 0.36);
+    border-color: transparent;
     cursor: pointer;
     user-select: none;
+    > * {
+      /*the inner item is clickable, so apply padding to it instead of the __item */
+      padding: 5px 10px;
+    }
   }
-
   .menu__item:hover {
     color: gold;
-  }
-  .menu__item a {
-    padding: 0;
-    color: white;
   }
   .segment {
     position: absolute;
@@ -37,7 +32,6 @@ body.dark-theme {
     z-index: @z-standard-menu;
     text-align: center;
   }
-
   .segment .menu__item + .menu__item {
     // border-left: solid 1px #555;
   }
@@ -47,85 +41,42 @@ body.dark-theme {
   .segment .menu__item:last-child {
     border-radius: 0px 55px 55px 0px;
   }
-
   .segment .menu__item {
-      margin-left: -2px;
+    margin-left: -2px;
     border-radius: 0;
     margin-right: -6px;
     display: inline-block;
     position: relative;
     line-height: 33px;
-    padding: 0 15px;
+    padding: 0 7px;
     font-size: 13px;
     color: white;
     text-decoration: none;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
     outline: 0;
-
-    &:hover { background-color: rgba(30,87,153,0.5); }
-
+    &:hover {
+      background-color: rgba(30, 87, 153, 0.5);
+    }
     &--active {
-      background: linear-gradient(to top, rgba(30,87,153,1) 0%,rgba(125,185,232,0) 20%);
-      a { font-weight: bold; }
+      background: linear-gradient(to top, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 20%);
+      font-weight: bold;
     }
   }
-
   .toggle-programme:hover {
     color: gold;
-    box-shadow : 0px 0px 5px gold;
+    box-shadow: 0px 0px 5px gold;
   }
   .toggle-programme--active {
     color: black;
     background-color: gold;
   }
   .toggle-programme--active:hover {
-      color: gold;
-      background: black;
-    box-shadow : 0px 0px 5px gold;
-  }
-  .programme {
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 10px;
-    padding: 50px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 400px;
-    letter-spacing: normal;
-    text-align: left;
-    transition: width 0.5s, height 2s;
-  }
-  .programme--hidden {
-    display: none;
-  }
-  .programme .title {
-    margin-top: 10px;
-    font-size: 11px;
-  }
-  .programme .title--past {
-    display: none;
-  }
-  .programme .title--current {
-    font-size: 150%;
-  }
-  .programme .title .start-time {
-    font-family: consolas, monospace;
     color: gold;
-    font-weight: bolder;
+    background: black;
+    box-shadow: 0px 0px 5px gold;
   }
-  .programme .programme__close {
-    display: inline-block;
-    padding: 5px 10px;
-    background: gold;
-    color: black;
-    box-shadow: 1px 2px 5px #555;
-    border-radius: 50px;
-    z-index: 999;
-  }
-
-
   .segment--blue .menu__item {
-      margin-left: -2px;
+    margin-left: -2px;
     border-radius: 0;
     margin-right: -6px;
     display: inline-block;
@@ -137,20 +88,21 @@ body.dark-theme {
     text-decoration: none;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
     outline: 0;
-    background: linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(125,185,232,0) 80%);
-
+    background: linear-gradient(to bottom, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 80%);
     &--active {
-      background: linear-gradient(to top, rgba(30,87,153,1) 0%,rgba(125,185,232,0) 50%);
+      background: linear-gradient(to top, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 50%);
       border-top: #222;
     }
   }
-
-  #tv { background: none; }
-  #tv.loading {     
-    background-image: url(images/static.gif);     background-size: 50% 50%;
-    opacity: 0.8; 
-     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, 
-    from(rgba(0,0,0,0.9)), to(rgba(0,0,0,1)));
+  #tv {
+    background: none;
+    transition: background 500ms ease-out 1s;
+    &.loading {
+      background-image: url(images/static.gif);
+      background-size: 50% 50%;
+      opacity: 0.8;
+      -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.9)), to(rgba(0, 0, 0, 1)));
+      transition: background 500ms ease-out 1s;
+    }
   }
-
 }

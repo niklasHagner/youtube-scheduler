@@ -208,6 +208,9 @@ iframe#player {
 .fullscreen-menu .close-fullscreen:hover {
   cursor: pointer;
 }
+.no-cursor {
+  cursor: none;
+}
 @-webkit-keyframes slide {
   100% {
     left: 0;
