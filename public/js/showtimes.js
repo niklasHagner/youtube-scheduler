@@ -16,9 +16,9 @@ function toggleProgrammeVisibility() {
 function toggleTheme() {
   if ($("body").hasClass("retro-theme")) {
     $("body").removeClass("retro-theme");
-      $("body").addClass("dark-theme");
+    $("body").addClass("dark-theme");
   } else if ($("body").hasClass("dark-theme")) {
-        $("body").removeClass("dark-theme");
+    $("body").removeClass("dark-theme");
     $("body").addClass("retro-theme");
   }
 }

@@ -231,6 +231,11 @@ function setStartTime(item, previousProgrammeEndTime) {
 function removeBrokenVideos(playList, detailedVideos) {
 	for (ix = playList.items.length - 1; ix--;) {
 		var item = playList.items[ix];
+		if (!item) {
+			console.error("item", ix, "was undefined");
+			playList.items.splice(ix, 1);
+			continue;
+		}
 		var video = detailedVideos[ix];
 		var shouldRemove = false;
 		if (typeof video.items[0] === "undefined"
