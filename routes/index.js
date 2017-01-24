@@ -5,6 +5,7 @@ var moment = require('moment');
 var YouTube = require('youtube-node');
 var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../dateTimeHelper');
+var winston = require('winston');
 
 /* -------------- Config -------------- */
 
@@ -112,6 +113,12 @@ router.get('/', function (req, res) {
 	getAllTheThings(req, res, channel);
 });
 
+/* -------------- Setup handlers -------------- */
+ winston.configure({
+    transports: [
+      new (winston.transports.File)({ filename: 'app.log' })
+    ]
+  });
 /************** Main func ************** */
 function getAllTheThings(req, res, settings) {
 	globalsettings.requestCounter++;
@@ -157,6 +164,8 @@ function getAllTheThings(req, res, settings) {
 				})
 				.catch(function (e) {
 					console.error(e);
+						winston.log('error', 
+			'Caught exception', {error: e});
 					res.render('error', {
 						message: e.message,
 						error: e,
@@ -232,6 +241,10 @@ function removeBrokenVideos(playList, detailedVideos) {
 	for (ix = playList.items.length - 1; ix--;) {
 		var item = playList.items[ix];
 		if (!item) {
+
+
+			winston.log('error', 
+			'Video was undefined', {index: ix, playListId: playList.id});
 			console.error("item", ix, "was undefined");
 			playList.items.splice(ix, 1);
 			continue;
@@ -243,6 +256,8 @@ function removeBrokenVideos(playList, detailedVideos) {
 			playList.items.splice(ix, 1);
 			detailedVideos.splice(ix, 1);
 			console.error(item.snippet.title, "ix:", ix, "has no video items");
+			winston.log('error', 
+			'Video has no video items', {item: item, ix: ix});
 			continue;
 		}
 		if (item.status.privacyStatus !== "public"
@@ -255,6 +270,8 @@ function removeBrokenVideos(playList, detailedVideos) {
 			&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "has regionRestriction in SE");
+				winston.log('error', 
+			'Video not avaliable in Sweden', {item: item, ix: ix});
 		}
 		if (shouldRemove) {
 			playList.items.splice(ix, 1);
@@ -275,6 +292,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 
 	var filtered = removeBrokenVideos(playList, detailedVideos);
 	playList = filtered.playList;
+	playList.items = playList.items.filter( (item)=> { return typeof item !== "undefined";   });
 	detailedVideos = filtered.detailedVideos;
 	if (detailedVideos.length !== playList.items.length)
 		console.error(videos.length, "videos", playList.items.length, "items in playlist");
@@ -282,7 +300,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	for (ix = 0; ix < playList.items.length; ix++) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
-		if (typeof video.items[0] === "undefined") {
+		if (!video.items[0]) {
 			console.error("something is messed up with video", ix);
 		}
 		var durationString = video.items[0].contentDetails.duration;
@@ -312,6 +330,8 @@ function getVideoById(videoId) {
 		youTube.getById(videoId, function (error, result) {
 			if (error) {
 				console.error(error);
+					winston.log('error', 
+			'Exception', {error: error});
 				reject(error);
 			}
 			else {
@@ -332,6 +352,8 @@ function getPlayListAsync(videoId, page, settings) {
 		youTube.getPlayListsItemsById(videoId, page, function (error, result) {
 			if (error) {
 				console.error(error);
+					winston.log('error', 
+			'Exception', {error: error});
 				reject(error);
 			} else {
 				//aggregate
