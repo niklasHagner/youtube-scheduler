@@ -5,7 +5,9 @@ body.dark-theme {
     top: 2px;
     left: 0px;
     z-index: @z-standard-menu;
-    text-align: center;
+    @media screen and (min-width: 600px) {
+      text-align: center;
+    }
   }
   .menu__item {
     display: inline-block;
@@ -18,8 +20,11 @@ body.dark-theme {
     cursor: pointer;
     user-select: none;
     > * {
-      /*the inner item is clickable, so apply padding to it instead of the __item */
-      padding: 5px 10px;
+      padding: 0px;
+      @media screen and (min-width: 600px) {
+        /*the inner item is clickable, so apply padding to it instead of the __item */
+        padding: 5px 10px;
+      }
     }
   }
   .menu__item:hover {
@@ -31,6 +36,27 @@ body.dark-theme {
     right: 30px;
     z-index: @z-standard-menu;
     text-align: center;
+    &--desktop {
+      display: none;
+      @media screen and (min-width: 600px) {
+        display: block;
+      }
+    }
+    &--mobile {
+      display: block;
+      color: white;
+      background: transparent;
+      border-color: transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      * {
+        color: black;
+      }
+      @media screen and (min-width: 600px) {
+        display: none;
+      }
+    }
   }
   .segment .menu__item + .menu__item {
     // border-left: solid 1px #555;
@@ -42,24 +68,29 @@ body.dark-theme {
     border-radius: 0px 55px 55px 0px;
   }
   .segment .menu__item {
-    margin-left: -2px;
-    border-radius: 0;
-    margin-right: -6px;
     display: inline-block;
     position: relative;
-    line-height: 33px;
-    padding: 0 7px;
-    font-size: 13px;
+    margin-left: -2px;
+    margin-right: -6px;
     color: white;
     text-decoration: none;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
     outline: 0;
+    border-radius: 0;
+    font-size: 9px;
+    line-height: 16px;
+    padding: 0 2px;
     &:hover {
       background-color: rgba(30, 87, 153, 0.5);
     }
-    &--active {
-      background: linear-gradient(to top, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 20%);
-      font-weight: bold;
+    @media screen and (min-width: 600px) {
+      line-height: 33px;
+      padding: 0 7px;
+      font-size: 13px;
+      &--active {
+        background: linear-gradient(to top, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 20%);
+        font-weight: bold;
+      }
     }
   }
   .toggle-programme:hover {
@@ -81,14 +112,19 @@ body.dark-theme {
     margin-right: -6px;
     display: inline-block;
     position: relative;
-    line-height: 33px;
-    padding: 0 15px;
-    font-size: 13px;
     color: white;
     text-decoration: none;
-    text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
     outline: 0;
     background: linear-gradient(to bottom, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 80%);
+    padding: 0 3px;
+    font-size: 10px;
+    line-height: 16px;
+    @media screen and (min-width: 600px) {
+      line-height: 33px;
+      padding: 0 15px;
+      font-size: 13px;
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
+    }
     &--active {
       background: linear-gradient(to top, rgba(30, 87, 153, 1) 0%, rgba(125, 185, 232, 0) 50%);
       border-top: #222;

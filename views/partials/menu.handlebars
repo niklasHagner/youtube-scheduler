@@ -26,9 +26,20 @@
 
     <nav class="menu__item" onclick="toggleTheme()"><i class="fa fa-bolt" aria-hidden="true"></i>Theme</nav>
     <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()"><i class="fa fa-list-ul" aria-hidden="true"></i>Schedule</nav>
+        
+    <select id="channelDropdown" class="segment--mobile" onChange="selectChannelByDropdown()">
+        <option class="menu__item menu__item--default" value="/">Main Channel</option>
+        <option class="menu__item menu__item--western" value="/western">Western</option>
+        <option class="menu__item menu__item--scifi" value="/scifi">Sci-Fi</option>
+        <option class="menu__item menu__item--classics" value="/classics">Classics</option>
+        <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
+        <option class="menu__item menu__item--horror" value="/horror">Horror</option>
+        <option class="menu__item menu__item--docs" value="/docs">Docs</option>
+    </select>
+
 </menu>
 
-<menu class="segment">
+<menu class="segment segment--desktop">
     <a class="menu__item menu__item--default" href="/">Main Channel</a>
     <a class="menu__item menu__item--western" href="/western">Western</a>
     <a class="menu__item menu__item--scifi" href="/scifi">Sci-Fi</a>
@@ -37,6 +48,7 @@
     <a class="menu__item menu__item--horror" href="/horror">Horror</a>
     <a class="menu__item menu__item--docs" href="/docs">Docs</a>
 </menu>
+
 
 <script>
 $(function() {
@@ -81,4 +93,8 @@ $(function() {
         $(".menu__item--default").addClass("menu__item--active");
     }
 });
+
+function selectChannelByDropdown(ev) {
+    window.location.href = $("#channelDropdown").val();
+}
 </script>
