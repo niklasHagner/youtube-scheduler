@@ -13,7 +13,9 @@ var winston = require('winston');
 var apiKey = process.env.YOUTUBEAPIKEY;
 
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
-
+var endProgramme = null;
+var currentChannel = null;
+var currentlyPlaying = null;
 globalsettings = {
 	shouldCache: true, //false: make new get requests to youtube every time
 	printlogs: false,
@@ -32,7 +34,7 @@ var channels = {
 	},
 	mtv: {
 		name: "MTV",
-		playlist: 'PLbEb562CLykG4O0AQIM8ggWGpRgR1nugF',
+		playlist: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
 		aggregatedPlaylist: null,
 		cachedResult: null
 	},
@@ -79,64 +81,66 @@ var now = new Date();
 
 /* -------------- Channel routes -------------- */
 router.get('/western', function (req, res) {
-	var channel = channels.western;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.western);
 });
 router.get('/scifi', function (req, res) {
-	var channel = channels.scifi;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.scifi);
 });
 router.get('/classics', function (req, res) {
-	var channel = channels.classics;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.classics);
 });
 router.get('/horror', function (req, res) {
-	var channel = channels.horror;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.horror);
 });
 router.get('/mtv', function (req, res) {
-	var channel = channels.mtv;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.mtv);
 });
 router.get('/docs', function (req, res) {
-	var channel = channels.docs;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.docs);
 });
 router.get('/test', function (req, res) {
-	var channel = channels.test;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.test);
 });
 
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
-	var channel = channels.mixed;
-	getAllTheThings(req, res, channel);
+	getAllTheThings(req, res, channels.mixed);
 });
 
 /* -------------- Setup handlers -------------- */
- winston.configure({
-    transports: [
-      new (winston.transports.File)({ filename: 'app.log' })
-    ]
-  });
+winston.configure({
+	transports: [
+		new (winston.transports.File)({ filename: 'errors.log' })
+	]
+});
 /************** Main func ************** */
-function getAllTheThings(req, res, settings) {
+function getAllTheThings(req, res, channel) {
+	currentChannel = channel;
 	globalsettings.requestCounter++;
 	now = new Date();
-	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalsettings.requestCounter, "for", settings.name);
+	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalsettings.requestCounter, "for", channel.name);
 
 	if (typeof apiKey === "undefined") {
 		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
 	}
 	var plData = null;
-	if (globalsettings.shouldCache && settings.cachedResult) {
+	if (globalsettings.shouldCache && channel.cachedResult) {
+		var currentTime = new Date();
+		var scheduleEnd = channel.cachedResult.items[channel.cachedResult.items.length - 1].endTime;
+		if (scheduleEnd - currentTime <= 0) {
+			
+			//reset schedule
+			startProgramme = currentTime;
+			winston.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
+			console.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
+		}
 		var previousProgrammeEndTime = moment(startProgramme).toDate();
-		settings.cachedResult.items.forEach(function (item, ix) {
+		channel.cachedResult.items.forEach(function (item, ix) {
 			item.playFirst = false;
 			item = setStartTime(item, previousProgrammeEndTime);
 			previousProgrammeEndTime = item.endTime;
 		});
-		var encodedResult = encodeURIComponent(JSON.stringify(settings.cachedResult));
+		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedResult));
 		res.render('index', {
 			title: 'Web TV',
 			encodedJson: encodedResult
@@ -145,17 +149,18 @@ function getAllTheThings(req, res, settings) {
 	}
 
 	//fetch
-	settings.aggregatedPlaylist = null
+	channel.aggregatedPlaylist = null
 
-	getPlayListAsync(settings.playlist, null, settings)
+	getPlayListAsync(channel.playlist, null, channel)
 		.then(function (playListData) {
 			plData = playListData;
 			getVideosFromPlaylistAsync(plData)
 				.then(function (videoArray) {
 					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
+					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
 					if (globalsettings.shouldCache) {
-						settings.cachedResult = plWithEnhancedVids;
+						channel.cachedResult = plWithEnhancedVids;
 					}
 					res.render('index', {
 						title: 'Web TV',
@@ -164,8 +169,8 @@ function getAllTheThings(req, res, settings) {
 				})
 				.catch(function (e) {
 					console.error(e);
-						winston.log('error', 
-			'Caught exception', {error: e});
+					winston.log("info", "--------" + currentChannel.name + "--------");
+					winston.log('error: ' + e.message);
 					res.render('error', {
 						message: e.message,
 						error: e,
@@ -226,6 +231,7 @@ function setStartTime(item, previousProgrammeEndTime) {
 	}
 	if (startDiff > 0 && endDiff < 0) {
 		item.playFirst = true;
+		currentlyPlaying = item;
 		//console.log("Play this video first:");
 
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
@@ -241,10 +247,8 @@ function removeBrokenVideos(playList, detailedVideos) {
 	for (ix = playList.items.length - 1; ix--;) {
 		var item = playList.items[ix];
 		if (!item) {
-
-
-			winston.log('error', 
-			'Video was undefined', {index: ix, playListId: playList.id});
+			winston.log('error',
+				'Video was undefined', { index: ix, playListId: playList.id });
 			console.error("item", ix, "was undefined");
 			playList.items.splice(ix, 1);
 			continue;
@@ -255,9 +259,10 @@ function removeBrokenVideos(playList, detailedVideos) {
 			|| video.items.length === 0) {
 			playList.items.splice(ix, 1);
 			detailedVideos.splice(ix, 1);
-			console.error(item.snippet.title, "ix:", ix, "has no video items");
-			winston.log('error', 
-			'Video has no video items', {item: item, ix: ix});
+			console.error("index", ix, "has no video. probably deleted");
+			winston.log("info", "--------" + currentChannel.name + "--------");
+			winston.log('error',
+				'No items for video', ix, item.title);
 			continue;
 		}
 		if (item.status.privacyStatus !== "public"
@@ -265,13 +270,23 @@ function removeBrokenVideos(playList, detailedVideos) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "is not public/embeddable");
 		}
+		if (typeof video.items === "undefined") {
+			winston.log("info", "--------" + currentChannel.name + "--------");
+			winston.log("god damn! video.items is undefined");
+		}
+		else if (typeof video.items[0] === "undefined") {
+			winston.log("info", "--------" + currentChannel.name + "--------");
+			winston.log("god damn! video.items[0] is undefined");
+		}
+
 		if (typeof video.items[0].contentDetails.regionRestriction !== "undefined"
 			&& typeof video.items[0].contentDetails.regionRestriction.blocked !== "undefined"
 			&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "has regionRestriction in SE");
-				winston.log('error', 
-			'Video not avaliable in Sweden', {item: item, ix: ix});
+			winston.log("info", "--------" + currentChannel.name + "--------");
+			winston.log('error',
+				'Video not avaliable in Sweden' + ' ' + ix + ' ' + item.title);
 		}
 		if (shouldRemove) {
 			playList.items.splice(ix, 1);
@@ -282,17 +297,17 @@ function removeBrokenVideos(playList, detailedVideos) {
 }
 
 /*
-take playlist. extend it's items with metadata from video details
+Extend playlist items with metadata from video details
 */
 function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	now = new Date();
 	if (detailedVideos.length !== playList.items.length)
-		throw new Error(videos.length, "videos", playList.items.length, "items in playlist");
+		throw new Error(playList.items.length, "items in playlist");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
 	var filtered = removeBrokenVideos(playList, detailedVideos);
 	playList = filtered.playList;
-	playList.items = playList.items.filter( (item)=> { return typeof item !== "undefined";   });
+	playList.items = playList.items.filter((item) => { return typeof item !== "undefined"; });
 	detailedVideos = filtered.detailedVideos;
 	if (detailedVideos.length !== playList.items.length)
 		console.error(videos.length, "videos", playList.items.length, "items in playlist");
@@ -330,8 +345,8 @@ function getVideoById(videoId) {
 		youTube.getById(videoId, function (error, result) {
 			if (error) {
 				console.error(error);
-					winston.log('error', 
-			'Exception', {error: error});
+				winston.log('error',
+					'Exception', { error: error });
 				reject(error);
 			}
 			else {
@@ -352,8 +367,10 @@ function getPlayListAsync(videoId, page, settings) {
 		youTube.getPlayListsItemsById(videoId, page, function (error, result) {
 			if (error) {
 				console.error(error);
-					winston.log('error', 
-			'Exception', {error: error});
+				winston.log("info", "--------" + currentChannel.name + "--------");
+
+				winston.log('error',
+					'Exception', { error: error });
 				reject(error);
 			} else {
 				//aggregate
@@ -370,7 +387,6 @@ function getPlayListAsync(videoId, page, settings) {
 					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
 				}
 				else {
-					//console.log("found", settings.aggregatedPlaylist.items.length, "videos");
 					fulfill(settings.aggregatedPlaylist);
 				}
 			}
