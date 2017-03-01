@@ -93,18 +93,21 @@ body.dark-theme {
       }
     }
   }
-  .toggle-programme:hover {
-    color: gold;
-    box-shadow: 0px 0px 5px gold;
-  }
-  .toggle-programme--active {
-    color: black;
-    background-color: gold;
-  }
-  .toggle-programme--active:hover {
-    color: gold;
-    background: black;
-    box-shadow: 0px 0px 5px gold;
+  .toggle-programme {
+    padding-right: 10px;
+    &:hover {
+      color: gold;
+      box-shadow: 0px 0px 5px gold;
+    }
+    &--active {
+      color: black;
+      background-color: gold;
+      &:hover {
+        color: gold;
+        background: black;
+        box-shadow: 0px 0px 5px gold;
+      }
+    }
   }
   .segment--blue .menu__item {
     margin-left: -2px;

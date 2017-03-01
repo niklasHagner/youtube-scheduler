@@ -1,22 +1,50 @@
 .programme {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
-  margin: 10px;
-  padding: 10px;
+  margin: 0;
   position: absolute;
-  left: 30px;
-  top: 100px;
-  width: 400px;
+  left: 0;
+  top: 95px;
+  width: 430px;
+  height: calc(100vh - 60px);
   letter-spacing: normal;
   text-align: left;
   z-index: 7;
+  overflow: hidden;
+  transition: height 0.25s;
 }
 .programme--hidden {
-  display: none;
+  height: 0;
+}
+.programme__body {
+  padding: 10px 10px 10px 30px;
+  font-family: 'Lato', sans-serif;
+}
+.programme header {
+  padding: 10px 10px 10px 30px;
+  width: calc(100% - 30px);
+  background-color: gold;
+}
+.programme header h1 {
+  color: black;
+}
+.programme header .programme__close {
+  position: absolute;
+  top: 6px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  color: black;
+  font-size: 25px;
+  z-index: 8;
+  cursor: pointer;
+}
+.programme h1 {
+  display: inline;
 }
 .programme .title {
   margin-top: 10px;
-  font-size: 11px;
+  font-size: 13px;
 }
 .programme .title--past {
   display: none;
@@ -28,17 +56,4 @@
   font-family: consolas, monospace;
   color: gold;
   font-weight: bolder;
-}
-.programme h1 {
-  display: inline;
-}
-.programme .programme__close {
-  padding: 5px 10px;
-  background: gold;
-  color: black;
-  box-shadow: 1px 2px 5px #555;
-  border-radius: 50px;
-  z-index: 7 1;
-  float: right;
-  cursor: pointer;
 }

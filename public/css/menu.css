@@ -66,50 +66,6 @@ body.retro-theme .toggle-programme--active:hover {
   color: black;
   background-color: yellow;
 }
-body.retro-theme .programme {
-  background-color: rgba(0, 0, 0, 0.5);
-  margin: 10px;
-  padding: 50px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 400px;
-  letter-spacing: normal;
-  text-align: left;
-  transition: width 0.5s, height 2s;
-  left: 0;
-}
-body.retro-theme .programme--hidden {
-  display: none;
-}
-body.retro-theme .programme .title {
-  margin-top: 10px;
-  font-size: 11px;
-}
-body.retro-theme .programme .title--past {
-  display: none;
-}
-body.retro-theme .programme .title--current {
-  font-size: 150%;
-}
-body.retro-theme .programme .title .start-time {
-  font-family: consolas, monospace;
-  color: gold;
-  font-weight: bolder;
-}
-body.retro-theme .programme header {
-  width: 100%;
-}
-body.retro-theme .programme header .programme__close {
-  float: right;
-  display: inline-block;
-  padding: 5px 10px;
-  background: gold;
-  color: black;
-  box-shadow: 1px 2px 5px #555;
-  border-radius: 50px;
-  z-index: 999;
-}
 body.retro-theme .logo {
   text-shadow: 1px 1px 2px black;
   display: none;
