@@ -24,10 +24,11 @@ function toggleTheme() {
 }
 
 function currentVideoChanged() {
-  var $curr = $($(".title--current")[0]);
-  $curr.next().addClass("title--current");
-  $curr.next().find(".start-time").text("Current: ");
-  $curr.removeClass("title--current").addClass("title--past");
+  var $curr = $($(".schedule-row--current")[0]);
+  $curr.next().addClass("schedule-row--current");
+  $curr.next().find(".schedule-row__time").text("NOW: ");
+  $curr.removeClass("schedule-row--current");
+  $curr.addClass("schedule-row--past");
 }
 
 function createProgramme(playlist) {
@@ -40,15 +41,20 @@ function createProgramme(playlist) {
     var startTime = new Date(item.startTime).getTime();
     var startTimeFormatted = item.startTimeFormatted;
     if (nowTime > endTime)
-      modifiers += " title--past";
+      modifiers += " schedule-row--past";
     else
-      modifiers += " title--future";
+      modifiers += " schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {
-      modifiers += " title--current";
-      startTimeFormatted = "Current:";
+      modifiers += " schedule-row--current";
+      startTimeFormatted = "NOW:";
     }
-    items += `<p class='title ${modifiers}'><span class='start-time'>${startTimeFormatted} </span>${item.snippet.title}</p>`;
+    var html =  `
+    <div class='schedule-row ${modifiers}'>
+      <div class='schedule-row__time'>${startTimeFormatted} </div>
+      <div class="schedule-row__title">${item.snippet.title}</div>
+    </div>`;
+    items += html.toString();
   });
 
   $(".programme__body").html(items);

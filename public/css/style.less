@@ -9,7 +9,7 @@ body, ul, menu, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, for
 body {
     background-color: #000;
     // background-image: url(images/static.gif);
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     letter-spacing: 0.3em;
     font-size: 14px;
     overflow: hidden;
@@ -165,9 +165,14 @@ iframe {
     margin-left: 5px;
 
     &--horror {
-        font-family: ChunkFive;
+        font-family: ChunkFive, Helvetica;
         text-shadow: 1px 0px #a70e0e;
         color: rgb(78, 71, 161);
+        font-size: 37px;
+        max-width: 300px;
+    }
+    &--western {
+        font-family: ChunkFive, Helvetica;
         font-size: 37px;
         max-width: 300px;
     }
@@ -179,7 +184,7 @@ iframe {
         font-weight: normal;
     }
     &--classics {
-        font-family: ChunkFive;
+        font-family: ChunkFive, Helvetica;
         color: #eee;
         font-size: 49px;
         max-width: 290px;
@@ -232,4 +237,9 @@ iframe {
     100% {
         left: 0;
     }
+}
+
+@font-face {
+    font-family: ChunkFive;
+    src: url(Chunkfive.otf);
 }

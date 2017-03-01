@@ -42,18 +42,30 @@
 .programme h1 {
   display: inline;
 }
-.programme .title {
-  margin-top: 10px;
+.programme .schedule-row {
+  margin-top: 15px;
   font-size: 13px;
+  display: inline-block;
+  width: 100%;
 }
-.programme .title--past {
+.programme .schedule-row--past {
   display: none;
 }
-.programme .title--current {
-  font-size: 150%;
+.programme .schedule-row--current {
+  color: gold;
 }
-.programme .title .start-time {
-  font-family: consolas, monospace;
+.programme .schedule-row__title {
+  width: 280px;
+  display: inline-block;
+  font-family: 'Work Sans', sans-serif;
+}
+.programme .schedule-row__time {
+  font-family: 'Work Sans', 'Helvetica', consolas, monospace;
+  font-size: 20px;
+  line-height: 1;
   color: gold;
   font-weight: bolder;
+  display: inline-block;
+  width: 65px;
+  vertical-align: top;
 }

@@ -43,19 +43,31 @@
     h1 {
         display: inline;
     }
-    .title {
-        margin-top: 10px;
+    .schedule-row {
+        margin-top: 15px;
         font-size: 13px;
+        display: inline-block;
+        width: 100%;
         &--past {
             display: none;
         }
         &--current {
-            font-size: 150%;
+            color: gold;
         }
-        .start-time {
-            font-family: consolas, monospace;
+        &__title {
+            width: 280px;
+            display: inline-block;
+            font-family: 'Work Sans', sans-serif;
+        }
+        &__time {
+            font-family: 'Work Sans', 'Helvetica', consolas, monospace;
+            font-size: 20px;
+            line-height: 1;
             color: gold;
             font-weight: bolder;
+            display: inline-block;
+            width: 65px;
+            vertical-align: top;
         }
     }
 }

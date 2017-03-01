@@ -27,7 +27,7 @@ blockquote {
 }
 body {
   background-color: #000;
-  font-family: 'Helvetica', sans-serif;
+  font-family: 'Quicksand', sans-serif;
   letter-spacing: 0.3em;
   font-size: 14px;
   overflow: hidden;
@@ -166,9 +166,14 @@ iframe#player {
   margin-left: 5px;
 }
 .logo--horror {
-  font-family: ChunkFive;
+  font-family: ChunkFive, Helvetica;
   text-shadow: 1px 0px #a70e0e;
   color: #4e47a1;
+  font-size: 37px;
+  max-width: 300px;
+}
+.logo--western {
+  font-family: ChunkFive, Helvetica;
   font-size: 37px;
   max-width: 300px;
 }
@@ -180,7 +185,7 @@ iframe#player {
   font-weight: normal;
 }
 .logo--classics {
-  font-family: ChunkFive;
+  font-family: ChunkFive, Helvetica;
   color: #eee;
   font-size: 49px;
   max-width: 290px;
@@ -225,4 +230,8 @@ iframe#player {
   100% {
     left: 0;
   }
+}
+@font-face {
+  font-family: ChunkFive;
+  src: url(Chunkfive.otf);
 }
