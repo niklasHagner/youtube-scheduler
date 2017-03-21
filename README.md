@@ -10,7 +10,7 @@ A simple overlay prevents the user from interacting with the player, to get the 
 ## How to build and run this project
 1. `npm install`
 2. build using `grunt` or `grunt && grunt watch` in the root directory OR run built project using `node start` or `node ./bin/www` )
-3. browse to `http://localhost:3000` 
+3. browse to `http://localhost:8080` 
 4. you MUST check the Pre-requisites section on how to set YOUTUBEAPIKEY
 
  
