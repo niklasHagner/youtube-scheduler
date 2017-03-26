@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="css/menu-base.css">
 <link rel="stylesheet" type="text/css" href="css/retro-menu.css">
 <link rel="stylesheet" type="text/css" href="css/dark.css">
 
@@ -23,8 +24,16 @@
         </div>
     </nav>
 
-    <nav class="menu__item" onclick="toggleTheme()"><i class="fa fa-bolt" aria-hidden="true"></i>Theme</nav>
-    <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()"><i class="fa fa-list-ul" aria-hidden="true"></i>Schedule</nav>
+    <nav class="menu__item">
+        <div onclick="toggleTheme()">
+            <i class="fa fa-bolt" aria-hidden="true"></i>Theme
+        </div>
+    </nav>
+    <nav class="menu__item toggle-programme">
+        <div onclick="toggleProgrammeVisibility()">
+            <i class="fa fa-list-ul" aria-hidden="true"></i>Schedule
+        </div>
+    </nav>
 
     <h1 class="logo">Retro-TV</h1>
 </menu>

@@ -203,6 +203,9 @@ iframe#player {
   -webkit-animation-delay: 2s;
   animation: slide 0.5s forwards;
   animation-delay: 2s;
+  height: auto;
+  width: auto;
+  display: block;
 }
 .fullscreen-menu.hidden {
   opacity: 0;

@@ -1,0 +1,26 @@
+@import "vars.less";
+.toggle-programme {
+    i {
+        padding-right: 5px;
+    }
+}
+
+.segment {
+    z-index: @z-standard-menu;
+    &--desktop {
+        display: none;
+        @media screen and (min-width: @breakpoint-mobile) {
+            display: block;
+        }
+    }
+    &--mobile {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: @z-menu-dropdown;
+        @media screen and (min-width: @breakpoint-mobile) {
+            display: none;
+        }
+    }
+}

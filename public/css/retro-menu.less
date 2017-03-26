@@ -4,15 +4,15 @@ body.retro-theme {
     background-image: url(images/static.gif);
     .menu {
         position: absolute;
-        top: -7px;
+        top: 0px;
         left: 0px;
         z-index: @z-standard-menu;
         text-align: center;
         font-family: Oswald, Helvetica, Arial, sans-serif;
         &__item {
             display: inline-block;
-            background: gold;
-            opacity: 0.5;
+            background: #b9ab8e;
+            opacity: 1;
             color: black;
             font-size: 12px;
             letter-spacing: normal;
@@ -24,17 +24,16 @@ body.retro-theme {
                 /*the inner item is clickable, so apply padding to it instead of the __item */
                 padding: 5px 10px;
             }
-            &--active {
-                opacity: 0.8;
-            }
+            &--active {}
             &:hover {
-                background-color: yellow;
+                background-color: gold;
             }
         }
     }
     .segment {
         position: absolute;
-        top: -7px;
+        font-family: Oswald, Helvetica, Arial, sans-serif;
+        top: 2px;
         right: 28px;
         z-index: @z-standard-menu;
         text-align: center;
@@ -49,6 +48,10 @@ body.retro-theme {
                     font-weight: bold;
                 }
             }
+            &:hover {
+                color: black;
+                background-color: gold;
+            }
         }
         .menu__item + .menu__item {
             border-left: solid 1px #555;
@@ -62,12 +65,12 @@ body.retro-theme {
     }
     .toggle-programme {
         &:hover {
-            color: white;
-            background-color: yellow;
+            color: black;
+            background-color: gold;
         }
         &--active {
             background: black;
-            color: yellow;
+            color: gold;
             box-shadow: 1px 1px 4px gold;
             &:hover {
                 color: black;

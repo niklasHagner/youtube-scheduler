@@ -1,5 +1,4 @@
 @import "vars.less";
-
 body, ul, menu, div, h1, h2, h3, h4, h5, h6, p, ul, ol, li, dl, dt, dd, img, form, fieldset, input, textarea, blockquote {
     margin: 0;
     padding: 0;
@@ -163,7 +162,6 @@ iframe {
     width: 100%;
     text-align: left;
     margin-left: 5px;
-
     &--horror {
         font-family: ChunkFive, Helvetica;
         text-shadow: 1px 0px #a70e0e;
@@ -206,6 +204,9 @@ iframe {
     -webkit-animation-delay: 2s;
     animation: slide 0.5s forwards;
     animation-delay: 2s;
+    height: auto;
+    width: auto;
+    display: block;
     &.hidden {
         opacity: 0;
         transition: all 0.5s ease;
@@ -214,6 +215,8 @@ iframe {
         -webkit-animation-delay: 2s;
         animation: slide 0.5s forwards;
         animation-delay: 2s;
+        // height: 0;
+        // width: 0;
     }
     .close-fullscreen {
         color: white;
@@ -223,7 +226,8 @@ iframe {
     }
 }
 
-.no-cursor { //hide cursor in fullscreen mode
+.no-cursor {
+    //hide cursor in fullscreen mode
     cursor: none;
 }
 
