@@ -3,9 +3,9 @@ body.dark-theme {
   .menu {
     position: absolute;
     top: 2px;
-    left: 0px;
+    left: 5px;
     z-index: @z-standard-menu;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: @breakpoint-mobile) {
       text-align: center;
     }
   }
@@ -15,13 +15,13 @@ body.dark-theme {
     color: white;
     font-size: 12px;
     letter-spacing: normal;
-    border-radius: 50px;
+    border-radius: 5px;
     border-color: transparent;
     cursor: pointer;
     user-select: none;
     > * {
       padding: 0px;
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: @breakpoint-mobile) {
         /*the inner item is clickable, so apply padding to it instead of the __item */
         padding: 5px 10px;
       }
@@ -38,7 +38,7 @@ body.dark-theme {
     text-align: center;
     &--desktop {
       display: none;
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: @breakpoint-mobile) {
         display: block;
       }
     }
@@ -50,10 +50,11 @@ body.dark-theme {
       position: absolute;
       top: 0;
       right: 0;
+      z-index: @z-menu-dropdown;
       * {
         color: black;
       }
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: @breakpoint-mobile) {
         display: none;
       }
     }
@@ -83,8 +84,8 @@ body.dark-theme {
     &:hover {
       background-color: rgba(30, 87, 153, 0.5);
     }
-    @media screen and (min-width: 600px) {
-      line-height: 33px;
+    @media screen and (min-width: @breakpoint-mobile) {
+      // line-height: 33px;
       padding: 0 7px;
       font-size: 13px;
       &--active {
@@ -122,8 +123,8 @@ body.dark-theme {
     padding: 0 3px;
     font-size: 10px;
     line-height: 16px;
-    @media screen and (min-width: 600px) {
-      line-height: 33px;
+    @media screen and (min-width: @breakpoint-mobile) {
+      // line-height: 33px;
       padding: 0 15px;
       font-size: 13px;
       text-shadow: 0 -1px rgba(0, 0, 0, 0.3);

@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/menu.css">
+<link rel="stylesheet" type="text/css" href="css/retro-menu.css">
 <link rel="stylesheet" type="text/css" href="css/dark.css">
 
 <menu class="fullscreen-menu hidden">
@@ -14,7 +14,6 @@
 
 
 <menu class="menu">
-    <h1 class="logo">Retro-TV</h1>
     <nav class="menu__item">{{> mutebutton }}</nav>
     <nav class="menu__item">{{> fullscreenbutton }}</nav>
     <nav class="menu__item">
@@ -26,17 +25,8 @@
 
     <nav class="menu__item" onclick="toggleTheme()"><i class="fa fa-bolt" aria-hidden="true"></i>Theme</nav>
     <nav class="menu__item toggle-programme" onclick="toggleProgrammeVisibility()"><i class="fa fa-list-ul" aria-hidden="true"></i>Schedule</nav>
-        
-    <select id="channelDropdown" class="segment--mobile" onChange="selectChannelByDropdown()">
-        <option class="menu__item menu__item--default" value="/">Main Channel</option>
-        <option class="menu__item menu__item--western" value="/western">Western</option>
-        <option class="menu__item menu__item--scifi" value="/scifi">Sci-Fi</option>
-        <option class="menu__item menu__item--classics" value="/classics">Classics</option>
-        <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
-        <option class="menu__item menu__item--horror" value="/horror">Horror</option>
-        <option class="menu__item menu__item--docs" value="/docs">Docs</option>
-    </select>
 
+    <h1 class="logo">Retro-TV</h1>
 </menu>
 
 <menu class="segment segment--desktop">
@@ -49,52 +39,63 @@
     <a class="menu__item menu__item--docs" href="/docs">Docs</a>
 </menu>
 
+<select id="channelDropdown" class="segment--mobile" onChange="selectChannelByDropdown()">
+        <option class="menu__item menu__item--default" value="/">Main Channel</option>
+        <option class="menu__item menu__item--western" value="/western">Western</option>
+        <option class="menu__item menu__item--scifi" value="/scifi">Sci-Fi</option>
+        <option class="menu__item menu__item--classics" value="/classics">Classics</option>
+        <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
+        <option class="menu__item menu__item--horror" value="/horror">Horror</option>
+        <option class="menu__item menu__item--docs" value="/docs">Docs</option>
+    </select>
+
 
 <script>
-$(function() {
-    var path = window.location.pathname;
-    var western = path.indexOf("western") > -1;
-    var scifi = path.indexOf("scifi") > -1;
-    var classics = path.indexOf("classics") > -1;
-    var mtv = path.indexOf("mtv") > -1;
-    var horror = path.indexOf("horror") > -1;
-    var docs = path.indexOf("docs") > -1;
-    var defaultChannel = !western && !scifi && !classics && !mtv && !horror;
-    if(western) {
-        $(".menu__item--western").addClass("menu__item--active");
-        $(".logo").addClass("logo--western");
-        $(".logo").html("Western");
-    }
-    else if( scifi) {
-        $(".menu__item--scifi").addClass("menu__item--active");
-        $(".logo").addClass("logo--scifi");
-        $(".logo").html("Sci-fi");
-    }
-    else if(classics) {
-        $(".menu__item--classics").addClass("menu__item--active");
-        $(".logo").addClass("logo--classics");
-        $(".logo").html("Classics");
-    }
-    else if( mtv) {
-        $(".mtv-logo").removeClass("mtv-logo--hidden");
-        $(".menu__item--mtv").addClass("menu__item--active");
-    }
-    else if(horror) {
-        $(".menu__item--horror").addClass("menu__item--active");
-        $(".logo").addClass("logo--horror");
-        $(".logo").html("Horror");
-    }
-     else if(docs) {
-        $(".menu__item--docs").addClass("menu__item--active");
-        $(".logo").addClass("logo--docs");
-        $(".logo").html("Docs");
-    }
-    else {
-        $(".menu__item--default").addClass("menu__item--active");
-    }
-});
+                                                               $(function () {
+                                                                   var path = window.location.pathname;
+                                                                   var western = path.indexOf("western") > -1;
+                                                                   var scifi = path.indexOf("scifi") > -1;
+                                                                   var classics = path.indexOf("classics") > -1;
+                                                                   var mtv = path.indexOf("mtv") > -1;
+                                                                   var horror = path.indexOf("horror") > -1;
+                                                                   var docs = path.indexOf("docs") > -1;
+                                                                   var defaultChannel = !western && !scifi && !classics && !mtv && !horror;
+                                                                   if (western) {
+                                                                       $(".menu__item--western").addClass("menu__item--active");
+                                                                       $(".logo").addClass("logo--western");
+                                                                       $(".logo").html("Western");
+                                                                   }
+                                                                   else if (scifi) {
+                                                                       $(".menu__item--scifi").addClass("menu__item--active");
+                                                                       $(".logo").addClass("logo--scifi");
+                                                                       $(".logo").html("Sci-fi");
+                                                                   }
+                                                                   else if (classics) {
+                                                                       $(".menu__item--classics").addClass("menu__item--active");
+                                                                       $(".logo").addClass("logo--classics");
+                                                                       $(".logo").html("Classics");
+                                                                   }
+                                                                   else if (mtv) {
+                                                                       $(".mtv-logo").removeClass("mtv-logo--hidden");
+                                                                       $(".menu__item--mtv").addClass("menu__item--active");
+                                                                   }
+                                                                   else if (horror) {
+                                                                       $(".menu__item--horror").addClass("menu__item--active");
+                                                                       $(".logo").addClass("logo--horror");
+                                                                       $(".logo").html("Horror");
+                                                                   }
+                                                                   else if (docs) {
+                                                                       $(".menu__item--docs").addClass("menu__item--active");
+                                                                       $(".logo").addClass("logo--docs");
+                                                                       $(".logo").html("Docs");
+                                                                   }
+                                                                   else {
+                                                                       $(".menu__item--default").addClass("menu__item--active");
+                                                                   }
+                                                               });
 
-function selectChannelByDropdown(ev) {
-    window.location.href = $("#channelDropdown").val();
-}
+                                                               function selectChannelByDropdown(ev) {
+                                                                   window.location.href = $("#channelDropdown").val();
+                                                               }
+
 </script>

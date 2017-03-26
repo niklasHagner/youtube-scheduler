@@ -16,7 +16,7 @@ body.retro-theme {
             color: black;
             font-size: 12px;
             letter-spacing: normal;
-            border-radius: 50px;
+            border-radius: 5px;
             box-shadow: 1px 1px 1px #555;
             cursor: pointer;
             user-select: none;
@@ -42,6 +42,13 @@ body.retro-theme {
             margin-left: -2px;
             border-radius: 0;
             margin-right: -6px;
+            padding: 0 10px;
+            @media screen and (min-width: @breakpoint-mobile) {
+                line-height: 33px;
+                &--active {
+                    font-weight: bold;
+                }
+            }
         }
         .menu__item + .menu__item {
             border-left: solid 1px #555;
@@ -68,7 +75,6 @@ body.retro-theme {
             }
         }
     }
-    
     .logo {
         text-shadow: 1px 1px 2px black;
         display: none;

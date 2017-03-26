@@ -17,7 +17,7 @@ body.retro-theme .menu__item {
   color: black;
   font-size: 12px;
   letter-spacing: normal;
-  border-radius: 5px;
+  border-radius: 50px;
   box-shadow: 1px 1px 1px #555;
   cursor: pointer;
   user-select: none;
@@ -43,9 +43,8 @@ body.retro-theme .segment .menu__item {
   margin-left: -2px;
   border-radius: 0;
   margin-right: -6px;
-  padding: 0 10px;
 }
-@media screen and (min-width: 850px) {
+@media screen and (min-width: 600px) {
   body.retro-theme .segment .menu__item {
     line-height: 33px;
   }

@@ -1,10 +1,10 @@
 body.dark-theme .menu {
   position: absolute;
   top: 2px;
-  left: 0px;
+  left: 5px;
   z-index: 4;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .menu {
     text-align: center;
   }
@@ -15,7 +15,7 @@ body.dark-theme .menu__item {
   color: white;
   font-size: 12px;
   letter-spacing: normal;
-  border-radius: 50px;
+  border-radius: 5px;
   border-color: transparent;
   cursor: pointer;
   user-select: none;
@@ -23,7 +23,7 @@ body.dark-theme .menu__item {
 body.dark-theme .menu__item > * {
   padding: 0px;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .menu__item > * {
     /*the inner item is clickable, so apply padding to it instead of the __item */
     padding: 5px 10px;
@@ -42,7 +42,7 @@ body.dark-theme .segment {
 body.dark-theme .segment--desktop {
   display: none;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .segment--desktop {
     display: block;
   }
@@ -55,11 +55,12 @@ body.dark-theme .segment--mobile {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 4;
 }
 body.dark-theme .segment--mobile * {
   color: black;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .segment--mobile {
     display: none;
   }
@@ -87,9 +88,8 @@ body.dark-theme .segment .menu__item {
 body.dark-theme .segment .menu__item:hover {
   background-color: rgba(30, 87, 153, 0.5);
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .segment .menu__item {
-    line-height: 33px;
     padding: 0 7px;
     font-size: 13px;
   }
@@ -128,9 +128,8 @@ body.dark-theme .segment--blue .menu__item {
   font-size: 10px;
   line-height: 16px;
 }
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   body.dark-theme .segment--blue .menu__item {
-    line-height: 33px;
     padding: 0 15px;
     font-size: 13px;
     text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
