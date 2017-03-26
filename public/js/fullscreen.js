@@ -39,10 +39,10 @@ $('body').mousemove(function () {
     }
     clearTimeout(mousemovetimer);
     $(".fullscreen-menu").show();
-    $("#tv").removeClass(".no-cursor");
+    $("#tv").removeClass("no-cursor");
     showingFullscreenMenu = true;
     mousemovetimer = window.setInterval(function () {
-        $("#tv").addClass(".no-cursor");
+        $("#tv").addClass("no-cursor");
         $(".fullscreen-menu").hide();
         showingFullscreenMenu = false;
     }, 1500);
