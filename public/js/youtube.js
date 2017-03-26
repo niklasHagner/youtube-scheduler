@@ -59,12 +59,14 @@ function getPlayerSettings() {
 	return playerSettings;
 }
 
+var readyEvent = new Event('youtubePlayerReady');
 function onPlayerReady(event) {
 	event.target.cueVideoById({
 		videoId: playNowVideo.snippet.resourceId.videoId,
 		startSeconds: playNowVideo.skipToSeconds
 	});
 	event.target.playVideo();
+	window.dispatchEvent(readyEvent);
 }
 
 function handleBufferTimeouts(event) {

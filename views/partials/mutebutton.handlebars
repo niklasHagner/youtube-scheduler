@@ -3,15 +3,34 @@
     <span>Sound</span>
 </div>
 <script>
-$('.mute-toggle').on('click', function() {
-    var icon = $(this).find("i");
-    if(player.isMuted()){
+    var soundIcon = $('.mute-toggle i');
+    var soundLabel = $('.mute-toggle span');
+    var soundCached = localStorage["ytPlayerSound"];
+    if (soundCached == "off")
+        window.addEventListener('youtubePlayerReady', mute);
+    //runWhenVarExists("player", mute);
+    else if (soundCached == "on")
+        window.addEventListener('youtubePlayerReady', unMute);
+    // runWhenVarExists("player", mute);
+
+    $('.mute-toggle').on('click', function () {
+
+        if (player.isMuted())
+            unMute();
+        else
+            mute();
+    });
+    function unMute() {
         player.unMute();
-        icon.attr('class','fa fa-volume-up');
+        soundIcon.attr('class', 'fa fa-volume-up');
+        soundLabel.text('Mute');
+        localStorage["ytPlayerSound"] = "on";
     }
-    else{
+    function mute() {
         player.mute();
-        icon.attr('class','fa fa-volume-off');
+        soundIcon.attr('class', 'fa fa-volume-off');
+        soundLabel.text('Unmute');
+        localStorage["ytPlayerSound"] = "off";
     }
-});
+
 </script>
