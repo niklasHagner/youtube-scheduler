@@ -9,18 +9,17 @@ var winston = require('winston');
 
 /* -------------- Config -------------- */
 
-//this env var must be manually set to your unique key for youtube-API  see README.md
-var apiKey = process.env.YOUTUBEAPIKEY;
-
+globalSettings = {
+	shouldCache: false, //false: make new get requests to youtube every time
+	printlogs: false,
+	requestCounter: 0,
+	MAX_PAGE_COUNT: 100,
+	apiKey: process.env.YOUTUBEAPIKEY //this env var must be manually set to your unique key for youtube-API  see README.md
+};
 var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
 var endProgramme = null;
 var currentChannel = null;
 var currentlyPlaying = null;
-globalsettings = {
-	shouldCache: true, //false: make new get requests to youtube every time
-	printlogs: false,
-	requestCounter: 0
-}
 /*
 	Change these playlist keys!
 	The keys are the strings after `pl=` in the url when watching a playlist on youtube.com
@@ -116,15 +115,15 @@ winston.configure({
 /************** Main func ************** */
 function getAllTheThings(req, res, channel) {
 	currentChannel = channel;
-	globalsettings.requestCounter++;
+	globalSettings.requestCounter++;
 	now = new Date();
-	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalsettings.requestCounter, "for", channel.name);
+	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalSettings.requestCounter, "for", channel.name);
 
-	if (typeof apiKey === "undefined") {
+	if (typeof globalSettings.apiKey === "undefined") {
 		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
 	}
 	var plData = null;
-	if (globalsettings.shouldCache && channel.cachedResult) {
+	if (globalSettings.shouldCache && channel.cachedResult) {
 		var currentTime = new Date();
 		var scheduleEnd = channel.cachedResult.items[channel.cachedResult.items.length - 1].endTime;
 		if (scheduleEnd - currentTime <= 0) {
@@ -159,7 +158,7 @@ function getAllTheThings(req, res, channel) {
 					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
 					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
-					if (globalsettings.shouldCache) {
+					if (globalSettings.shouldCache) {
 						channel.cachedResult = plWithEnhancedVids;
 					}
 					res.render('index', {
@@ -188,9 +187,6 @@ function getAllTheThings(req, res, channel) {
 		});
 }
 
-/* -------------- Logic -------------- */
-
-
 /*
 promise an array of videoDetails
 */
@@ -199,12 +195,11 @@ function getVideosFromPlaylistAsync(data) {
 	var promiseArray = data.items.map((playListItem) => {
 		return getVideoById(playListItem.snippet.resourceId.videoId)
 	});
-	var p = new Promise(function (resolve, reject) {
+	return new Promise(function (resolve, reject) {
 		Promise.all(promiseArray).then(function (videoArray) {
 			resolve(videoArray);
 		});
 	});
-	return p;
 }
 
 
@@ -339,7 +334,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 
 function getVideoById(videoId) {
 	var youTube = new YouTube();
-	youTube.setKey(apiKey);
+	youTube.setKey(globalSettings.apiKey);
 
 	return new Promise(function (fulfill, reject) {
 		youTube.getById(videoId, function (error, result) {
@@ -356,15 +351,15 @@ function getVideoById(videoId) {
 	});
 }
 
-function getPlayListAsync(videoId, page, settings) {
-	if (typeof page === "undefined" || page === null)
-		page = null;
+function getPlayListAsync(videoId, pageToken, settings) {
+	if (typeof pageToken === "undefined" || pageToken === null)
+		pageToken = null;
 
 	var youTube = new YouTube();
-	youTube.setKey(apiKey);
+	youTube.setKey(globalSettings.apiKey);
 
 	return new Promise(function (fulfill, reject) {
-		youTube.getPlayListsItemsById(videoId, page, function (error, result) {
+		youTube.getPlayListsItemsById(videoId, pageToken, function (error, result) {
 			if (error) {
 				console.error(error);
 				winston.log("info", "--------" + currentChannel.name + "--------");
@@ -380,13 +375,12 @@ function getPlayListAsync(videoId, page, settings) {
 					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
 				}
 
-				//return
-				if (result.nextPageToken || settings.maxPageCount >= settings.pageCounter) {
+				if (result.nextPageToken && settings.pageCounter <= globalSettings.MAX_PAGE_COUNT) {
 					//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
 					settings.pageCounter++;
 					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
 				}
-				else {
+				else { //finished pagination
 					fulfill(settings.aggregatedPlaylist);
 				}
 			}
