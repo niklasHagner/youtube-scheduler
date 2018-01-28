@@ -18,7 +18,7 @@ A simple overlay prevents the user from interacting with the player, to get the 
 * node cannot access the `env.process.YOUTUBEAPIKEY` => you need to check the Prerequisities section again
 * some videos in the playlist were not found => set the `shouldCache` to false and try again
 * some video are not played => this can be a result of the clientside `onError` method which skips to the next video if the current video causes a known error. Check the schedule and the logs to find which video was the problem
-* `"Invalid unsigned integer value: 'CAUQAA'."` this error usually means youtube have updated their paging logic and something broke regarding the varibles `nextPageToken` or `maxPage`
+* `"Invalid unsigned integer value: 'CAUQAA'."` the node-youtube-api has some bugs regarding mixups of params `nextPageToken` (string) and `maxPage` (int)
 
 ## Pre-requisites
 Step 1: You NEED to get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
