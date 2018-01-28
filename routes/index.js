@@ -14,12 +14,17 @@ globalSettings = {
 	printlogs: false,
 	requestCounter: 0,
 	MAX_PAGE_COUNT: 100,
-	apiKey: process.env.YOUTUBEAPIKEY //this env var must be manually set to your unique key for youtube-API  see README.md
+	apiKey: process.env.YOUTUBEAPIKEY, //this env var must be manually set to your unique key for youtube-API  see README.md
+	randomSortProgrammes: true
 };
-var startProgramme = moment(now).format("YYYY-MM-DD") + " 00:00"; //first video on the playlist will start at this time
+var now = new Date();
+var startProgramme = moment(now).subtract(4, "hours").format("YYYY-MM-DD HH:mm"); //first video on the playlist will start at this time
 var endProgramme = null;
 var currentChannel = null;
 var currentlyPlaying = null;
+
+var youTube = new YouTube();
+youTube.setKey(globalSettings.apiKey);
 /*
 	Change these playlist keys!
 	The keys are the strings after `pl=` in the url when watching a playlist on youtube.com
@@ -27,55 +32,45 @@ var currentlyPlaying = null;
 var channels = {
 	mixed: {
 		name: "Main Channel",
-		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4'
 	},
 	mtv: {
 		name: "MTV",
-		playlist: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS'
 	},
 	scifi: {
 		name: "Sci-Fi",
-		playlist: 'PLoFIHcp8yG7TZCMpvoJN1sTxLXSC2fX-o',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7TZCMpvoJN1sTxLXSC2fX-o'
 	},
 	western: {
 		name: "Western",
-		playlist: 'PLoFIHcp8yG7Rw81Vziam16u1U_v-tWUIl',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7Rw81Vziam16u1U_v-tWUIl'
 	},
 	classics: {
 		name: "old school classics",
-		playlist: 'PLoFIHcp8yG7QOui_Nljd3L3ZDn-47fnkP',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7QOui_Nljd3L3ZDn-47fnkP'
 	},
 	horror: {
 		name: "terror",
-		playlist: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7R9uevgGe_oG3vWYwfPvhPc'
 	},
 	docs: {
 		name: "Documentaries",
-		playlist: 'PLoFIHcp8yG7TbDOaNjkw6UMPjzaNC-4hX',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		playlist: 'PLoFIHcp8yG7TbDOaNjkw6UMPjzaNC-4hX'
+	},
+	two: {
+		name: "Two",
+		playlist: 'PLoFIHcp8yG7RpBOZR8aqtG5nzGsJdiyFb'
 	},
 	test: {
 		name: "test",
-		id: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS',
-		aggregatedPlaylist: null,
-		cachedResult: null
+		id: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS'
 	}
 }
-
-var now = new Date();
+for (var propname in channels) {
+	channels[propname].aggregatedPlaylist = null; 
+	channels[propname].cachedResult = null; 
+};
 
 
 /* -------------- Channel routes -------------- */
@@ -96,6 +91,9 @@ router.get('/mtv', function (req, res) {
 });
 router.get('/docs', function (req, res) {
 	getAllTheThings(req, res, channels.docs);
+});
+router.get('/two', function (req, res) {
+	getAllTheThings(req, res, channels.two);
 });
 router.get('/test', function (req, res) {
 	getAllTheThings(req, res, channels.test);
@@ -127,7 +125,7 @@ function getAllTheThings(req, res, channel) {
 		var currentTime = new Date();
 		var scheduleEnd = channel.cachedResult.items[channel.cachedResult.items.length - 1].endTime;
 		if (scheduleEnd - currentTime <= 0) {
-			
+
 			//reset schedule
 			startProgramme = currentTime;
 			winston.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
@@ -156,6 +154,9 @@ function getAllTheThings(req, res, channel) {
 			getVideosFromPlaylistAsync(plData)
 				.then(function (videoArray) {
 					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
+					// if (globalSettings.randomSortProgrammes === true) {
+					// 	plWithEnhancedVids.items = shuffle(plWithEnhancedVids.items);
+					// }
 					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
 					if (globalSettings.shouldCache) {
@@ -168,7 +169,7 @@ function getAllTheThings(req, res, channel) {
 				})
 				.catch(function (e) {
 					console.error(e);
-					winston.log("info", "--------" + currentChannel.name + "--------");
+					winston.log("CHANNEL:" + currentChannel.name);
 					winston.log('error: ' + e.message);
 					res.render('error', {
 						message: e.message,
@@ -191,7 +192,6 @@ function getAllTheThings(req, res, channel) {
 promise an array of videoDetails
 */
 function getVideosFromPlaylistAsync(data) {
-
 	var promiseArray = data.items.map((playListItem) => {
 		return getVideoById(playListItem.snippet.resourceId.videoId)
 	});
@@ -333,9 +333,6 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 }
 
 function getVideoById(videoId) {
-	var youTube = new YouTube();
-	youTube.setKey(globalSettings.apiKey);
-
 	return new Promise(function (fulfill, reject) {
 		youTube.getById(videoId, function (error, result) {
 			if (error) {
@@ -352,14 +349,15 @@ function getVideoById(videoId) {
 }
 
 function getPlayListAsync(videoId, pageToken, settings) {
-	if (typeof pageToken === "undefined" || pageToken === null)
-		pageToken = null;
-
-	var youTube = new YouTube();
-	youTube.setKey(globalSettings.apiKey);
+	// if (typeof pageToken === "undefined" || pageToken === null)
+	// 	pageToken = null;
+	var maxPage = (settings && settings.pageCounter) ? settings.pageCounter : null;
+	if (maxPage > 50)
+		maxPage = 50;
+	
 
 	return new Promise(function (fulfill, reject) {
-		youTube.getPlayListsItemsById(videoId, pageToken, function (error, result) {
+		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
 			if (error) {
 				console.error(error);
 				winston.log("info", "--------" + currentChannel.name + "--------");
@@ -375,8 +373,8 @@ function getPlayListAsync(videoId, pageToken, settings) {
 					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
 				}
 
+				settings.pageCounter = settings.pageCounter > 0 ? settings.pageCounter : 0;
 				if (result.nextPageToken && settings.pageCounter <= globalSettings.MAX_PAGE_COUNT) {
-					//console.log("page", settings.pageCounter, " : ", result.nextPageToken, "1st : ", result.items[0].snippet.title);
 					settings.pageCounter++;
 					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
 				}
@@ -387,6 +385,26 @@ function getPlayListAsync(videoId, pageToken, settings) {
 		});
 	});
 }
+
+function shuffle(array) {
+	var currentIndex = array.length, temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+}
+
 
 /* -------------- Extensions -------------- */
 function debuglog(args) {
