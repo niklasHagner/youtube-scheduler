@@ -31,7 +31,7 @@ youTube.setKey(globalSettings.apiKey);
 */
 var channels = {
 	mixed: {
-		name: "Main Channel",
+		name: "Channel 1",
 		playlist: 'PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4'
 	},
 	mtv: {
@@ -59,7 +59,7 @@ var channels = {
 		playlist: 'PLoFIHcp8yG7TbDOaNjkw6UMPjzaNC-4hX'
 	},
 	two: {
-		name: "Two",
+		name: "Channel 2",
 		playlist: 'PLoFIHcp8yG7RpBOZR8aqtG5nzGsJdiyFb'
 	},
 	test: {
@@ -252,12 +252,12 @@ function removeBrokenVideos(playList, detailedVideos) {
 		var shouldRemove = false;
 		if (typeof video.items[0] === "undefined"
 			|| video.items.length === 0) {
-			playList.items.splice(ix, 1);
-			detailedVideos.splice(ix, 1);
 			console.error("index", ix, "has no video. probably deleted");
 			winston.log("info", "--------" + currentChannel.name + "--------");
 			winston.log('error',
 				'No items for video', ix, item.title);
+			playList.items.splice(ix, 1);
+			detailedVideos.splice(ix, 1);
 			continue;
 		}
 		if (item.status.privacyStatus !== "public"
@@ -307,11 +307,21 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	if (detailedVideos.length !== playList.items.length)
 		console.error(videos.length, "videos", playList.items.length, "items in playlist");
 
-	for (ix = 0; ix < playList.items.length; ix++) {
+	/* reversed loop just so we can remove items without contentDetails, which is a common problem */
+	playList.items = playList.items.reverse();
+	for (ix = playList.items.length -1; ix >= 0; ix--) {
 		var item = playList.items[ix];
 		var video = detailedVideos[ix];
-		if (!video.items[0]) {
-			console.error("something is messed up with video", ix);
+		if (!video || !video.items[0]) {
+			console.error("video.items doesn't exist for index", ix);
+			playList.items.splice(ix, 1);
+			continue;
+		}
+		else if (!video.items[0].contentDetails) {
+			console.error("Damn! Contentdetails doesn't exist on item", ix, "removing that video");
+			console.error(video.items[0]);
+			playList.items.splice(ix, 1);
+			continue;
 		}
 		var durationString = video.items[0].contentDetails.duration;
 		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
