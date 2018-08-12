@@ -115,7 +115,7 @@ function getAllTheThings(req, res, channel) {
 	currentChannel = channel;
 	globalSettings.requestCounter++;
 	now = new Date();
-	console.info(now.getHours() + ":" + now.getMinutes(), " ~ Request", globalSettings.requestCounter, "for", channel.name);
+	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
 
 	if (typeof globalSettings.apiKey === "undefined") {
 		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
@@ -151,12 +151,10 @@ function getAllTheThings(req, res, channel) {
 	getPlayListAsync(channel.playlist, null, channel)
 		.then(function (playListData) {
 			plData = playListData;
+
 			getVideosFromPlaylistAsync(plData)
 				.then(function (videoArray) {
 					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
-					// if (globalSettings.randomSortProgrammes === true) {
-					// 	plWithEnhancedVids.items = shuffle(plWithEnhancedVids.items);
-					// }
 					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
 					if (globalSettings.shouldCache) {
@@ -306,6 +304,12 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	detailedVideos = filtered.detailedVideos;
 	if (detailedVideos.length !== playList.items.length)
 		console.error(videos.length, "videos", playList.items.length, "items in playlist");
+
+	console.log("playlist.items:", playList.items.length, "detailedVideos:", detailedVideos.length);
+	
+	// if (globalSettings.randomSortProgrammes === true) {
+	playList.items = playList.items = shuffle(playList.items = playList.items);
+	// }
 
 	/* reversed loop just so we can remove items without contentDetails, which is a common problem */
 	playList.items = playList.items.reverse();
