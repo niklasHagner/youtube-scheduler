@@ -329,6 +329,8 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
 	}
+	playList.items = playList.items.reverse();
+
 	//Loop the schedule by moving past stuff to the end
 	previousProgrammeEndTime = playList.items[playList.items.length - 1].endTime;
 	while (playList.items[0].past === true) {
