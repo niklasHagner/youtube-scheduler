@@ -8,10 +8,11 @@ A simple overlay prevents the user from interacting with the player, to get the 
 ![screenshot](http://i.imgur.com/220jd5k.jpg)
 
 ## How to build and run this project
-1. `npm install`
-2. build using `grunt` in the root directory OR run built project using `node start` or `node ./bin/www` )
-3. browse to `http://localhost:8080` 
-4. you MUST check the Pre-requisites section on how to set YOUTUBEAPIKEY
+1. ensure you've set the environment variable YOUTUBEAPIKEY, see the Pre-requsities section
+2. `npm install`
+3. build using `grunt` in the root directory 
+4. or if you've already built, you can start the server using `node start` or `node ./bin/www` )
+5. browse to `http://localhost:3000`
 
  
 ## Troubleshooting common issues
@@ -29,11 +30,13 @@ Step 2: Make node use that apiKey
 * Or if you are really lazy and hate env vars, you can just remove the line `var apiKey = process.env.YOUTUBEAPIKEY` and replace it with `var apiKey="abc123"`
 
 ### How to set env vars on Linux/Unix: 
-* Set it Permanently in a bash terminal: `export YOUTUBEAPIKEY='abc123'` 
-* ...or set it for current session only: in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
+* Set it in an `.env` file containing `YOUTUBEAPIKEY=abc123`
+* OR set it Permanently in a bash terminal: `export YOUTUBEAPIKEY='abc123'` 
+* OR set it for current session only: in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
 
 ### How to set env vars on Windows:
-* Set it permanently:
+* Set it in an `.env` file containing `YOUTUBEAPIKEY=abc123`
+* OR, set it permanently:
   * From Powershell:
  `[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")`
   * You might have to restart your console to use the new env variable in node
