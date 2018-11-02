@@ -70,8 +70,8 @@ function onPlayerReady(event) {
 }
 
 function handleBufferTimeouts(event) {
-	var maxWait = 4000;
-	setTimeout(function(){ 
+	var maxWait = 7000;
+	setTimeout(function(){
 		if ( state.isPlaying === false) {
 			console.log("video failed after", maxWait/1000, "s", "- moving to next video!");
 			playNext(event);
@@ -89,7 +89,7 @@ function onPlayerStateChange(event) {
 	}
 	else if (event.data == YT.PlayerState.PLAYING) {
 		setTimeout(function() { $("#tv").removeClass("loading"); }, 3500);
-		
+
 		state.isPlaying = true;
 	}
 }
