@@ -70,10 +70,10 @@ function onPlayerReady(event) {
 }
 
 function handleBufferTimeouts(event) {
-	var maxWait = 7000;
+	var maxWait = 14000;
 	setTimeout(function(){
 		if ( state.isPlaying === false) {
-			console.log("video failed after", maxWait/1000, "s", "- moving to next video!");
+			console.log("video playing did not start after", maxWait/1000, "seconds", "- moving to next video!");
 			playNext(event);
 		};
 	}, maxWait);
