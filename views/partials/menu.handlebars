@@ -15,12 +15,9 @@
 
 
 <menu class="menu">
-    <nav class="menu__item">{{> mutebutton }}</nav>
-    <nav class="menu__item">{{> fullscreenbutton }}</nav>
-    <nav class="menu__item">
-        <div class="fullscreen-toggle fullscreen-toggle-2">
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-            <span>Fullscreen</span>
+    <nav class="menu__item toggle-programme">
+        <div onclick="toggleProgrammeVisibility()">
+            <i class="fa fa-list-ul" aria-hidden="true"></i>Schedule
         </div>
     </nav>
 
@@ -29,14 +26,21 @@
             <i class="fa fa-bolt" aria-hidden="true"></i>Theme
         </div>
     </nav>
-    <nav class="menu__item toggle-programme">
-        <div onclick="toggleProgrammeVisibility()">
-            <i class="fa fa-list-ul" aria-hidden="true"></i>Schedule
+
+    <nav class="menu__item">{{> fullscreenbutton }}</nav>
+
+    <nav class="menu__item">{{> mutebutton }}</nav>
+
+    <nav class="menu__item">
+        <div class="fullscreen-toggle fullscreen-toggle-2">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            <span>Fullscreen</span>
         </div>
     </nav>
 
-    <h1 class="logo">Retro-TV</h1>
 </menu>
+
+<h1 class="logo">Retro-TV</h1>
 
 <menu class="segment segment--desktop">
     <a class="menu__item menu__item--default" href="/">One</a>

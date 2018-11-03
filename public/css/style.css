@@ -157,6 +157,9 @@ iframe#player {
   display: none;
 }
 .logo {
+  position: absolute;
+  bottom: 2px;
+  left: 5px;
   font-size: 50px;
   font-family: Helvetica;
   color: #eee;
@@ -195,8 +198,8 @@ iframe#player {
 .fullscreen-menu {
   z-index: 6;
   position: absolute;
-  top: 5px;
-  left: 5px;
+  bottom: 5px;
+  right: 5px;
   opacity: 1;
   transition: all 0.5s ease;
   -webkit-animation: slide 0.5s forwards;
