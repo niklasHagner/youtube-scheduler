@@ -2,7 +2,7 @@
 ## Broadcast playlists as TV channels
 I miss the days of sitting in front of the TV and watching whatever was on.
 
-This is a node service that lets you enter some youtube playlists and broadcast them as a TV-channel. 
+This is a node service that lets you enter some youtube playlists and broadcast them as a TV-channel.
 A simple overlay prevents the user from interacting with the player, to get the oldschool experience.
 
 ![screenshot](http://i.imgur.com/220jd5k.jpg)
@@ -10,11 +10,11 @@ A simple overlay prevents the user from interacting with the player, to get the 
 ## How to build and run this project
 1. ensure you've set the environment variable YOUTUBEAPIKEY, see the Pre-requsities section
 2. `npm install`
-3. build using `grunt` in the root directory 
-4. or if you've already built, you can start the server using `node start` or `node ./bin/www` )
+3. `npm run build` - to compile LESS to CSS
+4. `node start` to run the node-server
 5. browse to `http://localhost:3000`
 
- 
+
 ## Troubleshooting common issues
 * node cannot access the `env.process.YOUTUBEAPIKEY` => you need to check the Prerequisities section again
 * some videos in the playlist were not found => set the `shouldCache` to false and try again
@@ -29,9 +29,9 @@ Step 2: Make node use that apiKey
 * Set the environemnt variable `YOUTUBEAPIKEY` to your apiKey value.
 * Or if you are really lazy and hate env vars, you can just remove the line `var apiKey = process.env.YOUTUBEAPIKEY` and replace it with `var apiKey="abc123"`
 
-### How to set env vars on Linux/Unix: 
+### How to set env vars on Linux/Unix:
 * Set it in an `.env` file containing `YOUTUBEAPIKEY=abc123`
-* OR set it Permanently in a bash terminal: `export YOUTUBEAPIKEY='abc123'` 
+* OR set it Permanently in a bash terminal: `export YOUTUBEAPIKEY='abc123'`
 * OR set it for current session only: in the node shell run this command: `process.env.YOUTUBEAPIKEY = 'abc123'`
 
 ### How to set env vars on Windows:
@@ -40,7 +40,7 @@ Step 2: Make node use that apiKey
   * From Powershell:
  `[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")`
   * You might have to restart your console to use the new env variable in node
-  
+
 * Set it temporarily:
   * while in the node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
 

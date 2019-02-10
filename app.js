@@ -19,13 +19,13 @@ app.locals.ENV_DEVELOPMENT = env == 'development';
  //Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
  //Step 2: Set the environemtn variable YOUTUBEAPIKEY = 'yourapikey'
 
- //HOW TO SET ENV VARIABLES ON UNIX: 
+ //HOW TO SET ENV VARIABLES ON UNIX:
  //Temproary: in the node shell run this command: process.env.YOUTUBEAPIKEY = 'abc123'
  //Permanent: export YOUTUBEAPIKEY = 'abc123'
 
  //HOW TO SET ENV VARIABLES ON WINDOWS:
  //Temporary :while in the node-shell set the variable with the command command: process.env.youtubeapikey = 'abc123'
- //Permanent: 
+ //Permanent:
  //Use any powershell console (doesn't have to be elevated) with this command
  //[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")
 
@@ -93,6 +93,12 @@ app.use(function (err, req, res, next) {
         error: {},
         title: 'error'
     });
+});
+
+var portFallback = 8080;
+var port = process.env.PORT || portFallback;
+app.listen(port, function () {
+  console.log('Express server listening on port ' + port);
 });
 
 
