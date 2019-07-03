@@ -6,12 +6,10 @@
     var soundIcon = $('.mute-toggle i');
     var soundLabel = $('.mute-toggle span');
     var soundCached = localStorage["ytPlayerSound"];
-    if (soundCached == "off")
-        window.addEventListener('youtubePlayerReady', mute);
-    //runWhenVarExists("player", mute);
-    else if (soundCached == "on")
-        window.addEventListener('youtubePlayerReady', unMute);
-    // runWhenVarExists("player", mute);
+   // if (soundCached == "off")
+    //    window.addEventListener('youtubePlayerReady', mute);
+    //else if (soundCached == "on")
+     //   window.addEventListener('youtubePlayerReady', unMute);
 
     $('.mute-toggle').on('click', function () {
 

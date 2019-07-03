@@ -67,7 +67,8 @@ function onPlayerReady(event) {
 		videoId: playNowVideo.snippet.resourceId.videoId,
 		startSeconds: playNowVideo.skipToSeconds
 	});
-	event.target.playVideo();
+  event.target.playVideo();
+  player.mute();
 	window.dispatchEvent(readyEvent);
 }
 
