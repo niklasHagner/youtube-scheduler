@@ -68,8 +68,8 @@ var channels = {
 	}
 }
 for (var propname in channels) {
-	channels[propname].aggregatedPlaylist = null; 
-	channels[propname].cachedResult = null; 
+	channels[propname].aggregatedPlaylist = null;
+	channels[propname].cachedResult = null;
 };
 
 
@@ -246,9 +246,10 @@ function removeBrokenVideos(playList, detailedVideos) {
 			playList.items.splice(ix, 1);
 			continue;
 		}
-		var video = detailedVideos[ix];
+    var video = detailedVideos[ix];
+    var videoItem = video.items[0];
 		var shouldRemove = false;
-		if (typeof video.items[0] === "undefined"
+		if (typeof videoItem  === "undefined"
 			|| video.items.length === 0) {
 			console.error("index", ix, "has no video. probably deleted");
 			winston.log("info", "--------" + currentChannel.name + "--------");
@@ -259,7 +260,7 @@ function removeBrokenVideos(playList, detailedVideos) {
 			continue;
 		}
 		if (item.status.privacyStatus !== "public"
-			|| video.items[0].status.embeddable !== true) {
+			|| videoItem.status.embeddable !== true) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "is not public/embeddable");
 		}
@@ -267,16 +268,17 @@ function removeBrokenVideos(playList, detailedVideos) {
 			winston.log("info", "--------" + currentChannel.name + "--------");
 			winston.log("god damn! video.items is undefined");
 		}
-		else if (typeof video.items[0] === "undefined") {
+		else if (typeof videoItem === "undefined") {
 			winston.log("info", "--------" + currentChannel.name + "--------");
 			winston.log("god damn! video.items[0] is undefined");
 		}
 
-		if (typeof video.items[0].contentDetails.regionRestriction !== "undefined"
-			&& typeof video.items[0].contentDetails.regionRestriction.blocked !== "undefined"
-			&& video.items[0].contentDetails.regionRestriction.blocked.indexOf("SE") > -1) {
+		if (typeof videoItem.contentDetails.regionRestriction !== "undefined"
+			&& typeof videoItem.contentDetails.regionRestriction.blocked !== "undefined"
+      && videoItem.contentDetails.regionRestriction.blocked.indexOf("SE") > -1
+    ){
 			shouldRemove = true;
-			console.error(item.snippet.title, "has regionRestriction in SE");
+			console.error("item", ix, item.snippet.title, "has regionRestriction in SE");
 			winston.log("info", "--------" + currentChannel.name + "--------");
 			winston.log('error',
 				'Video not avaliable in Sweden' + ' ' + ix + ' ' + item.title);
@@ -306,7 +308,7 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		console.error(videos.length, "videos", playList.items.length, "items in playlist");
 
 	console.log("playlist.items:", playList.items.length, "detailedVideos:", detailedVideos.length);
-	
+
 	// if (globalSettings.randomSortProgrammes === true) {
 	playList.items = playList.items = shuffle(playList.items = playList.items);
 	// }
@@ -315,19 +317,20 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 	playList.items = playList.items.reverse();
 	for (ix = playList.items.length -1; ix >= 0; ix--) {
 		var item = playList.items[ix];
-		var video = detailedVideos[ix];
-		if (!video || !video.items[0]) {
+    var video = detailedVideos[ix];
+    var videoItem = video.items[0]
+		if (!video || !videoItem) {
 			console.error("video.items doesn't exist for index", ix);
 			playList.items.splice(ix, 1);
 			continue;
 		}
-		else if (!video.items[0].contentDetails) {
+		else if (!videoItem.contentDetails) {
 			console.error("Damn! Contentdetails doesn't exist on item", ix, "removing that video");
-			console.error(video.items[0]);
+			console.error(videoItem);
 			playList.items.splice(ix, 1);
 			continue;
 		}
-		var durationString = video.items[0].contentDetails.duration;
+		var durationString = videoItem.contentDetails.duration;
 		var hms = DateTimeHelper.getHoursMinutesSeconds(durationString);
 		item.durationSeconds = hms.s * 1 + hms.m * 60 + (hms.h * 60 * 60);
 		item = setStartTime(item, previousProgrammeEndTime);
@@ -370,7 +373,7 @@ function getPlayListAsync(videoId, pageToken, settings) {
 	var maxPage = (settings && settings.pageCounter) ? settings.pageCounter : null;
 	if (maxPage > 50)
 		maxPage = 50;
-	
+
 
 	return new Promise(function (fulfill, reject) {
 		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
