@@ -48,7 +48,8 @@ function getPlayerSettings() {
 			modestbranding: 1, //Set the parameter value to 1 to prevent the YouTube logo from displaying in the control bar. Note that a small YouTube text label will still display in the upper-right corner of a paused video when the user's mouse pointer hovers over the player.
 			rel: 0, //show related videos when playback of the initial video ends. Supported values are 0 and 1. The default value is 1.
 			fs: 0,
-			iv_load_policy: 3
+      iv_load_policy: 3,
+      enablejsapi: 1 //without this the onReady might not trigger
 		},
 		events: {
 			'onReady': onPlayerReady,
