@@ -3,7 +3,7 @@ var state = { isPlaying: false }
 
 //Insert iframe player
 var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
+tag.src = "https://www.youtube.com/iframe_api&mute=1";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
