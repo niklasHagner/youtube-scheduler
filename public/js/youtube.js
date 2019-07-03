@@ -42,7 +42,8 @@ function getPlayerSettings() {
 		playerVars: {
 			autoplay: 1,
 			controls: 0, //Player controls do not display in the player. For IFrame embeds, the Flash player loads immediately.
-			showsearch: 0,
+      disablekb: 1, //Disable keyboard nav
+      showsearch: 0,
 			showinfo: 0, //display information like the video title and uploader before the video starts playing.
 			autohide: 1,//Regardless of the player's dimensions, the video progress bar and player controls display or hide automatically.
 			modestbranding: 1, //Set the parameter value to 1 to prevent the YouTube logo from displaying in the control bar. Note that a small YouTube text label will still display in the upper-right corner of a paused video when the user's mouse pointer hovers over the player.
