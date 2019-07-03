@@ -114,3 +114,31 @@ function playNext(event) {
 	event.target.cueVideoById(cueObject);
 	event.target.playVideo();
 }
+
+function createProgramme(playlist) {
+  var items = '';
+  var nowTime = new Date().getTime();
+  playlist.items.forEach(function (item, index) {
+    var modifiers = "";
+    var endTime = new Date(item.endTime).getTime();
+    var startTime = new Date(item.startTime).getTime();
+    var startTimeFormatted = item.startTimeFormatted;
+    if (nowTime > endTime)
+      modifiers += " schedule-row--past";
+    else
+      modifiers += " schedule-row--future";
+
+    if (endTime > nowTime && startTime < nowTime) {
+      modifiers += " schedule-row--current";
+      startTimeFormatted = "NOW:";
+    }
+    var html =  `
+    <div class='schedule-row ${modifiers}'>
+      <div class='schedule-row__time'>${startTimeFormatted} </div>
+      <div class="schedule-row__title">${item.snippet.title}</div>
+    </div>`;
+    items += html.toString();
+  });
+
+  $(".programme__body").html(items);
+}
