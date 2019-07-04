@@ -1,5 +1,10 @@
 <menu class="fullscreen-menu hidden">
-    <nav class="menu__item">{{> mutebutton }}</nav>
+    <nav class="menu__item">
+      <div class="mute-toggle">
+          <i class="fa fa-volume-up" aria-hidden="true"></i>
+          <span>Sound</span>
+      </div>
+    </nav>
     <nav class="menu__item">{{> fullscreenbutton }}</nav>
     <nav class="menu__item">
         <div class="fullscreen-toggle fullscreen-toggle-2">
@@ -25,7 +30,12 @@
 
     <nav class="menu__item">{{> fullscreenbutton }}</nav>
 
-    <nav class="menu__item">{{> mutebutton }}</nav>
+    <nav class="menu__item">
+      <div class="mute-toggle">
+          <i class="fa fa-volume-up" aria-hidden="true"></i>
+          <span>Sound</span>
+      </div>
+    </nav>
 
     <nav class="menu__item">
         <div class="fullscreen-toggle fullscreen-toggle-2">
@@ -59,7 +69,6 @@
     <option class="menu__item menu__item--horror" value="/horror">Horror</option>
     <option class="menu__item menu__item--docs" value="/docs">Docs</option>
 </select>
-
 
 <script>
     $(function () {
@@ -113,6 +122,34 @@
 
     function selectChannelByDropdown(ev) {
         window.location.href = $("#channelDropdown").val();
+    }
+
+    var soundIcon = $('.mute-toggle i');
+    var soundLabel = $('.mute-toggle span');
+    var soundCached = localStorage["ytPlayerSound"];
+    // if (soundCached == "off")
+    //    window.addEventListener('youtubePlayerReady', mute);
+    //else if (soundCached == "on")
+    //   window.addEventListener('youtubePlayerReady', unMute);
+
+    $('.mute-toggle').on('click', toggleMute);
+    function unMute() {
+        player.unMute();
+        soundIcon.attr('class', 'fa fa-volume-up');
+        soundLabel.text('Mute');
+        localStorage["ytPlayerSound"] = "on";
+    }
+    function mute() {
+        player.mute();
+        soundIcon.attr('class', 'fa fa-volume-off');
+        soundLabel.text('Unmute');
+        localStorage["ytPlayerSound"] = "off";
+    }
+    function toggleMute() {
+        if (player.isMuted())
+            unMute();
+        else
+            mute();
     }
 
 </script>
