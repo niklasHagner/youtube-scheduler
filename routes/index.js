@@ -10,7 +10,7 @@ var winston = require('winston');
 /* -------------- Config -------------- */
 
 globalSettings = {
-	shouldCache: false, //false: make new get requests to youtube every time
+	shouldCache: true, //false: make new get requests to youtube every time
 	printlogs: false,
 	requestCounter: 0,
 	MAX_PAGE_COUNT: 100,
@@ -64,7 +64,7 @@ var channels = {
 	},
 	test: {
 		name: "test",
-		id: 'PLoFIHcp8yG7Tnv63BtXOBYMRpKVOCOipS'
+		id: 'PLoFIHcp8yG7RLSsgPfsjooecPAa2Mnim7'
 	}
 }
 for (var propname in channels) {
@@ -101,6 +101,9 @@ router.get('/test', function (req, res) {
 
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
+  if (typeof globalSettings.apiKey === "undefined") {
+		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
+	}
 	getAllTheThings(req, res, channels.mixed);
 });
 
@@ -117,9 +120,6 @@ function getAllTheThings(req, res, channel) {
 	now = new Date();
 	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
 
-	if (typeof globalSettings.apiKey === "undefined") {
-		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
-	}
 	var plData = null;
 	if (globalSettings.shouldCache && channel.cachedResult) {
 		var currentTime = new Date();
@@ -228,11 +228,10 @@ function setStartTime(item, previousProgrammeEndTime) {
 		//console.log("Play this video first:");
 
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
-		var skipTo = new Date(skipMs);
 		item.skipToSeconds = skipMs / 1000;
 		item.skipToString = DateTimeHelper.msToYoutubeSkipString(skipMs);
 	}
-	//console.log(item.snippet.title, item.playFirst, item.skipTo, item.startTime, item.endTime);
+	//console.log(item.snippet.title, item.playFirst, item.startTime, item.endTime);
 	return item;
 }
 
@@ -408,28 +407,16 @@ function getPlayListAsync(videoId, pageToken, settings) {
 function shuffle(array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;
 
-	// While there remain elements to shuffle...
+	// While there remain elements to shuffle: pick a remaining element and swap it with the current element.
 	while (0 !== currentIndex) {
-
-		// Pick a remaining element...
 		randomIndex = Math.floor(Math.random() * currentIndex);
 		currentIndex -= 1;
-
-		// And swap it with the current element.
 		temporaryValue = array[currentIndex];
 		array[currentIndex] = array[randomIndex];
 		array[randomIndex] = temporaryValue;
 	}
 
 	return array;
-}
-
-
-/* -------------- Extensions -------------- */
-function debuglog(args) {
-	if (globalSettings.printlogs) {
-		console.log(args);
-	}
 }
 
 module.exports = router;
