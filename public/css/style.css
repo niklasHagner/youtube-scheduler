@@ -359,8 +359,6 @@ blockquote {
 }
 body {
   background-color: #000;
-  font-family: 'Quicksand', sans-serif;
-  letter-spacing: 0.3em;
   font-size: 14px;
   overflow: hidden;
 }
@@ -467,7 +465,9 @@ iframe#player {
 .error h1,
 .error h2,
 .error h3 {
-  color: red;
+  color: lime;
+  font-family: monospace;
+  font-size: 12px;
 }
 /* -------------- Extra overlays -------------- */
 #logo {
