@@ -34,6 +34,7 @@ function onYouTubeIframeAPIReady() {
 	createProgramme(data);
 }
 
+var onPlayerReadyEventHasFired = false;
 function getPlayerSettings() {
 
 	var playerSettings = {
@@ -62,6 +63,7 @@ function getPlayerSettings() {
 
 var readyEvent = new Event('youtubePlayerReady');
 function onPlayerReady(event) {
+  onPlayerReadyEventHasFired = true;
 	event.target.cueVideoById({
 		videoId: playNowVideo.snippet.resourceId.videoId,
 		startSeconds: playNowVideo.skipToSeconds
@@ -70,6 +72,12 @@ function onPlayerReady(event) {
   player.mute();
 	window.dispatchEvent(readyEvent);
 }
+
+setTimeout(function() {
+  if (!onPlayerReadyEventHasFired) {
+    alert("Seems like youtube API cannot fire the 'onReady' event. Sometimes this is caused by AdBlocker. Please disable AdBlocker (this site blocks youtube ads on it's own)");
+  }
+}, 5000);
 
 function handleBufferTimeouts(event) {
 	var maxWait = 14000;
