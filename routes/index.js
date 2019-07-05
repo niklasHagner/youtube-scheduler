@@ -6,6 +6,7 @@ var YouTube = require('youtube-node');
 var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../dateTimeHelper');
 var winston = require('winston');
+var fs = require('fs');
 
 /* -------------- Config -------------- */
 
@@ -95,9 +96,6 @@ router.get('/docs', function (req, res) {
 router.get('/two', function (req, res) {
 	getAllTheThings(req, res, channels.two);
 });
-router.get('/test', function (req, res) {
-	getAllTheThings(req, res, channels.test);
-});
 
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
@@ -105,6 +103,13 @@ router.get('/', function (req, res) {
 		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
 	}
 	getAllTheThings(req, res, channels.mixed);
+});
+
+/* -------------- Test route -------------- */
+router.get('/static-test', function (req, res) {
+  fs.readFile('public/demo.html', 'utf8', (err, text) => {
+    res.send(text);
+  });
 });
 
 /* -------------- Setup handlers -------------- */
