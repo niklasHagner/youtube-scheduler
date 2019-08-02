@@ -75,7 +75,7 @@ function onPlayerReady(event) {
 
 setTimeout(function() {
   if (!onPlayerReadyEventHasFired) {
-    alert("Seems like youtube API cannot fire the 'onReady' event. Sometimes this is caused by AdBlocker. Please disable AdBlocker (this site blocks youtube ads on it's own)");
+    alert("Crap! This API doesn't seem to work properly in your browser browser. Try disabling extensions like adblocker, or use Firefox.");
   }
 }, 5000);
 
