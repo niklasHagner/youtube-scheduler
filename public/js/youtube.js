@@ -69,7 +69,7 @@ function onPlayerReady(event) {
 		startSeconds: playNowVideo.skipToSeconds
 	});
   event.target.playVideo();
-  player.mute();
+  //player.mute(); //hopefully not needed
 	window.dispatchEvent(readyEvent);
 }
 
