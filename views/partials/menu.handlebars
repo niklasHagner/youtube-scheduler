@@ -71,66 +71,59 @@
 </select>
 
 <script>
-    $(function () {
-        var path = window.location.pathname;
-        var western = path.indexOf("western") > -1;
-        var scifi = path.indexOf("scifi") > -1;
-        var classics = path.indexOf("classics") > -1;
-        var mtv = path.indexOf("mtv") > -1;
-        var horror = path.indexOf("horror") > -1;
-        var docs = path.indexOf("docs") > -1;
-        var two = path.indexOf("two") > -1;
-        var defaultChannel = !western && !scifi && !classics && !mtv && !horror &!two;
-        if (western) {
-            $(".menu__item--western").addClass("menu__item--active");
-            $(".logo").addClass("logo--western");
-            $(".logo").html("Western");
+
+    const channels = [ 
+        {
+            name: "One", path: "", menuSelector:".menu__item--default", active: false, logo: "logo--one"
+        },
+        {
+            name: "Two", path: "two", menuSelector:".menu__item--two", active: false,logo: "logo--two"
+        },
+        {
+            name: "Western", path: "western", menuSelector:".menu__item--western", active: false, logo: "logo--western"
+        },
+        {
+            name: "Sci-Fi", path: "scifi", menuSelector:".menu__item--scifi", active: false, logo: "logo--scifi"
+        },
+        {
+            name: "Classics", path: "classics",  menuSelector:".menu__item--classics", active: false, logo: "logo--classics"
+        },
+        {
+            name: "MTV", path: "mtv", menuSelector:".menu__item--mtv", active: false, logo: "logo--mtv"
+        },
+        {
+            name: "Horror", path: "horror", menuSelector:".menu__item--horror", active: false, logo: "logo--horror"
+        },
+        {
+            name: "Docs", path: "docs", menuSelector:".menu__item--docs", active: false, logo: "logo--docs"
         }
-        else if (scifi) {
-            $(".menu__item--scifi").addClass("menu__item--active");
-            $(".logo").addClass("logo--scifi");
-            $(".logo").html("Sci-fi");
-        }
-        else if (classics) {
-            $(".menu__item--classics").addClass("menu__item--active");
-            $(".logo").addClass("logo--classics");
-            $(".logo").html("Classics");
-        }
-        else if (mtv) {
-            $(".mtv-logo").removeClass("mtv-logo--hidden");
-            $(".menu__item--mtv").addClass("menu__item--active");
-        }
-        else if (horror) {
-            $(".menu__item--horror").addClass("menu__item--active");
-            $(".logo").addClass("logo--horror");
-            $(".logo").html("Horror");
-        }
-        else if (docs) {
-            $(".menu__item--docs").addClass("menu__item--active");
-            $(".logo").addClass("logo--docs");
-            $(".logo").html("Docs");
-        }
-        else if (two) {
-            $(".menu__item--two").addClass("menu__item--active");
-            $(".logo").addClass("logo--two");
-            $(".logo").html("Channel 2");
-        }
-        else {
-            $(".menu__item--default").addClass("menu__item--active");
-        }
-    });
+    ];
+    
+    let path = window.location.pathname;
+    path = path.slice(1, path.length);
+    const activeChannel = channels.find(channel => channel.path === path);
+    const logoEl = document.querySelector(".logo");
+    logoEl.classList.add(activeChannel.logo);
+    logoEl.innerText = activeChannel.name;
+    document.querySelector(activeChannel.menuSelector).classList.add("menu__item--active");
+    const channelDropdown = document.querySelector("#channelDropdown");
+    const matchingOption = [...channelDropdown.options].find(option => option.innerText === activeChannel.name);
+    const matchingIndex = [...channelDropdown.options].indexOf(matchingOption);
+    channelDropdown.selectedIndex = matchingIndex;
+
+    if (activeChannel.path === "mtv") {
+        document.querySelector(".mtv-logo").classList.remove("mtv-logo--hidden");
+    }
 
     function selectChannelByDropdown(ev) {
-        window.location.href = $("#channelDropdown").val();
+        document.getElementById("player").remove();     
+        console.log("switching channel to", document.querySelector("#channelDropdown").value);
+        window.location.href = document.querySelector("#channelDropdown").value;
     }
 
     var soundIcon = $('.mute-toggle i');
     var soundLabel = $('.mute-toggle span');
     var soundCached = localStorage["ytPlayerSound"];
-    // if (soundCached == "off")
-    //    window.addEventListener('youtubePlayerReady', mute);
-    //else if (soundCached == "on")
-    //   window.addEventListener('youtubePlayerReady', unMute);
 
     $('.mute-toggle').on('click', toggleMute);
     function unMute() {
