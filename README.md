@@ -43,11 +43,3 @@ Step 2: Make node use that apiKey
 
 * Set it temporarily:
   * while in the node-shell set the variable with the command command: `process.env.youtubeapikey = 'abc123'`
-
-## To do
-* Hide youtube controls and overlays  [X]
-* Remove youtube videos which cannot be played due to region-locks or content policies [X]
-* Handle timezones
-* Turn shorter playlists into a looping schedule [X]
-* Replace Handlebars with something better
-* Store data using something more than in-app-memory

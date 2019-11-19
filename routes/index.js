@@ -7,15 +7,16 @@ var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../dateTimeHelper');
 var winston = require('winston');
 var fs = require('fs');
+const config = require("exp-config");
 
 /* -------------- Config -------------- */
 
 globalSettings = {
-	shouldCache: true, //false: make new get requests to youtube every time
+	shouldCache: process.env.SHOULD_CACHE || true, //false: make new get requests to youtube every time
 	printlogs: false,
 	requestCounter: 0,
 	MAX_PAGE_COUNT: 100,
-	apiKey: process.env.YOUTUBEAPIKEY, //this env var must be manually set to your unique key for youtube-API  see README.md
+	apiKey: process.env.YOUTUBEAPIKEY || config.YOUTUBEAPIKEY,
 	randomSortProgrammes: true
 };
 var now = new Date();
@@ -155,11 +156,9 @@ function getAllTheThings(req, res, channel) {
 
 	getPlayListAsync(channel.playlist, null, channel)
 		.then(function (playListData) {
-			plData = playListData;
-
-			getVideosFromPlaylistAsync(plData)
+			getVideosFromPlaylistAsync(playListData)
 				.then(function (videoArray) {
-					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(plData, videoArray);
+					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(playListData, videoArray);
 					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
 					if (globalSettings.shouldCache) {
@@ -216,7 +215,6 @@ function setStartTime(item, previousProgrammeEndTime) {
 	item.endTime = moment(previousProgrammeEndTime).add(item.durationSeconds, "seconds").toDate();
 	previousProgrammeEndTime = item.endTime;
 
-	var diff = Math.abs(moment(item.startTime).diff(moment(item.endTime)), "seconds");
 	var startDiff = moment(now).diff(item.startTime, 'seconds');
 	var endDiff = moment(now).diff(item.endTime, 'seconds');
 

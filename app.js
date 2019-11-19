@@ -1,12 +1,11 @@
-/* -------------- External -------------- */
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
+const config = require("exp-config");
 
-/* -------------- Internal -------------- */
 var routes = require('./routes/index');
 
 /* -------------- App configuration -------------- */
@@ -18,20 +17,9 @@ app.locals.ENV_DEVELOPMENT = env == 'development';
  //YOU MUST MANUALLY SET YOUR APIKEY!
  //Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
  //Step 2: Set the environemtn variable YOUTUBEAPIKEY = 'yourapikey'
-
- //HOW TO SET ENV VARIABLES ON UNIX:
- //Temproary: in the node shell run this command: process.env.YOUTUBEAPIKEY = 'abc123'
- //Permanent: export YOUTUBEAPIKEY = 'abc123'
-
- //HOW TO SET ENV VARIABLES ON WINDOWS:
- //Temporary :while in the node-shell set the variable with the command command: process.env.youtubeapikey = 'abc123'
- //Permanent:
- //Use any powershell console (doesn't have to be elevated) with this command
- //[Environment]::SetEnvironmentVariable("YOUTUBEAPIKEY", "abc123", "User")
-
 //You might have to restart your console to use the new env variable
 
-var apiKeyTest = process.env.YOUTUBEAPIKEY;
+var apiKeyTest = process.env.YOUTUBEAPIKEY || config.YOUTUBEAPIKEY;
 if (typeof apiKeyTest === "undefined")
     throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set. the code will not work without it!");
 
