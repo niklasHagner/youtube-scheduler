@@ -30,7 +30,7 @@ function currentVideoChanged() {
 
   const next = current.nextElementSibling;
   next.classList.add("schedule-row--current");
-  next.closest(".schedule-row__time").innerText = "NOW: ";
+  next.querySelector(".schedule-row__time").innerText = "NOW: ";
 }
 
 
