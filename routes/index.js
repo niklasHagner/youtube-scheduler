@@ -15,7 +15,7 @@ globalSettings = {
 	shouldCache: process.env.SHOULD_CACHE || true, //false: make new get requests to youtube every time
 	printlogs: false,
 	requestCounter: 0,
-	MAX_PAGE_COUNT: 100,
+	MAX_PAGE_COUNT: 50,
 	apiKey: process.env.YOUTUBEAPIKEY || config.YOUTUBEAPIKEY,
 	randomSortProgrammes: true
 };
@@ -126,7 +126,6 @@ function getAllTheThings(req, res, channel) {
 	now = new Date();
 	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
 
-	var plData = null;
 	if (globalSettings.shouldCache && channel.cachedResult) {
 		var currentTime = new Date();
 		var scheduleEnd = channel.cachedResult.items[channel.cachedResult.items.length - 1].endTime;
@@ -383,8 +382,7 @@ function getPlayListAsync(videoId, pageToken, settings) {
 				console.error(error);
 				winston.log("info", "--------" + currentChannel.name + "--------");
 
-				winston.log('error',
-					'Exception', { error: error });
+				winston.log('error', 'Exception', { error: error });
 				reject(error);
 			} else {
 				//aggregate
