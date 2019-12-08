@@ -3,32 +3,34 @@ var programmeVisible = false;
 
 function toggleProgrammeVisibility() {
   if (programmeVisible) {
-    $(".programme").addClass("programme--hidden");
-    $(".toggle-programme").removeClass("toggle-programme--active");
+    document.querySelector(".programme").classList.add("programme--hidden");
+    document.querySelector(".toggle-programme").classList.remove("toggle-programme--active");
     programmeVisible = false;
   } else {
-    $(".programme").removeClass("programme--hidden");
-    $(".toggle-programme").addClass("toggle-programme--active");
+    document.querySelector(".programme").classList.remove("programme--hidden");
+    document.querySelector(".toggle-programme").classList.add("toggle-programme--active");
     programmeVisible = true;
   }
 }
 
 function toggleTheme() {
-  if ($("body").hasClass("retro-theme")) {
-    $("body").removeClass("retro-theme");
-    $("body").addClass("dark-theme");
-  } else if ($("body").hasClass("dark-theme")) {
-    $("body").removeClass("dark-theme");
-    $("body").addClass("retro-theme");
+  if (document.body.classList.contains("retro-theme")) {
+    document.body.classList.remove("retro-theme");
+    document.body.classList.add("dark-theme");
+  } else if (document.body.classList.contains("dark-theme")) {
+    document.body.classList.remove("dark-theme");
+    document.body.classList.add("retro-theme");
   }
 }
 
 function currentVideoChanged() {
-  var $curr = $($(".schedule-row--current")[0]);
-  $curr.next().addClass("schedule-row--current");
-  $curr.next().find(".schedule-row__time").text("NOW: ");
-  $curr.removeClass("schedule-row--current");
-  $curr.addClass("schedule-row--past");
+  var current = document.querySelector(".schedule-row--current");
+  current.classList.remove("schedule-row--current");
+  current.classList.add("schedule-row--past");
+
+  const next = current.nextElementSibling;
+  next.classList.add("schedule-row--current");
+  next.closest(".schedule-row__time").innerText = "NOW: ";
 }
 
 
