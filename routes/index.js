@@ -8,7 +8,16 @@ var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../lib/dateTimeHelper');
 var YouTube = require('../lib/youtubeApiWrapper');
 
-/* -------------- Config -------------- */
+/* 
+Note: youtube's default video objects are crude and only contain *some* contentDetails, but they lack `duration`.
+This is why we must make an extra apiCall to fetch the full set of details for every video.
+
+Crude video example:
+"{"kind":"youtube#playlistItem","etag":"\"p4VTdlkQv3HQeTEaXgvLePAydmU/_-CGILTaHIZUM-sqZ8mZUOyC5fk\"","id":"UExvRklIY3A4eUc3Unc4MVZ6aWFtMTZ1MVVfdi10V1VJbC4zMDg5MkQ5MEVDMEM1NTg2","snippet":{"publishedAt":"2016-09-24T18:59:53.000Z","channelId":"UCHUo4QHEhdHFAvNaa5cJvCQ","title":"Alan Ladd western movies full length || Saskatchewan 1954 || Classic western movies on youtube","description":"","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/hqdefault.jpg","width":480,"height":360}},"channelTitle":"BenRangel","playlistId":"PLoFIHcp8yG7Rw81Vziam16u1U_v-tWUIl","position":0,"resourceId":{"kind":"youtube#video","videoId":"qcF8v38hRoE"}},"contentDetails":{"videoId":"qcF8v38hRoE","videoPublishedAt":"2015-11-06T08:20:41.000Z"},"status":{"privacyStatus":"public"}}"
+
+Detailed video example:
+"{"kind":"youtube#videoListResponse","etag":"\"p4VTdlkQv3HQeTEaXgvLePAydmU/fNPqa_TTtS6z_F5ugy_thxjDeAI\"","pageInfo":{"totalResults":1,"resultsPerPage":1},"items":[{"kind":"youtube#video","etag":"\"p4VTdlkQv3HQeTEaXgvLePAydmU/FvUbhdN5wAwQCnBZm6KVupmaQs4\"","id":"qcF8v38hRoE","snippet":{"publishedAt":"2015-11-06T08:20:41.000Z","channelId":"UCLRUgl28CtEKRf7Pio5KztQ","title":"Alan Ladd western movies full length || Saskatchewan 1954 || Classic western movies on youtube","description":"","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Jordon Peyton","tags":["Alan Ladd western movies full length","Saskatchewan 1954","Classic western movies on youtube","Western (TV Genre)","Alan Ladd (Film Actor)","western movies full length free","western movies action","western movies alan ladd","western movies best","western movies cowboys","western movies classics","western movies english full length","the best western movies ever","spaghetti western movies english"],"categoryId":"1","liveBroadcastContent":"none","localized":{"title":"Alan Ladd western movies full length || Saskatchewan 1954 || Classic western movies on youtube","description":""},"defaultAudioLanguage":"en"},"contentDetails":{"duration":"PT1H23M33S","dimension":"2d","definition":"sd","caption":"false","licensedContent":false,"projection":"rectangular"},"status":{"uploadStatus":"processed","privacyStatus":"public","license":"youtube","embeddable":true,"publicStatsViewable":false},"statistics":{"viewCount":"206519","likeCount":"406","dislikeCount":"54","favoriteCount":"0","commentCount":"39"}}]}"
+*/
 
 globalSettings = {
 	shouldCache: process.env.SHOULD_CACHE || true, //false: make new get requests to youtube every time
@@ -70,7 +79,7 @@ var channels = {
 }
 for (var propname in channels) {
 	channels[propname].aggregatedPlaylist = null;
-	channels[propname].cachedResult = null;
+	channels[propname].cachedEnhancedVideos = null;
 };
 
 
@@ -124,10 +133,10 @@ function getAllTheThings(req, res, channel) {
 	globalSettings.requestCounter++;
 	now = new Date();
 	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
-
-	if (globalSettings.shouldCache && channel.cachedResult) {
+	
+	if (globalSettings.shouldCache && channel.cachedEnhancedVideos) {
 		var currentTime = new Date();
-		var scheduleEnd = channel.cachedResult.items[channel.cachedResult.items.length - 1].endTime;
+		var scheduleEnd = channel.cachedEnhancedVideos[channel.cachedEnhancedVideos.length - 1].endTime;
 		if (scheduleEnd - currentTime <= 0) {
 
 			//reset schedule
@@ -136,12 +145,12 @@ function getAllTheThings(req, res, channel) {
 			console.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
 		}
 		var previousProgrammeEndTime = moment(startProgramme).toDate();
-		channel.cachedResult.items.forEach(function (item, ix) {
+		channel.cachedEnhancedVideos.forEach(function (item, ix) {
 			item.playFirst = false;
 			item = setStartTime(item, previousProgrammeEndTime);
 			previousProgrammeEndTime = item.endTime;
 		});
-		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedResult));
+		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedEnhancedVideos));
 		res.render('index', {
 			title: 'Web TV',
 			encodedJson: encodedResult
@@ -152,38 +161,36 @@ function getAllTheThings(req, res, channel) {
 	//fetch
 	channel.aggregatedPlaylist = null
 
-	getPlayListAsync(channel.playlist, null, channel)
-		.then(function (playListData) {
-			console.log("playListData:", playListData.items.length);
-			getVideosFromPlaylistAsync(playListData)
-				.then(function (videoArray) {
-					console.log("videoArray:", videoArray.length)
-					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(playListData, videoArray);
-					console.log("plWithEnhancedVids:", plWithEnhancedVids.items.length)
-
-					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
-					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
-					if (globalSettings.shouldCache) {
-						channel.cachedResult = plWithEnhancedVids;
-					}
-					res.render('index', {
-						title: 'Web TV',
-						encodedJson: encodedResult
-					});
-				})
-				.catch(function (e) {
-					console.error(e);
-					winston.log("CHANNEL:" + currentChannel.name);
-					winston.log('error: ' + e.message);
-					res.render('error', {
-						message: e.message,
-						error: e,
-						title: 'error'
-					});
-				})
+	// getPlayListAsync(channel.playlist, null, channel)
+	getEverythingFromChannel(channel).then((crudeVideos) => {
+			getDetailsFromAllVideos(crudeVideos).then((detailedVideos) => { 
+				var enhancedVideos = getEnhancedVideos(crudeVideos, detailedVideos);
+				if (globalSettings.shouldCache) {
+					channel.cachedEnhancedVideos = enhancedVideos;
+				}
+				endProgramme = enhancedVideos[enhancedVideos.length - 1].endTime;
+				var encodedResult = encodeURIComponent(JSON.stringify(enhancedVideos));
+			
+				res.render('index', {
+					title: 'Web TV',
+					encodedJson: encodedResult
+				});
+			})
+			.catch(function (e) {
+				console.error(e);
+				winston.log("CHANNEL:" + currentChannel.name);
+				winston.log('error: ' + e.message);
+				res.render('error', {
+					message: e.message,
+					error: e,
+					title: 'error'
+				});
+			})
 		})
 		.catch(function (e) {
 			console.error(e);
+			winston.log("CHANNEL:" + currentChannel.name);
+			winston.log('error: ' + e.message);
 			res.render('error', {
 				message: e.message,
 				error: e,
@@ -192,19 +199,57 @@ function getAllTheThings(req, res, channel) {
 		});
 }
 
+
 /*
-promise an array of videoDetails
+Return a promise with an array of videoDetails
+Note: the default video-objects do not contain details such as duration
 */
-function getVideosFromPlaylistAsync(data) {
-	var promiseArray = data.items.map((playListItem) => {
-		return getVideoById(playListItem.snippet.resourceId.videoId)
+function getDetailsFromAllVideos(crudeVideos) {
+	var promiseArray = crudeVideos.map((crudeVideo) => {
+		return getVideoById(crudeVideo.snippet.resourceId.videoId)
 	});
 	return new Promise(function (resolve, reject) {
-		Promise.all(promiseArray).then(function (videoArray) {
-			resolve(videoArray);
+		Promise.all(promiseArray).then(function (detailedVideos) {
+			resolve(detailedVideos);
 		});
 	});
 }
+
+function getEverythingFromChannel(channel) {
+	const playListId = channel.playlist;
+	const initialNextPageToken = playListId;
+
+	return new Promise(function (resolve, reject) {
+		iterativeGetPlayListsItemsById(playListId, initialNextPageToken, function(error, result) {
+			resolve(result);
+		});
+	});
+
+	
+}
+
+
+function iterativeGetPlayListsItemsById(playListId, nextPageToken, cb){
+	youTube.getPlayListsItemsById(playListId, config.max, nextPageToken, function(error, result) {
+		if (error) {
+			cb(error);
+		}
+		else {
+			var items = result.items;
+			if(result.nextPageToken){
+				iterativeGetPlayListsItemsById(playListId, result.nextPageToken, function(err, its){
+					if(err){
+						return cb(err);
+					}
+					items = items.concat(its);
+					cb(null, items);
+				});
+			} else {
+				cb(null, items)
+			}
+		}
+	});
+};
 
 
 function setStartTime(item, previousProgrammeEndTime) {
@@ -240,29 +285,12 @@ function setStartTime(item, previousProgrammeEndTime) {
 	return item;
 }
 
-function removeBrokenVideos(playList, detailedVideos) {
-	for (ix = playList.items.length - 1; ix--;) {
-		var item = playList.items[ix];
-		if (!item) {
-			winston.log('error',
-				'Video was undefined', { index: ix, playListId: playList.id });
-			console.error("item", ix, "was undefined");
-			playList.items.splice(ix, 1);
-			continue;
-		}
+function removeBrokenVideos(crudeVideos, detailedVideos) {
+	for (ix = crudeVideos.length - 1; ix--;) {
+		var item = crudeVideos[ix];
     var video = detailedVideos[ix];
     var videoItem = video.items[0];
 		var shouldRemove = false;
-		if (typeof videoItem  === "undefined"
-			|| video.items.length === 0) {
-			console.error("index", ix, "has no video. probably deleted");
-			winston.log("info", "--------" + currentChannel.name + "--------");
-			winston.log('error',
-				'No items for video', ix, item.title);
-			playList.items.splice(ix, 1);
-			detailedVideos.splice(ix, 1);
-			continue;
-		}
 		if (item.status.privacyStatus !== "public"
 			|| videoItem.status.embeddable !== true) {
 			shouldRemove = true;
@@ -288,50 +316,50 @@ function removeBrokenVideos(playList, detailedVideos) {
 				'Video not avaliable in Sweden' + ' ' + ix + ' ' + item.title);
 		}
 		if (shouldRemove) {
-			playList.items.splice(ix, 1);
+			crudeVideos.splice(ix, 1);
 			detailedVideos.splice(ix, 1);
 		}
 	}
-	return { playList: playList, detailedVideos: detailedVideos };
+	return { crudeVideos, detailedVideos };
 }
 
 /*
-Extend playlist items with metadata from video details
+Extend crude videos with some relevant extra details
 */
-function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
+function getEnhancedVideos(crudeVideos, detailedVideos) {
 	now = new Date();
-	if (detailedVideos.length !== playList.items.length)
-		throw new Error(playList.items.length, "items in playlist");
+	if (detailedVideos.length !== crudeVideos.length)
+		throw new Error(crudeVideos.length, "items in playlist");
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
-	var filtered = removeBrokenVideos(playList, detailedVideos);
-	playList = filtered.playList;
-	playList.items = playList.items.filter((item) => { return typeof item !== "undefined"; });
+	var filtered = removeBrokenVideos(crudeVideos, detailedVideos);
+	playList = filtered.crudeVideos;
+	crudeVideos = crudeVideos.filter((item) => { return typeof item !== "undefined"; });
 	detailedVideos = filtered.detailedVideos;
-	if (detailedVideos.length !== playList.items.length)
-		console.error(videos.length, "videos", playList.items.length, "items in playlist");
+	if (detailedVideos.length !== crudeVideos.length)
+		console.error(videos.length, "videos", crudeVideos.length, "crude videos");
 
-	console.log("playlist.items:", playList.items.length, "detailedVideos:", detailedVideos.length);
+	console.log("crudeVideos:", crudeVideos.length, "detailedVideos:", detailedVideos.length);
 
 	// if (globalSettings.randomSortProgrammes === true) {
-	playList.items = playList.items = shuffle(playList.items = playList.items);
+	crudeVideos = shuffle(crudeVideos);
 	// }
 
 	/* reversed loop just so we can remove items without contentDetails, which is a common problem */
-	playList.items = playList.items.reverse();
-	for (ix = playList.items.length -1; ix >= 0; ix--) {
-		var item = playList.items[ix];
+	crudeVideos = crudeVideos.reverse();
+	for (ix = crudeVideos.length -1; ix >= 0; ix--) {
+		var item = crudeVideos[ix];
     var video = detailedVideos[ix];
     var videoItem = video.items[0]
 		if (!video || !videoItem) {
 			console.error("video.items doesn't exist for index", ix);
-			playList.items.splice(ix, 1);
+			crudeVideos.splice(ix, 1);
 			continue;
 		}
 		else if (!videoItem.contentDetails) {
 			console.error("Damn! Contentdetails doesn't exist on item", ix, "removing that video");
 			console.error(videoItem);
-			playList.items.splice(ix, 1);
+			crudeVideos.splice(ix, 1);
 			continue;
 		}
 		var durationString = videoItem.contentDetails.duration;
@@ -340,16 +368,16 @@ function getPlaylistEnhanchedWithVideos(playList, detailedVideos) {
 		item = setStartTime(item, previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
 	}
-	playList.items = playList.items.reverse();
+	crudeVideos = crudeVideos.reverse();
 
 	//Loop the schedule by moving past stuff to the end
-	previousProgrammeEndTime = playList.items[playList.items.length - 1].endTime;
-	while (playList.items[0].past === true) {
-		var item = setStartTime(playList.items[0], previousProgrammeEndTime);
+	previousProgrammeEndTime = crudeVideos[crudeVideos.length - 1].endTime;
+	while (crudeVideos[0].past === true) {
+		var item = setStartTime(crudeVideos[0], previousProgrammeEndTime);
 		previousProgrammeEndTime = item.endTime;
 		item.past = false;
 		item.future = true;
-		playList.items.push(playList.items.splice(0, 1)[0]);
+		crudeVideos.push(crudeVideos.splice(0, 1)[0]);
 	}
 
 	return playList;
@@ -371,47 +399,47 @@ function getVideoById(videoId) {
 	});
 }
 
-function getPlayListAsync(videoId, pageToken, settings) {
-	// if (typeof pageToken === "undefined" || pageToken === null)
-	// 	pageToken = null;
-	var maxPage = (settings && settings.pageCounter) ? settings.pageCounter : null;
-	if (maxPage > 50)
-		maxPage = 50;
+// function getPlayListAsync(videoId, pageToken, settings) {
+// 	// if (typeof pageToken === "undefined" || pageToken === null)
+// 	// 	pageToken = null;
+// 	var maxPage = (settings && settings.pageCounter) ? settings.pageCounter : null;
+// 	if (maxPage > 50)
+// 		maxPage = 50;
 
 
-	return new Promise(function (fulfill, reject) {
+// 	return new Promise(function (fulfill, reject) {
 
-		//This will fetch the max amount of items per page
-		//Then recursively call itself to fetch the items from the next page
-		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
-			if (error) {
-				console.error(error);
-				winston.log("info", "--------" + currentChannel.name + "--------");
+// 		//This will fetch the max amount of items per page
+// 		//Then recursively call itself to fetch the items from the next page
+// 		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
+// 			if (error) {
+// 				console.error(error);
+// 				winston.log("info", "--------" + currentChannel.name + "--------");
 
-				winston.log('error', 'Exception', { error: error });
-				reject(error);
-			} else {
-				//aggregate
-				if (settings.aggregatedPlaylist === null) {
-					settings.aggregatedPlaylist = result;
-					const titles = result.items.map((item) => item.snippet.title);
-					console.log(titles.join(", "));
-				} else {
-					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
-				}
+// 				winston.log('error', 'Exception', { error: error });
+// 				reject(error);
+// 			} else {
+// 				//aggregate
+// 				if (settings.aggregatedPlaylist === null) {
+// 					settings.aggregatedPlaylist = result;
+// 					const titles = result.items.map((item) => item.snippet.title);
+// 					console.log(titles.join(", "));
+// 				} else {
+// 					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
+// 				}
 
-				settings.pageCounter = settings.pageCounter > 0 ? settings.pageCounter : 0;
-				if (result.nextPageToken && settings.pageCounter <= globalSettings.MAX_PAGE_COUNT) {
-					settings.pageCounter++;
-					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
-				}
-				else { //finished pagination
-					fulfill(settings.aggregatedPlaylist);
-				}
-			}
-		});
-	});
-}
+// 				settings.pageCounter = settings.pageCounter > 0 ? settings.pageCounter : 0;
+// 				if (result.nextPageToken && settings.pageCounter <= globalSettings.MAX_PAGE_COUNT) {
+// 					settings.pageCounter++;
+// 					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
+// 				}
+// 				else { //finished pagination
+// 					fulfill(settings.aggregatedPlaylist);
+// 				}
+// 			}
+// 		});
+// 	});
+// }
 
 function shuffle(array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;
