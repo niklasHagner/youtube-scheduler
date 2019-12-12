@@ -1,13 +1,12 @@
-/* -------------- External deps -------------- */
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
-var YouTube = require('youtube-node');
-var Promise = require('es6-promise').Promise;
-var DateTimeHelper = require('../dateTimeHelper');
 var winston = require('winston');
-var fs = require('fs');
 const config = require("exp-config");
+var fs = require('fs');
+var Promise = require('es6-promise').Promise;
+var DateTimeHelper = require('../lib/dateTimeHelper');
+var YouTube = require('../lib/youtubeApiWrapper');
 
 /* -------------- Config -------------- */
 
@@ -155,9 +154,13 @@ function getAllTheThings(req, res, channel) {
 
 	getPlayListAsync(channel.playlist, null, channel)
 		.then(function (playListData) {
+			console.log("playListData:", playListData.items.length);
 			getVideosFromPlaylistAsync(playListData)
 				.then(function (videoArray) {
+					console.log("videoArray:", videoArray.length)
 					var plWithEnhancedVids = getPlaylistEnhanchedWithVideos(playListData, videoArray);
+					console.log("plWithEnhancedVids:", plWithEnhancedVids.items.length)
+
 					endProgramme = plWithEnhancedVids.items[plWithEnhancedVids.items.length - 1].endTime;
 					var encodedResult = encodeURIComponent(JSON.stringify(plWithEnhancedVids));
 					if (globalSettings.shouldCache) {
@@ -377,6 +380,9 @@ function getPlayListAsync(videoId, pageToken, settings) {
 
 
 	return new Promise(function (fulfill, reject) {
+
+		//This will fetch the max amount of items per page
+		//Then recursively call itself to fetch the items from the next page
 		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
 			if (error) {
 				console.error(error);
@@ -388,6 +394,8 @@ function getPlayListAsync(videoId, pageToken, settings) {
 				//aggregate
 				if (settings.aggregatedPlaylist === null) {
 					settings.aggregatedPlaylist = result;
+					const titles = result.items.map((item) => item.snippet.title);
+					console.log(titles.join(", "));
 				} else {
 					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
 				}
