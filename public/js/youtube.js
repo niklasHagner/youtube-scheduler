@@ -8,9 +8,9 @@ var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 function getNextVideo() {
-	var nowIndex = window.youtubeData.items.indexOf(window.playNowVideo);
-	var nextIndex = (window.youtubeData.items.length > nowIndex + 1) ? nowIndex + 1 : 0;
-	var nextVideo = window.youtubeData.items[nextIndex];
+	var nowIndex = window.youtubeData.indexOf(window.playNowVideo);
+	var nextIndex = (window.youtubeData.length > nowIndex + 1) ? nowIndex + 1 : 0;
+	var nextVideo = window.youtubeData[nextIndex];
 	window.playNowVideo = nextVideo;
 	return nextVideo;
 }
@@ -20,18 +20,18 @@ function onYouTubeIframeAPIReady() {
 		console.error("ERROR! window.youtubeData does not exist");
 		return;
 	}
-	var data = window.youtubeData;
-	//data.items.forEach(function (x) { console.log(x.snippet.title) });
-	window.playNowVideo = data.items.find(function (item) { return item.playFirst == true });
+	var videos = window.youtubeData;
+	videos.forEach(function (x) { console.log(x.snippet.title) });
+	window.playNowVideo = videos.find(function (item) { return item.playFirst == true });
 	if (!playNowVideo) {
 		console.log("could not find playFirst so just playing the first video");
-		playNowVideo = data.items[0];
+		playNowVideo = videos[0];
 	}
 	var playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
 	//console.log(player.getAvailableQualityLevels());
 	//player.setPlaybackQuality('highres');
-	createProgramme(data);
+	createProgramme(videos);
 }
 
 var onPlayerReadyEventHasFired = false;
@@ -125,30 +125,32 @@ function playNext(event) {
 	event.target.playVideo();
 }
 
-function createProgramme(playlist) {
-  var items = '';
-  var nowTime = new Date().getTime();
-  playlist.items.forEach(function (item, index) {
+function createProgramme(videos) {
+	var nowTime = new Date().getTime();
+
+	const scheduledItems = videos.filter((item) => {
+		var endTime = new Date(item.endTime).getTime();
+    return nowTime <= endTime;
+	});
+
+  const items = scheduledItems.map(function (item, index) {
     var modifiers = "";
     var endTime = new Date(item.endTime).getTime();
     var startTime = new Date(item.startTime).getTime();
-    var startTimeFormatted = item.startTimeFormatted;
-    if (nowTime > endTime)
-      modifiers += " schedule-row--past";
-    else
-      modifiers += " schedule-row--future";
+    var startTimeFormatted = item.startTimeFormatted;    
+    modifiers += " schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {
       modifiers += " schedule-row--current";
       startTimeFormatted = "NOW:";
     }
-    var html =  `
+    var htmlString =  `
     <div class='schedule-row ${modifiers}'>
       <div class='schedule-row__time'>${startTimeFormatted} </div>
       <div class="schedule-row__title">${item.snippet.title}</div>
     </div>`;
-    items += html.toString();
+    return htmlString;
   });
 
-  $(".programme__body").html(items);
+  document.querySelector(".programme__body").innerHTML = items.join("");
 }
