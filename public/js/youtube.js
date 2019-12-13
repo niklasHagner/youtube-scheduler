@@ -98,7 +98,7 @@ function onPlayerStateChange(event) {
 		handleBufferTimeouts(event);
 	}
 	else if (event.data == YT.PlayerState.PLAYING) {
-		setTimeout(function() { $("#tv").removeClass("loading"); }, 3500);
+		setTimeout(function() { document.querySelector("#tv").classList.remove("loading"); }, 3500);
 
 		state.isPlaying = true;
 	}

@@ -1,30 +1,36 @@
 var isFullscreen = false;
-$('.js-fullscreen-toggle').on('click', function () {
-    toggleFullscreen('.js-fullscreen-toggle', false, 'fa fa-arrow-up', 'fa fa-arrow-down');
+[...document.querySelectorAll('.js-interface-toggle')].forEach((fullscreenToggle) => {
+    fullscreenToggle.addEventListener('click', () => {
+        toggleFullscreen('.js-interface-toggle', false, 'fa fa-arrow-up', 'fa fa-arrow-down');
+    });
 });
 
 var isWindowFullscreen = false;
-$('.fullscreen-toggle-2').on('click', function () {
+[...document.querySelectorAll('.fullscreen-toggle-2')].forEach((fullscreenToggle) => {
+    fullscreenToggle.addEventListener("click", toggleFullscreen2)
+});
+
+function toggleFullscreen2() {
     var useWindowFullscreen = !isWindowFullscreen;
     toggleFullscreen('.fullscreen-toggle-2', useWindowFullscreen, 'fa fa-arrows-alt', 'fa fa-times');
     if (!useWindowFullscreen)
         exitFullscreenBrowser();
     isWindowFullscreen = useWindowFullscreen;
-});
+}
 
 function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass, expandedIconClass) {
-    var icon = $(selector + " i");
-    $(".fullscreen-menu").toggleClass("hidden");;
-    $("#tv").toggleClass("fullscreen");
-    $("#content").toggleClass("fullscreen");
+    var icon = document.querySelector(selector + " i");
+    document.querySelector(".fullscreen-menu").classList.toggle("hidden");;
+    document.querySelector("#tv").classList.toggle("fullscreen");
+    document.querySelector("#content").classList.toggle("fullscreen");
 
     if (isFullscreen) {
         isFullscreen = false;
-        icon.attr('class', collapsedIconClass);
+        icon.className = collapsedIconClass;
     }
     else {
         isFullscreen = true;
-        icon.attr('class', expandedIconClass);
+        icon.className = expandedIconClass;
         if (requestBrowserFullscreen) {
             enterFullscreenBrowser(document.body);
         }
@@ -33,17 +39,18 @@ function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass
 
 var mousemovetimer = null;
 var showingFullscreenMenu = false;
-$('body').mousemove(function () {
+
+document.querySelector("body").addEventListener("mousemove", () => {
     if (!isFullscreen || showingFullscreenMenu) {
         return;
     }
     clearTimeout(mousemovetimer);
-    $(".fullscreen-menu").show();
-    $("#tv").removeClass("no-cursor");
+    document.querySelector(".fullscreen-menu").classList.remove("hidden");
+    document.querySelector("#tv").classList.remove("no-cursor");
     showingFullscreenMenu = true;
     mousemovetimer = window.setInterval(function () {
-        $("#tv").addClass("no-cursor");
-        $(".fullscreen-menu").hide();
+        document.querySelector("#tv").classList.add("no-cursor");
+        document.querySelector(".fullscreen-menu").classList.add("hidden");
         showingFullscreenMenu = false;
     }, 1500);
 });
@@ -61,6 +68,7 @@ function enterFullscreenBrowser(element) {
         }
     }
 }
+
 function exitFullscreenBrowser() {
     if (document.exitFullscreen) {
         document.exitFullscreen();
