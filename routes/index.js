@@ -285,36 +285,34 @@ function setStartTime(item, previousProgrammeEndTime) {
 	return item;
 }
 
+/*
+Remove videos which lack detailed info (such as duration) and those who will not be able to play in the clientside player due to restrictions.
+*/
 function removeBrokenVideos(crudeVideos, detailedVideos) {
 	for (ix = crudeVideos.length - 1; ix--;) {
 		var item = crudeVideos[ix];
     var video = detailedVideos[ix];
     var videoItem = video.items[0];
 		var shouldRemove = false;
-		if (item.status.privacyStatus !== "public"
+		if (!videoItem || !video || !video.items || !video.items.length) {
+			console.error("Missing detais for", item.etag);
+			shouldRemove = true;
+		}
+		else if (item.status.privacyStatus !== "public"
 			|| videoItem.status.embeddable !== true) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "is not public/embeddable");
 		}
-		if (typeof video.items === "undefined") {
-			winston.log("info", "--------" + currentChannel.name + "--------");
-			winston.log("god damn! video.items is undefined");
-		}
-		else if (typeof videoItem === "undefined") {
-			winston.log("info", "--------" + currentChannel.name + "--------");
-			winston.log("god damn! video.items[0] is undefined");
-		}
-
-		if (typeof videoItem.contentDetails.regionRestriction !== "undefined"
+		else if (typeof videoItem.contentDetails.regionRestriction !== "undefined"
 			&& typeof videoItem.contentDetails.regionRestriction.blocked !== "undefined"
       && videoItem.contentDetails.regionRestriction.blocked.indexOf("SE") > -1
     ){
 			shouldRemove = true;
 			console.error("item", ix, item.snippet.title, "has regionRestriction in SE");
-			winston.log("info", "--------" + currentChannel.name + "--------");
 			winston.log('error',
 				'Video not avaliable in Sweden' + ' ' + ix + ' ' + item.title);
 		}
+
 		if (shouldRemove) {
 			crudeVideos.splice(ix, 1);
 			detailedVideos.splice(ix, 1);
