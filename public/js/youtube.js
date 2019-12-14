@@ -21,7 +21,7 @@ function onYouTubeIframeAPIReady() {
 		return;
 	}
 	var videos = window.youtubeData;
-	videos.forEach(function (x) { console.log(x.snippet.title) });
+	videos.forEach(function (x) { console.log(x.startTimeFormatted, x.startTime, x.snippet.title) });
 	window.playNowVideo = videos.find(function (item) { return item.playFirst == true });
 	if (!playNowVideo) {
 		console.log("could not find playFirst so just playing the first video");
@@ -83,7 +83,7 @@ function handleBufferTimeouts(event) {
 	var maxWait = 14000;
 	setTimeout(function(){
 		if ( state.isPlaying === false) {
-			console.log("video playing did not start after", maxWait/1000, "seconds", "- moving to next video!");
+			console.log("video playing did not start after", maxWait/1000, "seconds. Moving to next video.");
 			playNext(event);
 		};
 	}, maxWait);

@@ -29,7 +29,6 @@ globalSettings = {
 };
 var now = new Date();
 var startProgramme = moment(now).subtract(4, "hours").format("YYYY-MM-DD HH:mm"); //first video on the playlist will start at this time
-var endProgramme = null;
 var currentChannel = null;
 var currentlyPlaying = null;
 
@@ -150,6 +149,9 @@ function getAllTheThings(req, res, channel) {
 			item = setStartTime(item, previousProgrammeEndTime);
 			previousProgrammeEndTime = item.endTime;
 		});
+		channel.cachedEnhancedVideos = channel.cachedEnhancedVideos.sort(function(a,b){
+			return new Date(b.startTime) - new Date(a.startTime);
+		}).reverse();
 		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedEnhancedVideos));
 		res.render('index', {
 			title: 'Web TV',
@@ -165,10 +167,12 @@ function getAllTheThings(req, res, channel) {
 	getEverythingFromChannel(channel).then((crudeVideos) => {
 			getDetailsFromAllVideos(crudeVideos).then((detailedVideos) => { 
 				var enhancedVideos = getEnhancedVideos(crudeVideos, detailedVideos);
+				enhancedVideos = enhancedVideos.sort(function(a,b){
+					return new Date(b.startTime) - new Date(a.startTime);
+				}).reverse();
 				if (globalSettings.shouldCache) {
 					channel.cachedEnhancedVideos = enhancedVideos;
 				}
-				endProgramme = enhancedVideos[enhancedVideos.length - 1].endTime;
 				var encodedResult = encodeURIComponent(JSON.stringify(enhancedVideos));
 			
 				res.render('index', {
