@@ -30,7 +30,6 @@ globalSettings = {
 var now = new Date();
 var startProgramme = moment(now).subtract(4, "hours").format("YYYY-MM-DD HH:mm"); //first video on the playlist will start at this time
 var currentChannel = null;
-var currentlyPlaying = null;
 
 var youTube = new YouTube();
 youTube.setKey(globalSettings.apiKey);
@@ -126,7 +125,8 @@ winston.configure({
 		new (winston.transports.File)({ filename: 'errors.log' })
 	]
 });
-/************** Main func ************** */
+
+/* -------------- Main logic -------------- */
 function getAllTheThings(req, res, channel) {
 	currentChannel = channel;
 	globalSettings.requestCounter++;
@@ -160,11 +160,9 @@ function getAllTheThings(req, res, channel) {
 		return;
 	}
 
-	//fetch
 	channel.aggregatedPlaylist = null
 
-	// getPlayListAsync(channel.playlist, null, channel)
-	getEverythingFromChannel(channel).then((crudeVideos) => {
+	getEnhancedVideosFromChannel(channel).then((crudeVideos) => {
 			getDetailsFromAllVideos(crudeVideos).then((detailedVideos) => { 
 				var enhancedVideos = getEnhancedVideos(crudeVideos, detailedVideos);
 				enhancedVideos = enhancedVideos.sort(function(a,b){
@@ -219,7 +217,7 @@ function getDetailsFromAllVideos(crudeVideos) {
 	});
 }
 
-function getEverythingFromChannel(channel) {
+function getEnhancedVideosFromChannel(channel) {
 	const playListId = channel.playlist;
 	const initialNextPageToken = playListId;
 
@@ -228,10 +226,7 @@ function getEverythingFromChannel(channel) {
 			resolve(result);
 		});
 	});
-
-	
 }
-
 
 function iterativeGetPlayListsItemsById(playListId, nextPageToken, cb){
 	youTube.getPlayListsItemsById(playListId, config.max, nextPageToken, function(error, result) {
@@ -278,14 +273,11 @@ function setStartTime(item, previousProgrammeEndTime) {
 	}
 	if (startDiff > 0 && endDiff < 0) {
 		item.playFirst = true;
-		currentlyPlaying = item;
-		//console.log("Play this video first:");
 
 		var skipMs = Math.ceil(Math.abs((now.getTime() - item.startTime.getTime())));
 		item.skipToSeconds = skipMs / 1000;
 		item.skipToString = DateTimeHelper.msToYoutubeSkipString(skipMs);
 	}
-	//console.log(item.snippet.title, item.playFirst, item.startTime, item.endTime);
 	return item;
 }
 
@@ -347,7 +339,7 @@ function getEnhancedVideos(crudeVideos, detailedVideos) {
 	crudeVideos = shuffle(crudeVideos);
 	// }
 
-	/* reversed loop just so we can remove items without contentDetails, which is a common problem */
+	//This loop is reversed, to make it simpler to delete items without contentDetails (a common problem)
 	crudeVideos = crudeVideos.reverse();
 	for (ix = crudeVideos.length -1; ix >= 0; ix--) {
 		var item = crudeVideos[ix];
@@ -400,48 +392,6 @@ function getVideoById(videoId) {
 		});
 	});
 }
-
-// function getPlayListAsync(videoId, pageToken, settings) {
-// 	// if (typeof pageToken === "undefined" || pageToken === null)
-// 	// 	pageToken = null;
-// 	var maxPage = (settings && settings.pageCounter) ? settings.pageCounter : null;
-// 	if (maxPage > 50)
-// 		maxPage = 50;
-
-
-// 	return new Promise(function (fulfill, reject) {
-
-// 		//This will fetch the max amount of items per page
-// 		//Then recursively call itself to fetch the items from the next page
-// 		youTube.getPlayListsItemsById(videoId, maxPage, function (error, result) {
-// 			if (error) {
-// 				console.error(error);
-// 				winston.log("info", "--------" + currentChannel.name + "--------");
-
-// 				winston.log('error', 'Exception', { error: error });
-// 				reject(error);
-// 			} else {
-// 				//aggregate
-// 				if (settings.aggregatedPlaylist === null) {
-// 					settings.aggregatedPlaylist = result;
-// 					const titles = result.items.map((item) => item.snippet.title);
-// 					console.log(titles.join(", "));
-// 				} else {
-// 					Array.prototype.push.apply(settings.aggregatedPlaylist.items, result.items);
-// 				}
-
-// 				settings.pageCounter = settings.pageCounter > 0 ? settings.pageCounter : 0;
-// 				if (result.nextPageToken && settings.pageCounter <= globalSettings.MAX_PAGE_COUNT) {
-// 					settings.pageCounter++;
-// 					fulfill(getPlayListAsync(videoId, result.nextPageToken, settings));
-// 				}
-// 				else { //finished pagination
-// 					fulfill(settings.aggregatedPlaylist);
-// 				}
-// 			}
-// 		});
-// 	});
-// }
 
 function shuffle(array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;

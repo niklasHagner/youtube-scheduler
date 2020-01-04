@@ -15,11 +15,13 @@ function toggleProgrammeVisibility() {
 
 function toggleTheme() {
   if (document.body.classList.contains("retro-theme")) {
-    document.body.classList.remove("retro-theme");
+    document.body.className = "";
     document.body.classList.add("dark-theme");
+    localStorage.setItem("theme", "dark-theme");
   } else if (document.body.classList.contains("dark-theme")) {
-    document.body.classList.remove("dark-theme");
+    document.body.className = "";
     document.body.classList.add("retro-theme");
+    localStorage.setItem("theme", "retro-theme");
   }
 }
 
