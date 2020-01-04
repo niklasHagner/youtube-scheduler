@@ -31,6 +31,7 @@ function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', playerSettings);
 	//console.log(player.getAvailableQualityLevels());
 	//player.setPlaybackQuality('highres');
+
 	createProgramme(videos);
 }
 
@@ -69,7 +70,6 @@ function onPlayerReady(event) {
 		startSeconds: playNowVideo.skipToSeconds
 	});
   event.target.playVideo();
-  //player.mute(); //hopefully not needed
 	window.dispatchEvent(readyEvent);
 }
 
@@ -83,10 +83,15 @@ function handleBufferTimeouts(event) {
 	var maxWait = 14000;
 	setTimeout(function(){
 		if ( state.isPlaying === false) {
-			console.log("video playing did not start after", maxWait/1000, "seconds. Moving to next video.");
+			console.log(`video playing did not start after ${maxWait/1000} seconds. Moving to next video.`);
+			updateScheduleTimesAfterVideoWasSkipped();
 			playNext(event);
 		};
 	}, maxWait);
+}
+
+function updateScheduleTimesAfterVideoWasSkipped() {
+
 }
 
 function onPlayerStateChange(event) {
