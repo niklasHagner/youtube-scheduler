@@ -32,11 +32,6 @@ function onYouTubeIframeAPIReady() {
 	//console.log(player.getAvailableQualityLevels());
   //player.setPlaybackQuality('highres');
 
-  const storedMuteSetting = JSON.parse(localStorage.getItem("muteSound"));
-  if (storedMuteSetting && typeof mute === "function") {
-    window.setTimeout(mute([...document.querySelectorAll('.mute-toggle')][0]), 50);
-  }
-
 	createProgramme(videos);
 }
 
@@ -75,7 +70,14 @@ function onPlayerReady(event) {
 		startSeconds: playNowVideo.skipToSeconds
 	});
   event.target.playVideo();
-	window.dispatchEvent(readyEvent);
+  window.dispatchEvent(readyEvent);
+
+
+  const storedMuteSetting = JSON.parse(localStorage.getItem("muteSound"));
+  if (storedMuteSetting && typeof mute === "function") {
+    var muteToggles = [...document.querySelectorAll('.mute-toggle')];
+    muteToggles.forEach((x) => { mute(x) });
+  }
 }
 
 setTimeout(function() {
