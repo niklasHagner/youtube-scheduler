@@ -30,7 +30,12 @@ function onYouTubeIframeAPIReady() {
 	var playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
 	//console.log(player.getAvailableQualityLevels());
-	//player.setPlaybackQuality('highres');
+  //player.setPlaybackQuality('highres');
+
+  const storedMuteSetting = JSON.parse(localStorage.getItem("muteSound"));
+  if (storedMuteSetting && typeof mute === "function") {
+    window.setTimeout(mute([...document.querySelectorAll('.mute-toggle')][0]), 50);
+  }
 
 	createProgramme(videos);
 }
@@ -142,7 +147,7 @@ function createProgramme(videos) {
     var modifiers = "";
     var endTime = new Date(item.endTime).getTime();
     var startTime = new Date(item.startTime).getTime();
-    var startTimeFormatted = item.startTimeFormatted;    
+    var startTimeFormatted = item.startTimeFormatted;
     modifiers += " schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {

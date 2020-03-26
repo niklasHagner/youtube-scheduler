@@ -72,7 +72,7 @@
 
 <script>
 
-    const channels = [ 
+    const channels = [
         {
             name: "One", path: "", menuSelector:".menu__item--default", active: false, logo: "logo--one"
         },
@@ -98,7 +98,7 @@
             name: "Docs", path: "docs", menuSelector:".menu__item--docs", active: false, logo: "logo--docs"
         }
     ];
-    
+
     let path = window.location.pathname;
     path = path.slice(1, path.length);
     const activeChannel = channels.find(channel => channel.path === path);
@@ -116,7 +116,7 @@
     }
 
     function selectChannelByDropdown(ev) {
-        document.getElementById("player").remove();     
+        document.getElementById("player").remove();
         console.log("switching channel to", document.querySelector("#channelDropdown").value);
         window.location.href = document.querySelector("#channelDropdown").value;
     }
@@ -132,6 +132,7 @@
         const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
         buttonElement.querySelector("i").className = 'fa fa-volume-up';
         buttonElement.querySelector("span").innerText = 'Mute';
+        localStorage.setItem("muteSound", false);
     }
     function mute(target) {
         player.mute();
@@ -139,6 +140,7 @@
         const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
         buttonElement.querySelector("i").className = 'fa fa-volume-off';
         buttonElement.querySelector("span").innerText = 'Unmute';
+        localStorage.setItem("muteSound", true);
     }
     function toggleMute(ev) {
         if (player.isMuted())
