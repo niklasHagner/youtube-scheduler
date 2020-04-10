@@ -31,6 +31,10 @@ function currentVideoChanged() {
   current.classList.add("schedule-row--past");
 
   const next = current.nextElementSibling;
+  if (!next) {
+    console.error("No next item in schedule");
+    return;
+  }
   next.classList.add("schedule-row--current");
   next.querySelector(".schedule-row__time").innerText = "NOW: ";
 }
