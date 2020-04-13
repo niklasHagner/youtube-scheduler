@@ -66,6 +66,10 @@ var channels = {
 		name: "Documentaries",
 		playlist: 'PLoFIHcp8yG7TbDOaNjkw6UMPjzaNC-4hX'
 	},
+	action: {
+		name: "Action",
+		playlist: 'PLoFIHcp8yG7R_gbb4VCUOGfEmXZEs03A9'
+	},
 	two: {
 		name: "Channel 2",
 		playlist: 'PLoFIHcp8yG7RpBOZR8aqtG5nzGsJdiyFb'
@@ -99,6 +103,9 @@ router.get('/mtv', function (req, res) {
 });
 router.get('/docs', function (req, res) {
 	getAllTheThings(req, res, channels.docs);
+});
+router.get('/action', function (req, res) {
+	getAllTheThings(req, res, channels.action);
 });
 router.get('/two', function (req, res) {
 	getAllTheThings(req, res, channels.two);

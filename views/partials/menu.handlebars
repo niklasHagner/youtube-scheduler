@@ -57,6 +57,7 @@
     <a class="menu__item menu__item--mtv" href="/mtv">MTV</a>
     <a class="menu__item menu__item--horror" href="/horror">Horror</a>
     <a class="menu__item menu__item--docs" href="/docs">Docs</a>
+    <a class="menu__item menu__item--action" href="/action">Action</a>
 </menu>
 
 <select id="channelDropdown" class="segment--mobile" onChange="selectChannelByDropdown()">
@@ -68,6 +69,7 @@
     <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
     <option class="menu__item menu__item--horror" value="/horror">Horror</option>
     <option class="menu__item menu__item--docs" value="/docs">Docs</option>
+    <option class="menu__item menu__item--action" value="/action">Action</option>
 </select>
 
 <script>
@@ -96,6 +98,9 @@
         },
         {
             name: "Docs", path: "docs", menuSelector:".menu__item--docs", active: false, logo: "logo--docs"
+        },
+        {
+            name: "Action", path: "action", menuSelector:".menu__item--action", active: false, logo: "logo--action"
         }
     ];
 
