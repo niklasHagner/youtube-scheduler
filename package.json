@@ -14,14 +14,14 @@
     "express": "^4.17.1",
     "express-handlebars": "^3.1.0",
     "moment": "^2.24.0",
-    "morgan": "^1.9.1",
+    "morgan": "^1.10.0",
     "path": "^0.12.7",
     "querystring": "^0.2.0",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "serve-favicon": "^2.5.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "less": "^3.10.3"
+    "less": "^3.11.1"
   }
 }

@@ -291,7 +291,8 @@ function removeBrokenVideos(crudeVideos, detailedVideos) {
     var videoItem = video.items[0];
 		var shouldRemove = false;
 		if (!videoItem || !video || !video.items || !video.items.length) {
-			console.error("Missing detais for", item.etag);
+			const problematicTitle = item && item.snippet && item.snippet.title ? item.snippet.title : "unknown title";
+			console.error("Missing detais for", problematicTitle, "etag:", item.etag);
 			shouldRemove = true;
 		}
 		else if (item.status.privacyStatus !== "public"
