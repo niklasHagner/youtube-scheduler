@@ -128,10 +128,11 @@ function playNext(event) {
 	var cueObject = {
 		videoId: nextVideo.snippet.resourceId.videoId
 	};
+	if (nextVideo && nextVideo.snippet && nextVideo.snippet.title) {
+		console.log("Playing next video", nextVideo.snippet.title, ".Skip to seconds:",  nextVideo.skipToSeconds);
+	}
 	if (nextVideo.skipToSeconds && Number.isInteger(nextVideo.skipToSeconds)) {
 		cueObject.startSeconds = nextVideo.skipToSeconds;
-	} else {
-		console.log("no video start time");
 	}
 	event.target.cueVideoById(cueObject);
 	event.target.playVideo();

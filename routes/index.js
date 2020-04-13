@@ -299,7 +299,7 @@ function removeBrokenVideos(crudeVideos, detailedVideos) {
 		var shouldRemove = false;
 		if (!videoItem || !video || !video.items || !video.items.length) {
 			const problematicTitle = item && item.snippet && item.snippet.title ? item.snippet.title : "unknown title";
-			console.error("Missing detais for", problematicTitle, "etag:", item.etag);
+			console.error("Missing detais for title:", problematicTitle, ".Etag:", item.etag, ".Index:", ix);
 			shouldRemove = true;
 		}
 		else if (item.status.privacyStatus !== "public"
