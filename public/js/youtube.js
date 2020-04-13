@@ -82,7 +82,7 @@ function onPlayerReady(event) {
 
 setTimeout(function() {
   if (!onPlayerReadyEventHasFired) {
-    alert("Crap! This API doesn't seem to work properly in your browser browser. Try disabling extensions like adblocker, or use Firefox.");
+    alert("The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
   }
 }, 5000);
 

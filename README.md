@@ -16,7 +16,7 @@ A simple overlay prevents the user from interacting with the player, to get the 
 
 
 ## Troubleshooting common issues
-* the youtube player functions `onPlayerReady` and `onStateChange` never fire => check devtools, it's likely that youtube-scripts are blocked. (One of the common AdBlock plugins usually blocks two scripts required by the youtubePlayer)
+* the youtube player functions `onPlayerReady` and `onStateChange` never fire => This is often due to browser extensions like AdBlocker or PopupBlocker preventing youtube's `base.js` script from loading other scripts such as `endscreen.js` - this doesn't always result in visible DevTools errors. But try running your browser in Incognito mode without any extensions to see if that helps.
 * node cannot access the `env.process.YOUTUBEAPIKEY` => you need to check the Prerequisities section again
 * some videos in the playlist were not found => set the `shouldCache` to false and try again
 * some video are not played => this can be a result of the clientside `onError` method which skips to the next video if the current video causes a known error. Check the schedule and the logs to find which video was the problem
