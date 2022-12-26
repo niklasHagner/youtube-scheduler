@@ -43,6 +43,7 @@ function getPlayerSettings() {
 		height: '780',
 		playerVars: {
 			autoplay: 1,
+      mute: 1, //since 2018 autoplay will not work without mute
 			controls: 0, //Player controls do not display in the player. For IFrame embeds, the Flash player loads immediately.
       disablekb: 1, //Disable keyboard nav
       showsearch: 0,
@@ -65,13 +66,15 @@ function getPlayerSettings() {
 var readyEvent = new Event('youtubePlayerReady');
 function onPlayerReady(event) {
   onPlayerReadyEventHasFired = true;
-	event.target.cueVideoById({
+  const videoToCue = {
 		videoId: playNowVideo.snippet.resourceId.videoId,
 		startSeconds: playNowVideo.skipToSeconds
-	});
-  event.target.playVideo();
+	};
+	event.target.cueVideoById(videoToCue.videoId, videoToCue.startSeconds);
+  window.setTimeout(() => {
+    event.target.playVideo();
+  }, 1000);
   window.dispatchEvent(readyEvent);
-
 
   const storedMuteSetting = JSON.parse(localStorage.getItem("muteSound"));
   if (storedMuteSetting && typeof mute === "function") {
