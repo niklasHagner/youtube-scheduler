@@ -8,6 +8,8 @@ var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../lib/dateTimeHelper');
 var YouTube = require('../lib/youtubeApiWrapper');
 
+const RESULTS_PER_PAGE = 50;
+
 /*
 Note: youtube's default video objects are crude and only contain *some* contentDetails, but they lack `duration`.
 This is why we must make an extra apiCall to fetch the full set of details for every video.
@@ -226,7 +228,7 @@ function getDetailsFromAllVideos(crudeVideos) {
 
 function getEnhancedVideosFromChannel(channel) {
 	const playListId = channel.playlist;
-	const initialNextPageToken = playListId;
+	const initialNextPageToken = null; //playListId; //sometimes a pageToken is necessary, set to the same value as the playlist iteself
 
 	return new Promise(function (resolve, reject) {
 		iterativeGetPlayListsItemsById(playListId, initialNextPageToken, function(error, result) {
@@ -236,7 +238,7 @@ function getEnhancedVideosFromChannel(channel) {
 }
 
 function iterativeGetPlayListsItemsById(playListId, nextPageToken, cb){
-	youTube.getPlayListsItemsById(playListId, config.max, nextPageToken, function(error, result) {
+	youTube.getPlayListsItemsById(playListId, RESULTS_PER_PAGE, nextPageToken, function(error, result) {
 		if (error) {
 			return cb(error);
 		}
