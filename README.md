@@ -21,6 +21,7 @@ A simple overlay prevents the user from interacting with the player, to get the 
 * some videos in the playlist were not found => set the `shouldCache` to false and try again
 * some video are not played => this can be a result of the clientside `onError` method which skips to the next video if the current video causes a known error. Check the schedule and the logs to find which video was the problem
 * `"Invalid unsigned integer value: 'CAUQAA'."` the node-youtube-api has some bugs regarding mixups of params `nextPageToken` (string) and `maxPage` (int)
+* YoutubeAPI v3 has a common 400-error: 'The request specifies an invalid page token'
 
 ## Pre-requisites
 Step 1: You NEED to get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard

@@ -8,7 +8,7 @@ var Promise = require('es6-promise').Promise;
 var DateTimeHelper = require('../lib/dateTimeHelper');
 var YouTube = require('../lib/youtubeApiWrapper');
 
-/* 
+/*
 Note: youtube's default video objects are crude and only contain *some* contentDetails, but they lack `duration`.
 This is why we must make an extra apiCall to fetch the full set of details for every video.
 
@@ -139,7 +139,7 @@ function getAllTheThings(req, res, channel) {
 	globalSettings.requestCounter++;
 	now = new Date();
 	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
-	
+
 	if (globalSettings.shouldCache && channel.cachedEnhancedVideos) {
 		var currentTime = new Date();
 		var scheduleEnd = channel.cachedEnhancedVideos[channel.cachedEnhancedVideos.length - 1].endTime;
@@ -170,7 +170,7 @@ function getAllTheThings(req, res, channel) {
 	channel.aggregatedPlaylist = null
 
 	getEnhancedVideosFromChannel(channel).then((crudeVideos) => {
-			getDetailsFromAllVideos(crudeVideos).then((detailedVideos) => { 
+			getDetailsFromAllVideos(crudeVideos).then((detailedVideos) => {
 				var enhancedVideos = getEnhancedVideos(crudeVideos, detailedVideos);
 				enhancedVideos = enhancedVideos.sort(function(a,b){
 					return new Date(b.startTime) - new Date(a.startTime);
@@ -179,7 +179,7 @@ function getAllTheThings(req, res, channel) {
 					channel.cachedEnhancedVideos = enhancedVideos;
 				}
 				var encodedResult = encodeURIComponent(JSON.stringify(enhancedVideos));
-			
+
 				res.render('index', {
 					title: 'Web TV',
 					encodedJson: encodedResult
@@ -238,8 +238,12 @@ function getEnhancedVideosFromChannel(channel) {
 function iterativeGetPlayListsItemsById(playListId, nextPageToken, cb){
 	youTube.getPlayListsItemsById(playListId, config.max, nextPageToken, function(error, result) {
 		if (error) {
-			cb(error);
+			return cb(error);
 		}
+    if (!result) {
+      winston.error("getPlayListsItemsById: no result");
+      return cb("no result from getPlayListsItemsById");
+    }
 		else {
 			var items = result.items;
 			if(result.nextPageToken){

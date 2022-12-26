@@ -14,14 +14,14 @@ var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
 
- //YOU MUST MANUALLY SET YOUR APIKEY!
- //Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
- //Step 2: Set the environemtn variable YOUTUBEAPIKEY = 'yourapikey'
+//YOU MUST MANUALLY SET YOUR APIKEY!
+//Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
+//Step 2: Set the environemtn variable YOUTUBEAPIKEY = 'yourapikey'
 //You might have to restart your console to use the new env variable
 
 var apiKeyTest = process.env.YOUTUBEAPIKEY || config.YOUTUBEAPIKEY;
 if (typeof apiKeyTest === "undefined")
-    throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set. the code will not work without it!");
+    throw new Error("You forgot to set process.env.YOUTUBEAPIKEY. Create an env var for it");
 
 /* -------------- App Engine Handlebars -------------- */
 var hbs = exphbs.create({
