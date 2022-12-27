@@ -116,7 +116,7 @@ router.get('/two', function (req, res) {
 /* -------------- Default route -------------- */
 router.get('/', function (req, res) {
   if (typeof globalSettings.apiKey === "undefined") {
-		throw new Error("Damnit! process.env.YOUTUBEAPIKEY is not set");
+		throw new Error("process.env.YOUTUBEAPIKEY is not set");
 	}
 	getAllTheThings(req, res, channels.mixed);
 });
@@ -303,9 +303,8 @@ function removeBrokenVideos(crudeVideos, detailedVideos) {
     var video = detailedVideos[ix];
     var videoItem = video.items[0];
 		var shouldRemove = false;
-		if (!videoItem || !video || !video.items || !video.items.length) {
-			const problematicTitle = item && item.snippet && item.snippet.title ? item.snippet.title : "unknown title";
-			console.error("Missing detais for title:", problematicTitle, ".Etag:", item.etag, ".Index:", ix);
+		if (!videoItem || !video?.items?.length) {
+			console.error("Missing detais for title:", item?.snippet?.title, ".Etag:", item.etag, ".Index:", ix);
 			shouldRemove = true;
 		}
 		else if (item.status.privacyStatus !== "public"
@@ -353,7 +352,7 @@ function getEnhancedVideos(crudeVideos, detailedVideos) {
 	crudeVideos = shuffle(crudeVideos);
 	// }
 
-	//This loop is reversed, to make it simpler to delete items without contentDetails (a common problem)
+	//This loop is reversed, to make it simpler to delete items without contentDetails (This happens regularly as videos are removed or blocked)
 	crudeVideos = crudeVideos.reverse();
 	for (ix = crudeVideos.length -1; ix >= 0; ix--) {
 		var item = crudeVideos[ix];
@@ -365,7 +364,7 @@ function getEnhancedVideos(crudeVideos, detailedVideos) {
 			continue;
 		}
 		else if (!videoItem.contentDetails) {
-			console.error("Damn! Contentdetails doesn't exist on item", ix, "removing that video");
+			console.error("Contentdetails doesn't exist on item", ix, "removing that video");
 			console.error(videoItem);
 			crudeVideos.splice(ix, 1);
 			continue;
