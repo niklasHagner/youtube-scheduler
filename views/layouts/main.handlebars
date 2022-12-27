@@ -13,15 +13,25 @@
   <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
   <link href="css/Chunkfive.otf">
-
   <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <!-- set the default theme here-->
 <body class="retro-theme">
+  {{#if googleAnalyticsId}}
+    <!-- GoogleAnalytics4 -->
+    <script async src="{{ googleAnalyticsScriptUrl }}"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ googleAnalyticsId }}');
+    </script>
+  {{/if}}
+
   {{{body}}}
-  <!--<script src="js/privateGoogleAnalyticsTracking.js"></script>-->
   <script src="js/clickEvents.js"></script>
 </body>
 
