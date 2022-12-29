@@ -22,7 +22,9 @@ Node server using the youtube data api v3 to schedule videos from playlists and 
 * YoutubeAPI v3 has a common 400-error: 'The request specifies an invalid page token'
 * If some videos in the playlist were not found, set `shouldCache=false` and try again
 
-## Troubleshooting Frontend problems
-* Age restricted videos cannot be played in the youtube iframe api. They should be manualluy removed from the playlist
+## Youtube frontend quirks
 * Browser extensions like AdBlocker or PopupBlocker can preventing youtube's `base.js` script from loading other scripts such as `endscreen.js` and lead to events like `onPlayerReady` and `onStateChange` never firing. Make sure to disable all plugins and test again.
-* If some video are not played: This occurss when the clientside `onError` method skips to the next video if the current video causes a known error. Check the schedule and the logs to find which video was the problem
+* The video schedule has to be adjusted clientside to account for videos that could be unplayable in the iframe api
+* Age-restricted videos cannot be viewed in iframes and will result in the videoPlayer showing "This video is age-restricted and only available on Youtube". They must be manually removed from the playlist
+* Some videos are country-restricted
+

@@ -106,7 +106,10 @@ function updateScheduleTimesAfterVideoWasSkipped() {
 }
 
 function onPlayerStateChange(event) {
-	if (event.data == YT.PlayerState.ENDED) {
+  if (event.data == -1) {
+    console.log("Youtube Player state is -1");
+  }
+	else if (event.data == YT.PlayerState.ENDED) {
 		setTimeout(function () { playNext(event), 100 });
 	}
 	else if (event.data == YT.PlayerState.BUFFERING) {
@@ -115,7 +118,6 @@ function onPlayerStateChange(event) {
 	}
 	else if (event.data == YT.PlayerState.PLAYING) {
 		setTimeout(function() { document.querySelector("#tv-backdrop").classList.remove("loading"); }, 3500);
-
 		state.isPlaying = true;
 	}
 }
