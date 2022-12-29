@@ -5,16 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
   <title>{{title }}</title>
-  <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
-  <link href="https://fonts.googleapis.com/css?family=Work+Sans" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <link href="images/favicon.ico" rel="icon" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Oswald:wght@400;700&family=Quicksand:wght@400;700&family=Work+Sans:wght@400;700;800&display=swap" rel="stylesheet">
   <link href="css/Chunkfive.otf">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-
 </head>
 
 <!-- set the default theme here-->
@@ -27,11 +24,11 @@
     <!-- GoogleAnalytics4 -->
     <script async src="{{ googleAnalyticsScriptUrl }}"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
 
-    gtag('config', '{{ googleAnalyticsId }}');
+      gtag("config", "{{ googleAnalyticsId }}");
     </script>
   {{/if}}
 </body>

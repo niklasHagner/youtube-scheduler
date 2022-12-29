@@ -3,7 +3,7 @@
   color: white;
   margin: 0;
   position: absolute;
-  top: 50px;
+  top: 40px;
   left: 0;
   width: 430px;
   height: calc(100vh - 60px);
@@ -101,8 +101,8 @@ body.retro-theme {
 }
 body.retro-theme .menu {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 3px;
+  left: 2px;
   z-index: 4;
   text-align: center;
   font-family: Oswald, Helvetica, Arial, sans-serif;
@@ -380,6 +380,9 @@ a {
 }
 a:hover {
   color: #af9a77;
+}
+nav li {
+  list-style: none;
 }
 /* -------------- TV -------------- */
 #tv-backdrop {

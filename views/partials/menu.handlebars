@@ -1,157 +1,160 @@
-<menu class="fullscreen-menu hidden">
-    <nav class="menu__item">
+<nav class="fullscreen-menu hidden">
+  <ul>
+    <li class="menu__item">
       <div class="mute-toggle">
-          <i class="fa fa-volume-up" aria-hidden="true"></i>
-          <span>Unmute</span>
+        <i class="fa fa-volume-up" aria-hidden="true"></i>
+        <span>Unmute</span>
       </div>
-    </nav>
-    <nav class="menu__item">{{> fullscreenbutton }}</nav>
-    <nav class="menu__item">
-        <div class="fullscreen-toggle fullscreen-toggle-2">
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-            <span>Fullscreen</span>
-        </div>
-    </nav>
-</menu>
+    </li>
+    <li class="menu__item">{{> fullscreenbutton }}</li>
+    <li class="menu__item">
+      <div class="fullscreen-toggle fullscreen-toggle-2">
+        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        <span>Fullscreen</span>
+      </div>
+    </li>
+  </ul>
+</nav>
 
 
-<menu class="menu">
-    <nav class="menu__item toggle-programme">
-        <div onclick="toggleProgrammeVisibility()">
-            <i class="fa fa-list-ul" aria-hidden="true"></i>Schedule
-        </div>
-    </nav>
+<nav class="menu">
+  <ul>
+    <li class="menu__item toggle-programme">
+      <div onclick="toggleProgrammeVisibility()">
+        <i class="fa fa-list-ul" aria-hidden="true"></i>Schedule
+      </div>
+    </li>
 
-    <nav class="menu__item">
-        <div onclick="toggleTheme()">
-            <i class="fa fa-bolt" aria-hidden="true"></i>Theme
-        </div>
-    </nav>
+    <li class="menu__item">
+      <div onclick="toggleTheme()">
+        <i class="fa fa-bolt" aria-hidden="true"></i>Theme
+      </div>
+    </li>
 
-    <nav class="menu__item">{{> fullscreenbutton }}</nav>
+    <li class="menu__item">{{> fullscreenbutton }}</li>
 
-    <nav class="menu__item">
+    <li class="menu__item">
       <div class="mute-toggle">
-          <i class="fa fa-volume-up" aria-hidden="true"></i>
-          <span>Unmute</span>
+        <i class="fa fa-volume-up" aria-hidden="true"></i>
+        <span>Unmute</span>
       </div>
-    </nav>
+    </li>
 
-    <nav class="menu__item">
-        <div class="fullscreen-toggle fullscreen-toggle-2">
-            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-            <span>Fullscreen</span>
-        </div>
-    </nav>
-
-</menu>
+    <li class="menu__item">
+      <div class="fullscreen-toggle fullscreen-toggle-2">
+        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        <span>Fullscreen</span>
+      </div>
+    </li>
+  </ul>
+</nav>
 
 <h1 class="logo">Retro-TV</h1>
 
-<menu class="segment segment--desktop">
-    <a class="menu__item menu__item--default" href="/">One</a>
-    <a class="menu__item menu__item--two" href="/two">Two</a>
-    <a class="menu__item menu__item--western" href="/western">Western</a>
-    <a class="menu__item menu__item--scifi" href="/scifi">Sci-Fi</a>
-    <a class="menu__item menu__item--classics" href="/classics">Classics</a>
-    <a class="menu__item menu__item--mtv" href="/mtv">MTV</a>
-    <a class="menu__item menu__item--horror" href="/horror">Horror</a>
-    <a class="menu__item menu__item--docs" href="/docs">Docs</a>
-    <a class="menu__item menu__item--action" href="/action">Action</a>
-</menu>
+<nav class="segment segment--desktop">
+  <a class="menu__item menu__item--default" href="/">One</a>
+  <a class="menu__item menu__item--two" href="/two">Two</a>
+  <a class="menu__item menu__item--western" href="/western">Western</a>
+  <a class="menu__item menu__item--scifi" href="/scifi">Sci-Fi</a>
+  <a class="menu__item menu__item--classics" href="/classics">Classics</a>
+  <a class="menu__item menu__item--mtv" href="/mtv">MTV</a>
+  <a class="menu__item menu__item--horror" href="/horror">Horror</a>
+  <a class="menu__item menu__item--docs" href="/docs">Docs</a>
+  <a class="menu__item menu__item--action" href="/action">Action</a>
+</nav>
 
 <select id="channelDropdown" class="segment--mobile" onChange="selectChannelByDropdown()">
-    <option class="menu__item menu__item--default" value="/">One</option>
-    <option class="menu__item menu__item--two" value="/two">Two</option>
-    <option class="menu__item menu__item--western" value="/western">Western</option>
-    <option class="menu__item menu__item--scifi" value="/scifi">Sci-Fi</option>
-    <option class="menu__item menu__item--classics" value="/classics">Classics</option>
-    <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
-    <option class="menu__item menu__item--horror" value="/horror">Horror</option>
-    <option class="menu__item menu__item--docs" value="/docs">Docs</option>
-    <option class="menu__item menu__item--action" value="/action">Action</option>
+  <option class="menu__item menu__item--default" value="/">One</option>
+  <option class="menu__item menu__item--two" value="/two">Two</option>
+  <option class="menu__item menu__item--western" value="/western">Western</option>
+  <option class="menu__item menu__item--scifi" value="/scifi">Sci-Fi</option>
+  <option class="menu__item menu__item--classics" value="/classics">Classics</option>
+  <option class="menu__item menu__item--mtv" value="/mtv">MTV</option>
+  <option class="menu__item menu__item--horror" value="/horror">Horror</option>
+  <option class="menu__item menu__item--docs" value="/docs">Docs</option>
+  <option class="menu__item menu__item--action" value="/action">Action</option>
 </select>
 
 <script>
 
-    const channels = [
-        {
-            name: "One", path: "", menuSelector:".menu__item--default", active: false, logo: "logo--one"
-        },
-        {
-            name: "Two", path: "two", menuSelector:".menu__item--two", active: false,logo: "logo--two"
-        },
-        {
-            name: "Western", path: "western", menuSelector:".menu__item--western", active: false, logo: "logo--western"
-        },
-        {
-            name: "Sci-Fi", path: "scifi", menuSelector:".menu__item--scifi", active: false, logo: "logo--scifi"
-        },
-        {
-            name: "Classics", path: "classics",  menuSelector:".menu__item--classics", active: false, logo: "logo--classics"
-        },
-        {
-            name: "MTV", path: "mtv", menuSelector:".menu__item--mtv", active: false, logo: "logo--mtv"
-        },
-        {
-            name: "Horror", path: "horror", menuSelector:".menu__item--horror", active: false, logo: "logo--horror"
-        },
-        {
-            name: "Docs", path: "docs", menuSelector:".menu__item--docs", active: false, logo: "logo--docs"
-        },
-        {
-            name: "Action", path: "action", menuSelector:".menu__item--action", active: false, logo: "logo--action"
-        }
-    ];
-
-    let path = window.location.pathname;
-    path = path.slice(1, path.length);
-    const activeChannel = channels.find(channel => channel.path === path);
-    const logoEl = document.querySelector(".logo");
-    logoEl.classList.add(activeChannel.logo);
-    logoEl.innerText = activeChannel.name;
-    document.querySelector(activeChannel.menuSelector).classList.add("menu__item--active");
-    const channelDropdown = document.querySelector("#channelDropdown");
-    const matchingOption = [...channelDropdown.options].find(option => option.innerText === activeChannel.name);
-    const matchingIndex = [...channelDropdown.options].indexOf(matchingOption);
-    channelDropdown.selectedIndex = matchingIndex;
-
-    if (activeChannel.path === "mtv") {
-        document.querySelector(".mtv-logo").classList.remove("mtv-logo--hidden");
+  const channels = [
+    {
+      name: "One", path: "", menuSelector: ".menu__item--default", active: false, logo: "logo--one"
+    },
+    {
+      name: "Two", path: "two", menuSelector: ".menu__item--two", active: false, logo: "logo--two"
+    },
+    {
+      name: "Western", path: "western", menuSelector: ".menu__item--western", active: false, logo: "logo--western"
+    },
+    {
+      name: "Sci-Fi", path: "scifi", menuSelector: ".menu__item--scifi", active: false, logo: "logo--scifi"
+    },
+    {
+      name: "Classics", path: "classics", menuSelector: ".menu__item--classics", active: false, logo: "logo--classics"
+    },
+    {
+      name: "MTV", path: "mtv", menuSelector: ".menu__item--mtv", active: false, logo: "logo--mtv"
+    },
+    {
+      name: "Horror", path: "horror", menuSelector: ".menu__item--horror", active: false, logo: "logo--horror"
+    },
+    {
+      name: "Docs", path: "docs", menuSelector: ".menu__item--docs", active: false, logo: "logo--docs"
+    },
+    {
+      name: "Action", path: "action", menuSelector: ".menu__item--action", active: false, logo: "logo--action"
     }
+  ];
 
-    function selectChannelByDropdown(ev) {
-        document.getElementById("player").remove();
-        console.log("switching channel to", document.querySelector("#channelDropdown").value);
-        window.location.href = document.querySelector("#channelDropdown").value;
-    }
+  let path = window.location.pathname;
+  path = path.slice(1, path.length);
+  const activeChannel = channels.find(channel => channel.path === path);
+  const logoEl = document.querySelector(".logo");
+  logoEl.classList.add(activeChannel.logo);
+  logoEl.innerText = activeChannel.name;
+  document.querySelector(activeChannel.menuSelector).classList.add("menu__item--active");
+  const channelDropdown = document.querySelector("#channelDropdown");
+  const matchingOption = [...channelDropdown.options].find(option => option.innerText === activeChannel.name);
+  const matchingIndex = [...channelDropdown.options].indexOf(matchingOption);
+  channelDropdown.selectedIndex = matchingIndex;
 
-    var muteToggles = [...document.querySelectorAll('.mute-toggle')];
-    var soundCached = localStorage["ytPlayerSound"];
+  if (activeChannel.path === "mtv") {
+    document.querySelector(".mtv-logo").classList.remove("mtv-logo--hidden");
+  }
 
-    muteToggles.forEach((toggleButton) => toggleButton.addEventListener("click", toggleMute));
+  function selectChannelByDropdown(ev) {
+    document.getElementById("player").remove();
+    console.log("switching channel to", document.querySelector("#channelDropdown").value);
+    window.location.href = document.querySelector("#channelDropdown").value;
+  }
 
-    function unMute(target) {
-        player.unMute();
-        localStorage["ytPlayerSound"] = "on";
-        const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
-        buttonElement.querySelector("i").className = 'fa fa-volume-down';
-        buttonElement.querySelector("span").innerText = 'Mute';
-        localStorage.setItem("muteSound", false);
-    }
-    function mute(target) {
-        player.mute();
-        localStorage["ytPlayerSound"] = "off";
-        const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
-        buttonElement.querySelector("i").className = 'fa fa-volume-off';
-        buttonElement.querySelector("span").innerText = 'Unmute';
-        localStorage.setItem("muteSound", true);
-    }
-    function toggleMute(ev) {
-        if (player.isMuted())
-            unMute(ev.target);
-        else
-            mute(ev.target);
-    }
+  var muteToggles = [...document.querySelectorAll('.mute-toggle')];
+  var soundCached = localStorage["ytPlayerSound"];
+
+  muteToggles.forEach((toggleButton) => toggleButton.addEventListener("click", toggleMute));
+
+  function unMute(target) {
+    player.unMute();
+    localStorage["ytPlayerSound"] = "on";
+    const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
+    buttonElement.querySelector("i").className = 'fa fa-volume-down';
+    buttonElement.querySelector("span").innerText = 'Mute';
+    localStorage.setItem("muteSound", false);
+  }
+  function mute(target) {
+    player.mute();
+    localStorage["ytPlayerSound"] = "off";
+    const buttonElement = target.classList.contains("mute-toggle") ? target : target.closest(".mute-toggle");
+    buttonElement.querySelector("i").className = 'fa fa-volume-off';
+    buttonElement.querySelector("span").innerText = 'Unmute';
+    localStorage.setItem("muteSound", true);
+  }
+  function toggleMute(ev) {
+    if (player.isMuted())
+      unMute(ev.target);
+    else
+      mute(ev.target);
+  }
 
 </script>
