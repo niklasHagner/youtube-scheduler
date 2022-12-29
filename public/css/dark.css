@@ -139,11 +139,11 @@ body.dark-theme .segment--blue .menu__item--active {
   background: linear-gradient(to top, #1e5799 0%, rgba(125, 185, 232, 0) 50%);
   border-top: #222;
 }
-body.dark-theme #tv {
+body.dark-theme #tv-backdrop {
   background: none;
   transition: background 500ms ease-out 1s;
 }
-body.dark-theme #tv.loading {
+body.dark-theme #tv-backdrop.loading {
   background-image: url(images/static.gif);
   background-size: 50% 50%;
   opacity: 0.8;

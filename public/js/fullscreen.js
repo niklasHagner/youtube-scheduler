@@ -21,7 +21,7 @@ function toggleFullscreen2() {
 function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass, expandedIconClass) {
     var icon = document.querySelector(selector + " i");
     document.querySelector(".fullscreen-menu").classList.toggle("hidden");;
-    document.querySelector("#tv").classList.toggle("fullscreen");
+    document.querySelector("#tv-backdrop").classList.toggle("fullscreen");
     document.querySelector("#content").classList.toggle("fullscreen");
 
     if (isFullscreen) {
@@ -46,10 +46,10 @@ document.querySelector("body").addEventListener("mousemove", () => {
     }
     clearTimeout(mousemovetimer);
     document.querySelector(".fullscreen-menu").classList.remove("hidden");
-    document.querySelector("#tv").classList.remove("no-cursor");
+    document.querySelector("#tv-backdrop").classList.remove("no-cursor");
     showingFullscreenMenu = true;
     mousemovetimer = window.setInterval(function () {
-        document.querySelector("#tv").classList.add("no-cursor");
+        document.querySelector("#tv-backdrop").classList.add("no-cursor");
         document.querySelector(".fullscreen-menu").classList.add("hidden");
         showingFullscreenMenu = false;
     }, 1500);

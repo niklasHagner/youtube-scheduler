@@ -166,7 +166,7 @@ function getAllTheThings(req, res, channel) {
 		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedEnhancedVideos));
 		res.render('index', {
 			title: `TV ${channel.name}`,
-			encodedJson: encodedResult,
+			videoDataAsEncodedJson: encodedResult,
       googleAnalyticsId,
       googleAnalyticsScriptUrl,
 		});
@@ -184,11 +184,11 @@ function getAllTheThings(req, res, channel) {
 				if (globalSettings.shouldCache) {
 					channel.cachedEnhancedVideos = enhancedVideos;
 				}
-				var encodedResult = encodeURIComponent(JSON.stringify(enhancedVideos));
+				var videoDataAsEncodedJson = encodeURIComponent(JSON.stringify(enhancedVideos));
 
 				res.render('index', {
 					title: 'Web TV',
-					encodedJson: encodedResult,
+					videoDataAsEncodedJson,
           googleAnalyticsId,
           googleAnalyticsScriptUrl,
 				});
