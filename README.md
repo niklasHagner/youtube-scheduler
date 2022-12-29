@@ -2,7 +2,7 @@
 ## Broadcast playlists as TV channels
 Node server using the youtube data api v3 to schedule videos from playlists and broadcast them as a TV-channels, removing the ability to pause or skip.
 
-![screenshot](http://i.imgur.com/220jd5k.jpg)
+<img width="1083" alt="image" src="https://user-images.githubusercontent.com/3415677/209952755-6ece8dd7-effe-48c9-acc1-bf12a1768aaf.png">
 
 ## Tech
 * [Youtube Data API v3](https://developers.google.com/youtube/v3) is accessed via a wrapper, basically a modified version of https://github.com/nodenica/youtube-node/blob/master/lib/youtube.js (which had pagination problems at the time this repo was created)
