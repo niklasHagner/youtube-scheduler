@@ -162,8 +162,8 @@ function createProgramme(videos) {
       startTimeFormatted = "NOW:";
     }
     var htmlString =  `
-    <div class='schedule-row ${modifiers}'>
-      <div class='schedule-row__time'>${startTimeFormatted} </div>
+    <div class="schedule-row ${modifiers}">
+      <div class="schedule-row__time">${startTimeFormatted}</div>
       <div class="schedule-row__title">${item.snippet.title}</div>
     </div>`;
     return htmlString;

@@ -6,7 +6,7 @@
 
 {{> showtimes name='Show times' }}
 
-<div id="content">   
+<div id="content">
     <img class="mtv-logo mtv-logo--hidden" src="images/mtv.gif"></img>
     <section class="videowrapper">
         <div id="player"></div>
@@ -15,15 +15,15 @@
 
 <script>
 	const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-	    document.body.className = "";
-	    document.body.classList.add(storedTheme);
-    }
+  if (storedTheme) {
+    document.body.className = "";
+    document.body.classList.add(storedTheme);
+  }
 
-    var encodedJsonString = "{{{encodedJson}}}"; //wrapped in quoutes to ensure handlebars parses it as string
-    var decoded = decodeURIComponent(encodedJsonString);
-    var parsed = JSON.parse(decoded); 
-    window.youtubeData = parsed;
+  var encodedJsonString = "{{{encodedJson}}}"; //wrapped in quoutes to ensure handlebars parses it as string
+  var decoded = decodeURIComponent(encodedJsonString);
+  var parsed = JSON.parse(decoded);
+  window.youtubeData = parsed;
 </script>
 <script src="js/youtube.js"></script>
 <script src="js/fullscreen.js"></script>

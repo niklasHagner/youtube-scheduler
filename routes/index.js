@@ -140,18 +140,17 @@ winston.configure({
 
 /* -------------- Main logic -------------- */
 function getAllTheThings(req, res, channel) {
+	now = new Date();
 	currentChannel = channel;
 	globalSettings.requestCounter++;
-	now = new Date();
 	console.info(now.getHours().toFixed(2) + ":" + now.getMinutes().toFixed(2), " ~ Request", globalSettings.requestCounter, "for", channel.name);
 
 	if (globalSettings.shouldCache && channel.cachedEnhancedVideos) {
-		var currentTime = new Date();
 		var scheduleEnd = channel.cachedEnhancedVideos[channel.cachedEnhancedVideos.length - 1].endTime;
-		if (scheduleEnd - currentTime <= 0) {
+		if (scheduleEnd - now <= 0) {
 
 			//reset schedule
-			startProgramme = currentTime;
+			startProgramme = now;
 			winston.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
 			console.log('info', { message: 'Shedule end time ' + scheduleEnd + '.\n New start-time: ' + startProgramme });
 		}
@@ -166,7 +165,7 @@ function getAllTheThings(req, res, channel) {
 		}).reverse();
 		var encodedResult = encodeURIComponent(JSON.stringify(channel.cachedEnhancedVideos));
 		res.render('index', {
-			title: 'Web TV',
+			title: `TV ${channel.name}`,
 			encodedJson: encodedResult,
       googleAnalyticsId,
       googleAnalyticsScriptUrl,
