@@ -19,6 +19,10 @@
 
 <!-- set the default theme here-->
 <body class="retro-theme">
+  {{{body}}}
+
+  <script src="js/clickEvents.js"></script>
+
   {{#if googleAnalyticsId}}
     <!-- GoogleAnalytics4 -->
     <script async src="{{ googleAnalyticsScriptUrl }}"></script>
@@ -30,9 +34,6 @@
     gtag('config', '{{ googleAnalyticsId }}');
     </script>
   {{/if}}
-
-  {{{body}}}
-  <script src="js/clickEvents.js"></script>
 </body>
 
 </html>
