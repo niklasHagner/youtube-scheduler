@@ -21,16 +21,16 @@ function onYouTubeIframeAPIReady() {
 		return;
 	}
 	var videos = window.youtubeData;
-	videos.forEach(function (x) { console.log(x.startTimeFormatted, x.startTime, x.snippet.title) });
 	window.playNowVideo = videos.find(function (item) { return item.playFirst == true });
 	if (!playNowVideo) {
-		console.log("could not find playFirst so just playing the first video");
+    console.log("could not find playFirst so just playing the first video");
 		playNowVideo = videos[0];
 	}
 	var playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
 	//console.log(player.getAvailableQualityLevels());
   //player.setPlaybackQuality('highres');
+  // videos.forEach(function (x) { console.log(x.startTimeFormatted, x.startTime, x.snippet.title) });
 
 	createProgramme(videos);
 }
@@ -71,6 +71,7 @@ function onPlayerReady(event) {
 		startSeconds: playNowVideo.skipToSeconds
 	};
 	event.target.cueVideoById(videoToCue.videoId, videoToCue.startSeconds);
+  console.log("cue video", playNowVideo);
   window.setTimeout(() => {
     event.target.playVideo();
   }, 1000);

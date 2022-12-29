@@ -16,7 +16,7 @@ app.locals.ENV_DEVELOPMENT = env == 'development';
 
 //YOU MUST MANUALLY SET YOUR APIKEY!
 //Step 1: Get your own unique apikey (a 39 character string) by creating a new project on https://console.developers.google.com/apis/credentials/wizard
-//Step 2: Set the environemtn variable YOUTUBEAPIKEY = 'yourapikey'
+//Step 2: Set the env var YOUTUBEAPIKEY = 'yourapikey'
 //You might have to restart your console to use the new env variable
 
 var apiKeyTest = process.env.YOUTUBEAPIKEY || config.YOUTUBEAPIKEY;
@@ -26,9 +26,16 @@ if (typeof apiKeyTest === "undefined")
 /* -------------- App Engine Handlebars -------------- */
 var hbs = exphbs.create({
     helpers: {
-        test: function () { return "Lorem ipsum" },
-        json: function (value, options) {
-            return JSON.stringify(value);
+        jsonStringify: function (value) { return JSON.stringify(value); },
+        getEnvVar: function(key) {
+          return process.env[key] || config[key];
+        },
+        concat: function() {
+          let result = "";
+          for(var i in arguments) {
+            result += (typeof arguments[i] === "string" ? arguments[i] : "") + " ";
+          }
+          return result;
         }
     },
     defaultLayout: 'main',
