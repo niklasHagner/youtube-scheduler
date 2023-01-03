@@ -317,7 +317,7 @@ function removeBrokenVideos(crudeVideos, detailedVideos) {
 			shouldRemove = true;
 			console.error(item.snippet.title, "is not public/embeddable");
 		}
-		if (videoItem.contentDetails?.regionRestriction?.blocked?.indexOf("SE") > -1){
+		if (videoItem?.contentDetails?.regionRestriction?.blocked?.indexOf("SE") > -1){
 			shouldRemove = true;
 			console.error("item", ix, item.snippet.title, "has regionRestriction in SE");
 			winston.log('error', 'Video not avaliable in Sweden' + ' ' + ix + ' ' + item.title);
@@ -364,7 +364,7 @@ function getEnhancedVideos(crudeVideos, detailedVideos) {
 			crudeVideos.splice(ix, 1);
 			continue;
 		}
-		else if (!videoItem.contentDetails) {
+		else if (!videoItem || !videoItem.contentDetails) {
 			console.error("Contentdetails doesn't exist on item", ix, "removing that video");
 			console.error(videoItem);
 			crudeVideos.splice(ix, 1);
