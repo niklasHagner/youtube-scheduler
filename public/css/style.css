@@ -39,7 +39,8 @@
   z-index: 8;
   cursor: pointer;
 }
-.programme h1 {
+.programme h1,
+.programme h2 {
   display: inline;
 }
 .programme .schedule-row {
