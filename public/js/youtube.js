@@ -153,19 +153,18 @@ function createProgramme(videos) {
 	});
 
   const items = scheduledItems.map(function (item, index) {
-    var modifiers = "";
     var endTime = new Date(item.endTime).getTime();
     var startTime = new Date(item.startTime).getTime();
-    var startTimeFormatted = item.startTimeFormatted;
-    modifiers += " schedule-row--future";
+    var startTimeFormatted = new Date(item.startTime).toTimeString().slice(0,5);
+    var modifierClasses = "schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {
-      modifiers += " schedule-row--current";
+      modifierClasses += " schedule-row--current";
       const endTimeFormatted = new Date(item.endTime).toTimeString().slice(0,5);
       startTimeFormatted = `NOW<br><span class="schedule-row__time-small">${startTimeFormatted} - ${endTimeFormatted}</span>`;
     }
     var htmlString =  `
-    <div class="schedule-row ${modifiers}">
+    <div class="schedule-row ${modifierClasses}">
       <div class="schedule-row__time">${startTimeFormatted}</div>
       <div class="schedule-row__title">${item.snippet.title}</div>
     </div>`;
