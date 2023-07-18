@@ -13,8 +13,9 @@ var isWindowFullscreen = false;
 function toggleFullscreen2() {
     var useWindowFullscreen = !isWindowFullscreen;
     toggleFullscreen('.fullscreen-toggle-2', useWindowFullscreen, 'fa fa-arrows-alt', 'fa fa-times');
-    if (!useWindowFullscreen)
-        exitFullscreenBrowser();
+    if (!useWindowFullscreen) {
+      exitFullscreenBrowser();
+    }
     isWindowFullscreen = useWindowFullscreen;
 }
 
@@ -27,6 +28,7 @@ function toggleFullscreen(selector, requestBrowserFullscreen, collapsedIconClass
     if (isFullscreen) {
         isFullscreen = false;
         icon.className = collapsedIconClass;
+        document.querySelector("#tv-backdrop").classList.remove("no-cursor");
     }
     else {
         isFullscreen = true;
@@ -77,4 +79,5 @@ function exitFullscreenBrowser() {
     } else if (document.webkitExitFullscreen) {
         document.webkitExitFullscreen();
     }
+    document.querySelector("#tv-backdrop").classList.remove("no-cursor");
 }
