@@ -39,6 +39,9 @@
   z-index: 8;
   cursor: pointer;
 }
+.programme header h2 {
+  color: black;
+}
 .programme h1,
 .programme h2 {
   display: inline;

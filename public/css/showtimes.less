@@ -1,4 +1,5 @@
 @import "vars.less";
+
 .programme {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
@@ -13,20 +14,25 @@
     text-align: left;
     z-index: @z-programme;
     transition: height 0.25s;
+
     &--hidden {
         height: 0;
     }
+
     &__body {
         padding: 10px 10px 10px 30px;
         font-family: 'Lato', sans-serif;
     }
+
     header {
         padding: 10px 10px 10px 30px;
         width: ~"calc(100% - 30px)";
         background-color: gold;
+
         h1 {
             color: black;
         }
+
         .programme__close {
             position: absolute;
             top: 6px;
@@ -40,25 +46,37 @@
             cursor: pointer;
         }
     }
+
+    header {
+      h2 {
+        color: black;
+      }
+    }
+
     h1, h2 {
         display: inline;
     }
+
     .schedule-row {
         margin-top: 15px;
         font-size: 13px;
         display: inline-block;
         width: 100%;
+
         &--past {
             display: none;
         }
+
         &--current {
             color: gold;
         }
+
         &__title {
             width: 280px;
             display: inline-block;
             font-family: 'Work Sans', sans-serif;
         }
+
         &__time {
             font-family: 'Work Sans', 'Helvetica', consolas, monospace;
             font-size: 20px;
