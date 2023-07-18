@@ -11,7 +11,7 @@ var YouTube = require('../lib/youtubeApiWrapper');
 const RESULTS_PER_PAGE = 50;
 
 const googleAnalyticsId = process.env.GOOGLEANALYTICSID || config.GOOGLEANALYTICSID;
-const googleAnalyticsScriptUrl =  'https://www.googoogleAnalyticsIdgletagmanager.com/gtag/js?id=' + googleAnalyticsId;
+const googleAnalyticsScriptUrl =  'https://www.googletagmanager.com/gtag/js?id=' + googleAnalyticsId;
 
 /*
 Note: youtube's default video objects are crude and only contain *some* contentDetails, but they lack `duration`.
