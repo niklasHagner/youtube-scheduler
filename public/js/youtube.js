@@ -161,7 +161,8 @@ function createProgramme(videos) {
 
     if (endTime > nowTime && startTime < nowTime) {
       modifiers += " schedule-row--current";
-      startTimeFormatted = "NOW:";
+      const endTimeFormatted = new Date(item.endTime).toTimeString().slice(0,5);
+      startTimeFormatted = `NOW<br><span class="schedule-row__time-small">${startTimeFormatted}:${endTimeFormatted}</span>`;
     }
     var htmlString =  `
     <div class="schedule-row ${modifiers}">
