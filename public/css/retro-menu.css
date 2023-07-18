@@ -8,7 +8,7 @@ body.retro-theme .menu {
   left: 0px;
   z-index: 4;
   text-align: center;
-  font-family: Oswald, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 body.retro-theme .menu__item {
   display: inline-block;
@@ -31,7 +31,7 @@ body.retro-theme .menu__item:hover {
 }
 body.retro-theme .segment {
   position: absolute;
-  font-family: Oswald, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   top: 2px;
   right: 28px;
   z-index: 4;

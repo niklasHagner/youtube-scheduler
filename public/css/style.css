@@ -73,11 +73,6 @@
   width: 65px;
   vertical-align: top;
 }
-.programme .schedule-row__time-small {
-  font-size: 14px;
-  float: left;
-}
-
 .toggle-programme i {
   padding-right: 5px;
 }
@@ -114,7 +109,7 @@ body.retro-theme .menu {
   left: 2px;
   z-index: 4;
   text-align: center;
-  font-family: Oswald, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 body.retro-theme .menu__item {
   display: inline-block;
@@ -137,7 +132,7 @@ body.retro-theme .menu__item:hover {
 }
 body.retro-theme .segment {
   position: absolute;
-  font-family: Oswald, Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   top: 2px;
   right: 28px;
   z-index: 4;
