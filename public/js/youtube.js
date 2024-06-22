@@ -7,6 +7,9 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
+const hasAlertedAboutManualPlay = false;
+const hasAlertedAboutAdblock = false;
+
 function getNextVideo() {
 	var nowIndex = window.youtubeData.indexOf(window.playNowVideo);
 	var nextIndex = (window.youtubeData.length > nowIndex + 1) ? nowIndex + 1 : 0;
@@ -85,8 +88,9 @@ function onPlayerReady(event) {
 }
 
 setTimeout(function() {
-  if (!onPlayerReadyEventHasFired) {
+  if (!onPlayerReadyEventHasFired && !hasAlertedAboutAdblock) {
     alert("The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
+    hasAlertedAboutAdblock = true;
   }
 }, 5000);
 
@@ -108,6 +112,11 @@ function updateScheduleTimesAfterVideoWasSkipped() {
 function onPlayerStateChange(event) {
   if (event.data == -1) {
     console.log("Youtube Player state is -1");
+    if (!hasAlertedAboutManualPlay) {
+      alert("YoutubePlayer failed to autoplay. You have to click the play button manually.");
+      hasAlertedAboutManualPlay = true;
+    }
+    document.querySelector("#tv-backdrop").style="z-index: 1"; // Reset from z-index:3 to something that doesn't overlay
   }
 	else if (event.data == YT.PlayerState.ENDED) {
 		setTimeout(function () { playNext(event), 100 });
