@@ -1,21 +1,25 @@
-var player;
-var state = { isPlaying: false }
+let player;
+const state = { isPlaying: false }
 
-//Insert iframe player
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+injectYoutubeIframePlayerScript();
 
-const hasAlertedAboutManualPlay = false;
-const hasAlertedAboutAdblock = false;
+window.hasAlertedAboutManualPlay = false;
+let hasAlertedAboutAdblock = false;
+let onPlayerReadyEventHasFired = false;
 
 function getNextVideo() {
-	var nowIndex = window.youtubeData.indexOf(window.playNowVideo);
-	var nextIndex = (window.youtubeData.length > nowIndex + 1) ? nowIndex + 1 : 0;
-	var nextVideo = window.youtubeData[nextIndex];
+	const nowIndex = window.youtubeData.indexOf(window.playNowVideo);
+	const nextIndex = (window.youtubeData.length > nowIndex + 1) ? nowIndex + 1 : 0;
+	const nextVideo = window.youtubeData[nextIndex];
 	window.playNowVideo = nextVideo;
 	return nextVideo;
+}
+
+function injectYoutubeIframePlayerScript() {
+  const newScriptTag = document.createElement('script');
+  newScriptTag.src = "https://www.youtube.com/iframe_api";
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(newScriptTag, firstScriptTag);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -23,13 +27,13 @@ function onYouTubeIframeAPIReady() {
 		console.error("ERROR! window.youtubeData does not exist");
 		return;
 	}
-	var videos = window.youtubeData;
+	const videos = window.youtubeData;
 	window.playNowVideo = videos.find(function (item) { return item.playFirst == true });
 	if (!playNowVideo) {
     console.log("could not find playFirst so just playing the first video");
 		playNowVideo = videos[0];
 	}
-	var playerSettings = getPlayerSettings();
+	const playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
 	//console.log(player.getAvailableQualityLevels());
   //player.setPlaybackQuality('highres');
@@ -38,10 +42,9 @@ function onYouTubeIframeAPIReady() {
 	createProgramme(videos);
 }
 
-var onPlayerReadyEventHasFired = false;
-function getPlayerSettings() {
 
-	var playerSettings = {
+function getPlayerSettings() {
+	return {
 		width: '1280',
 		height: '780',
 		playerVars: {
@@ -62,11 +65,9 @@ function getPlayerSettings() {
 			'onStateChange': onPlayerStateChange
 		}
 	};
-
-	return playerSettings;
 }
 
-var readyEvent = new Event('youtubePlayerReady');
+const readyEvent = new Event('youtubePlayerReady');
 function onPlayerReady(event) {
   onPlayerReadyEventHasFired = true;
   const videoToCue = {
@@ -95,7 +96,7 @@ setTimeout(function() {
 }, 5000);
 
 function handleBufferTimeouts(event) {
-	var maxWait = 14000;
+	const maxWait = 14000;
 	setTimeout(function(){
 		if ( state.isPlaying === false) {
 			console.log(`video playing did not start after ${maxWait/1000} seconds. Moving to next video.`);
@@ -112,9 +113,9 @@ function updateScheduleTimesAfterVideoWasSkipped() {
 function onPlayerStateChange(event) {
   if (event.data == -1) {
     console.log("Youtube Player state is -1");
-    if (!hasAlertedAboutManualPlay) {
+    if (!window.hasAlertedAboutManualPlay) {
       alert("YoutubePlayer failed to autoplay. You have to click the play button manually.");
-      hasAlertedAboutManualPlay = true;
+      window.hasAlertedAboutManualPlay = true;
     }
     document.querySelector("#tv-backdrop").style="z-index: 1"; // Reset from z-index:3 to something that doesn't overlay
   }
@@ -139,8 +140,8 @@ function onError(event) {
 function playNext(event) {
 	if (typeof window.currentVideoChanged !== "undefined")
 		currentVideoChanged();
-	var nextVideo = getNextVideo();
-	var cueObject = {
+	const nextVideo = getNextVideo();
+	const cueObject = {
 		videoId: nextVideo.snippet.resourceId.videoId
 	};
 	if (nextVideo && nextVideo.snippet && nextVideo.snippet.title) {
@@ -154,25 +155,25 @@ function playNext(event) {
 }
 
 function createProgramme(videos) {
-	var nowTime = new Date().getTime();
+	const nowTime = new Date().getTime();
 
 	const scheduledItems = videos.filter((item) => {
-		var endTime = new Date(item.endTime).getTime();
+		const endTime = new Date(item.endTime).getTime();
     return nowTime <= endTime;
 	});
 
   const items = scheduledItems.map(function (item, index) {
-    var endTime = new Date(item.endTime).getTime();
-    var startTime = new Date(item.startTime).getTime();
-    var startTimeFormatted = new Date(item.startTime).toTimeString().slice(0,5);
-    var modifierClasses = "schedule-row--future";
+    const endTime = new Date(item.endTime).getTime();
+    const startTime = new Date(item.startTime).getTime();
+    const startTimeFormatted = new Date(item.startTime).toTimeString().slice(0,5);
+    const modifierClasses = "schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {
       modifierClasses += " schedule-row--current";
       const endTimeFormatted = new Date(item.endTime).toTimeString().slice(0,5);
       startTimeFormatted = `NOW<br><span class="schedule-row__time-small">${startTimeFormatted} - ${endTimeFormatted}</span>`;
     }
-    var htmlString =  `
+    const htmlString =  `
     <div class="schedule-row ${modifierClasses}">
       <div class="schedule-row__time">${startTimeFormatted}</div>
       <div class="schedule-row__title">${item.snippet.title}</div>
