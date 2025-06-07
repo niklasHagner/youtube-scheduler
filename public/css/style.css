@@ -594,3 +594,22 @@ iframe#player {
   font-family: ChunkFive;
   src: url(Chunkfive.otf);
 }
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%) translateY(100px);
+  background: #222;
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 2, 0.6, 1);
+  z-index: 9999;
+  pointer-events: none;
+}
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

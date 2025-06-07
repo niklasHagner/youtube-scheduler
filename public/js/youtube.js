@@ -1,3 +1,5 @@
+import { showToast } from "./toast";
+
 let player;
 const state = { isPlaying: false }
 
@@ -90,7 +92,7 @@ function onPlayerReady(event) {
 
 setTimeout(function() {
   if (!onPlayerReadyEventHasFired && !hasAlertedAboutAdblock) {
-    alert("The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
+    showToast("The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
     hasAlertedAboutAdblock = true;
   }
 }, 5000);
@@ -114,7 +116,7 @@ function onPlayerStateChange(event) {
   if (event.data == -1) {
     console.log("Youtube Player state is -1");
     if (!window.hasAlertedAboutManualPlay) {
-      alert("YoutubePlayer failed to autoplay. You have to click the play button manually.");
+      showToast("YoutubePlayer failed to autoplay. You have to click the play button manually.");
       window.hasAlertedAboutManualPlay = true;
     }
     document.querySelector("#tv-backdrop").style="z-index: 1"; // Reset from z-index:3 to something that doesn't overlay
