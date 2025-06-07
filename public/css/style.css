@@ -73,6 +73,11 @@
   width: 65px;
   vertical-align: top;
 }
+.programme .schedule-row .schedule-row__time-small {
+  font-size: 13px;
+  white-space: nowrap;
+  float: right;
+}
 .toggle-programme i {
   padding-right: 5px;
 }
