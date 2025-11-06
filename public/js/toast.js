@@ -1,5 +1,5 @@
 // Toast notification utility
-export function showToast(message) {
+function showToast(message) {
   let toast = document.createElement('div');
   toast.className = 'custom-toast';
   toast.innerText = message;
@@ -12,6 +12,8 @@ export function showToast(message) {
     setTimeout(() => toast.remove(), 500);
   }, 2000);
 }
+
+window.showToast = showToast;
 
 // Add toast styles
 if (!document.getElementById('custom-toast-style')) {

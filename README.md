@@ -9,7 +9,7 @@ Node server using the youtube data api v3 to schedule videos from playlists and 
 2. `npm install`
 3. `npm run build` - to compile LESS to CSS
 4. `node start` to run the node-server
-5. browse to `http://localhost:8080`
+5. browse to `http://localhost:8082`
 
 
 ## Tech

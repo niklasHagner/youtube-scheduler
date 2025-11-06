@@ -238,6 +238,9 @@ function getEnhancedVideosFromChannel(channel) {
 
 	return new Promise(function (resolve, reject) {
 		iterativeGetPlayListsItemsById(playListId, initialNextPageToken, function(error, result) {
+			if (error) {
+				return reject(error);
+			}
 			resolve(result);
 		});
 	});
