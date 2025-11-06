@@ -10,7 +10,7 @@ function showToast(message) {
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 500);
-  }, 2000);
+  }, 5000);
 }
 
 window.showToast = showToast;

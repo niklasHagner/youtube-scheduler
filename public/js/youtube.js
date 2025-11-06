@@ -4,7 +4,7 @@ const state = { isPlaying: false }
 injectYoutubeIframePlayerScript();
 
 window.hasAlertedAboutManualPlay = false;
-let hasAlertedAboutAdblock = false;
+let hasShownToast = false;
 let onPlayerReadyEventHasFired = false;
 
 function getNextVideo() {
@@ -89,9 +89,9 @@ function onPlayerReady(event) {
 }
 
 setTimeout(function() {
-  if (!onPlayerReadyEventHasFired && !hasAlertedAboutAdblock) {
-    window.showToast("The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
-    hasAlertedAboutAdblock = true;
+  if (!onPlayerReadyEventHasFired && !hasShownToast) {
+    window.showToast("😤 The Youtube-player didn't load correctly. Possibly because your browser is preventing a script. Try disabling extensions like Popupblocker and AdBlocker.");
+    hasShownToast = true;
   }
 }, 5000);
 
