@@ -2,6 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Node start",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${userHome}/.nvm/versions/node/v20.19.2/bin/node",
+      "program": "${workspaceFolder}/app.js",
+      "cwd": "${workspaceFolder}",
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "${workspaceRoot}/node_modules/**/*.js",
+        "<node_internals>/**/*.js"
+      ]
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "nodemon",
