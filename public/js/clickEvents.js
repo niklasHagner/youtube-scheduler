@@ -27,6 +27,10 @@ function toggleTheme() {
 
 function currentVideoChanged() {
   var current = document.querySelector(".schedule-row--current");
+  if (!current) {
+    console.warn("No current item in schedule");
+    return;
+  }
   current.classList.remove("schedule-row--current");
   current.classList.add("schedule-row--past");
 

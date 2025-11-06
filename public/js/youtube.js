@@ -35,12 +35,16 @@ function onYouTubeIframeAPIReady() {
 	}
 	const playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
+  console.log("YouTube Iframe player", player);
 	//console.log(player.getAvailableQualityLevels());
   //player.setPlaybackQuality('highres');
   // videos.forEach(function (x) { console.log(x.startTimeFormatted, x.startTime, x.snippet.title) });
 
 	createProgramme(videos);
 }
+
+// Make it globally available for YouTube API
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
 
 function getPlayerSettings() {
@@ -111,6 +115,7 @@ function updateScheduleTimesAfterVideoWasSkipped() {
 }
 
 function onPlayerStateChange(event) {
+  console.log("onPlayerStateChange", event?.target?.videoTitle);
   if (event.data == -1) {
     console.log("Youtube Player state is -1");
     if (!window.hasAlertedAboutManualPlay) {
@@ -165,8 +170,8 @@ function createProgramme(videos) {
   const items = scheduledItems.map(function (item, index) {
     const endTime = new Date(item.endTime).getTime();
     const startTime = new Date(item.startTime).getTime();
-    const startTimeFormatted = new Date(item.startTime).toTimeString().slice(0,5);
-    const modifierClasses = "schedule-row--future";
+    let startTimeFormatted = new Date(item.startTime).toTimeString().slice(0,5);
+    let modifierClasses = "schedule-row--future";
 
     if (endTime > nowTime && startTime < nowTime) {
       modifierClasses += " schedule-row--current";

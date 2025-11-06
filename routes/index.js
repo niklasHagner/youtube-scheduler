@@ -39,8 +39,7 @@ var currentChannel = null;
 var youTube = new YouTube();
 youTube.setKey(globalSettings.apiKey);
 /*
-	Change these playlist keys!
-	The keys are the strings after `pl=` in the url when watching a playlist on youtube.com
+	From URL like https://www.youtube.com/playlist?list=PLoFIHcp8yG7RAH_6ctBzVHi9DN_6nKAc4
 */
 var channels = {
 	mixed: {
