@@ -1,4 +1,4 @@
-import { showToast } from "./toast";
+const { showToast } = require("./toast");
 
 let player;
 const state = { isPlaying: false }
