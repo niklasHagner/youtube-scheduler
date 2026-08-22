@@ -1,11 +1,15 @@
 let player;
 const state = { isPlaying: false }
+const AUTOPLAY_RETRY_DELAY_MS = 1200;
+const MAX_AUTOPLAY_ATTEMPTS = 3;
 
 injectYoutubeIframePlayerScript();
 
-window.hasAlertedAboutManualPlay = false;
 let hasShownToast = false;
 let onPlayerReadyEventHasFired = false;
+let autoplayAttemptCount = 0;
+let hasShownManualStartToast = false;
+let hasBoundManualStartFallback = false;
 
 function getNextVideo() {
 	const nowIndex = window.youtubeData.indexOf(window.playNowVideo);
@@ -29,9 +33,9 @@ function onYouTubeIframeAPIReady() {
 	}
 	const videos = window.youtubeData;
 	window.playNowVideo = videos.find(function (item) { return item.playFirst == true });
-	if (!playNowVideo) {
+	if (!window.playNowVideo) {
     console.log("could not find playFirst so just playing the first video");
-		playNowVideo = videos[0];
+		window.playNowVideo = videos[0];
 	}
 	const playerSettings = getPlayerSettings();
 	player = new YT.Player('player', playerSettings);
@@ -54,6 +58,7 @@ function getPlayerSettings() {
 		playerVars: {
 			autoplay: 1,
       mute: 1, //since 2018 autoplay will not work without mute
+      playsinline: 1,
 			controls: 0, //Player controls do not display in the player. For IFrame embeds, the Flash player loads immediately.
       disablekb: 1, //Disable keyboard nav
       showsearch: 0,
@@ -66,22 +71,68 @@ function getPlayerSettings() {
 		},
 		events: {
 			'onReady': onPlayerReady,
-			'onStateChange': onPlayerStateChange
+			'onStateChange': onPlayerStateChange,
+			'onError': onError
 		}
 	};
+}
+
+function tryStartPlayback(reason) {
+	if (!player || typeof player.playVideo !== "function") {
+		return;
+	}
+	autoplayAttemptCount += 1;
+	console.log(`Attempting playback (${autoplayAttemptCount}/${MAX_AUTOPLAY_ATTEMPTS}) - ${reason}`);
+	try {
+		player.playVideo();
+	} catch (error) {
+		console.error("playVideo threw an error", error);
+	}
+}
+
+function bindManualStartFallback() {
+	if (hasBoundManualStartFallback) {
+		return;
+	}
+
+	const startPlaybackOnInteraction = function () {
+		tryStartPlayback("manual interaction fallback");
+		removeManualStartFallbackListeners();
+	};
+
+	window.__manualStartPlaybackListener = startPlaybackOnInteraction;
+	window.addEventListener("pointerdown", startPlaybackOnInteraction, { once: true });
+	window.addEventListener("keydown", startPlaybackOnInteraction, { once: true });
+	hasBoundManualStartFallback = true;
+}
+
+function removeManualStartFallbackListeners() {
+	if (!window.__manualStartPlaybackListener) {
+		return;
+	}
+	window.removeEventListener("pointerdown", window.__manualStartPlaybackListener);
+	window.removeEventListener("keydown", window.__manualStartPlaybackListener);
+	window.__manualStartPlaybackListener = null;
+	hasBoundManualStartFallback = false;
 }
 
 const readyEvent = new Event('youtubePlayerReady');
 function onPlayerReady(event) {
   onPlayerReadyEventHasFired = true;
   const videoToCue = {
-		videoId: playNowVideo.snippet.resourceId.videoId,
-		startSeconds: playNowVideo.skipToSeconds
+		videoId: window.playNowVideo.snippet.resourceId.videoId,
+		startSeconds: window.playNowVideo.skipToSeconds
 	};
 	event.target.cueVideoById(videoToCue.videoId, videoToCue.startSeconds);
-  console.log("cue video", playNowVideo);
+	event.target.mute();
+	console.log("cue video", window.playNowVideo);
   window.setTimeout(() => {
-    event.target.playVideo();
+		tryStartPlayback("onReady");
+		setTimeout(function () {
+			if (!state.isPlaying && autoplayAttemptCount < MAX_AUTOPLAY_ATTEMPTS) {
+				tryStartPlayback("onReady retry");
+			}
+		}, AUTOPLAY_RETRY_DELAY_MS);
   }, 1000);
   window.dispatchEvent(readyEvent);
 
@@ -118,14 +169,18 @@ function onPlayerStateChange(event) {
   console.log("onPlayerStateChange", event?.target?.videoTitle);
   if (event.data == -1) {
     console.log("Youtube Player state is -1");
-    if (!window.hasAlertedAboutManualPlay) {
-      window.showToast("YoutubePlayer failed to autoplay. You have to click the play button manually.");
-      window.hasAlertedAboutManualPlay = true;
+		if (!state.isPlaying && autoplayAttemptCount < MAX_AUTOPLAY_ATTEMPTS) {
+			setTimeout(function () {
+				tryStartPlayback("state -1 retry");
+			}, AUTOPLAY_RETRY_DELAY_MS);
+		} else if (!hasShownManualStartToast) {
+			bindManualStartFallback();
+			window.showToast("YoutubePlayer failed to autoplay. Click anywhere to start playback.");
+			hasShownManualStartToast = true;
     }
-    document.querySelector("#tv-backdrop").style="z-index: 1"; // Reset from z-index:3 to something that doesn't overlay
   }
 	else if (event.data == YT.PlayerState.ENDED) {
-		setTimeout(function () { playNext(event), 100 });
+		setTimeout(function () { playNext(event); }, 100);
 	}
 	else if (event.data == YT.PlayerState.BUFFERING) {
 		state.isPlaying = false;
@@ -134,12 +189,16 @@ function onPlayerStateChange(event) {
 	else if (event.data == YT.PlayerState.PLAYING) {
 		setTimeout(function() { document.querySelector("#tv-backdrop").classList.remove("loading"); }, 3500);
 		state.isPlaying = true;
+		autoplayAttemptCount = 0;
+		hasShownManualStartToast = false;
+		removeManualStartFallbackListeners();
+		document.querySelector("#tv-backdrop").style="z-index: 1"; // reset overlay once playback is confirmed
 	}
 }
 
 function onError(event) {
 	console.log("player error", event);
-	setTimeout(function () { playNext(event), 100 });
+	setTimeout(function () { playNext(event); }, 100);
 }
 
 function playNext(event) {

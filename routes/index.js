@@ -24,7 +24,7 @@ Detailed video example:
 "{"kind":"youtube#videoListResponse","etag":"\"p4VTdlkQv3HQeTEaXgvLePAydmU/fNPqa_TTtS6z_F5ugy_thxjDeAI\"","pageInfo":{"totalResults":1,"resultsPerPage":1},"items":[{"kind":"youtube#video","etag":"\"p4VTdlkQv3HQeTEaXgvLePAydmU/FvUbhdN5wAwQCnBZm6KVupmaQs4\"","id":"qcF8v38hRoE","snippet":{"publishedAt":"2015-11-06T08:20:41.000Z","channelId":"UCLRUgl28CtEKRf7Pio5KztQ","title":"Alan Ladd western movies full length || Saskatchewan 1954 || Classic western movies on youtube","description":"","thumbnails":{"default":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/default.jpg","width":120,"height":90},"medium":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/mqdefault.jpg","width":320,"height":180},"high":{"url":"https://i.ytimg.com/vi/qcF8v38hRoE/hqdefault.jpg","width":480,"height":360}},"channelTitle":"Jordon Peyton","tags":["Alan Ladd western movies full length","Saskatchewan 1954","Classic western movies on youtube","Western (TV Genre)","Alan Ladd (Film Actor)","western movies full length free","western movies action","western movies alan ladd","western movies best","western movies cowboys","western movies classics","western movies english full length","the best western movies ever","spaghetti western movies english"],"categoryId":"1","liveBroadcastContent":"none","localized":{"title":"Alan Ladd western movies full length || Saskatchewan 1954 || Classic western movies on youtube","description":""},"defaultAudioLanguage":"en"},"contentDetails":{"duration":"PT1H23M33S","dimension":"2d","definition":"sd","caption":"false","licensedContent":false,"projection":"rectangular"},"status":{"uploadStatus":"processed","privacyStatus":"public","license":"youtube","embeddable":true,"publicStatsViewable":false},"statistics":{"viewCount":"206519","likeCount":"406","dislikeCount":"54","favoriteCount":"0","commentCount":"39"}}]}"
 */
 
-globalSettings = {
+const globalSettings = {
 	shouldCache: process.env.SHOULD_CACHE || true, //false: make new get requests to youtube every time
 	printlogs: false,
 	requestCounter: 0,
@@ -306,7 +306,7 @@ function setStartTime(item, previousProgrammeEndTime) {
 Remove videos which lack detailed info (such as duration) and those who will not be able to play in the clientside player due to restrictions.
 */
 function removeBrokenVideos(crudeVideos, detailedVideos) {
-	for (ix = crudeVideos.length - 1; ix--;) {
+	for (let ix = crudeVideos.length - 1; ix >= 0; ix--) {
 		var item = crudeVideos[ix];
     var video = detailedVideos[ix];
     var videoItem = video.items[0];
@@ -339,15 +339,15 @@ Extend crude videos with some relevant extra details
 function getEnhancedVideos(crudeVideos, detailedVideos) {
 	now = new Date();
 	if (detailedVideos.length !== crudeVideos.length)
-		throw new Error(crudeVideos.length, "items in playlist");
+		throw new Error(`${crudeVideos.length} items in playlist`);
 	var previousProgrammeEndTime = moment(startProgramme).toDate();
 
 	var filtered = removeBrokenVideos(crudeVideos, detailedVideos);
-	playList = filtered.crudeVideos;
+	const playList = filtered.crudeVideos;
 	crudeVideos = crudeVideos.filter((item) => { return typeof item !== "undefined"; });
 	detailedVideos = filtered.detailedVideos;
 	if (detailedVideos.length !== crudeVideos.length)
-		console.error(videos.length, "videos", crudeVideos.length, "crude videos");
+		console.error(detailedVideos.length, "videos", crudeVideos.length, "crude videos");
 
 	console.log("crudeVideos:", crudeVideos.length, "detailedVideos:", detailedVideos.length);
 
@@ -357,7 +357,7 @@ function getEnhancedVideos(crudeVideos, detailedVideos) {
 
 	//This loop is reversed, to make it simpler to delete items without contentDetails (This happens regularly as videos are removed or blocked)
 	crudeVideos = crudeVideos.reverse();
-	for (ix = crudeVideos.length -1; ix >= 0; ix--) {
+	for (let ix = crudeVideos.length -1; ix >= 0; ix--) {
 		var item = crudeVideos[ix];
     var video = detailedVideos[ix];
     var videoItem = video.items[0]
